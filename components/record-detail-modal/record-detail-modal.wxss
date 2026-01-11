@@ -1,0 +1,329 @@
+/* components/record-detail-modal/record-detail-modal.wxss */
+.detail-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.detail-modal-container {
+  width: 680rpx;
+  max-height: 90vh;
+  background-color: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.3);
+  animation: scaleIn 0.3s ease-out;
+  position: relative;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 头部图片区域 */
+.detail-header {
+  width: 100%;
+  height: 400rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-image {
+  width: 100%;
+  height: 100%;
+}
+
+.header-image:active {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+.image-indicator {
+  position: absolute;
+  bottom: 20rpx;
+  right: 20rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  backdrop-filter: blur(8rpx);
+}
+
+.detail-header-empty {
+  width: 100%;
+  height: 300rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/images/carbontracks.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+}
+
+/* 内容区域 */
+.detail-content {
+  max-height: calc(90vh - 400rpx);
+  overflow-y: auto;
+  padding: 32rpx;
+}
+
+.content-section {
+  margin-bottom: 32rpx;
+}
+
+.content-section.last-section {
+  margin-bottom: 0;
+}
+
+/* 活动类型和日期 */
+.activity-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.type-badge {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.2);
+}
+
+.type-emoji {
+  font-size: 32rpx;
+}
+
+.type-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.date-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 16rpx;
+}
+
+.date-icon {
+  font-size: 24rpx;
+}
+
+.date-text {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 统计数据区域 */
+.stats-section {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(129, 199, 132, 0.05) 100%);
+  padding: 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.stat-icon-box {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.3);
+}
+
+.stat-icon {
+  font-size: 36rpx;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-divider {
+  width: 2rpx;
+  height: 80rpx;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 详情文本 */
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.detail-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+  padding: 24rpx;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.description-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  padding: 24rpx;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+/* 原始活动数据 */
+.activity-data-section {
+  margin-bottom: 24rpx;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  padding: 24rpx;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.data-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.data-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 创建时间 */
+.create-time {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+}
+
+.time-icon {
+  font-size: 24rpx;
+}
+
+.time-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 关闭按钮 */
+.close-button {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 10;
+  backdrop-filter: blur(8rpx);
+  transition: all 0.2s ease;
+}
+
+.close-button:active {
+  transform: scale(0.9);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.close-icon {
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 滚动条样式 */
+.detail-content::-webkit-scrollbar {
+  width: 4rpx;
+}
+
+.detail-content::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.detail-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4rpx;
+}

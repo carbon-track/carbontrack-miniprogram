@@ -1,5 +1,7 @@
 <!--pages/about/about.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 返回按钮 -->
+  <uni-back-button title="关于我们" theme="{{theme}}" />
   <!-- 应用信息 -->
   <view class="app-info">
     <view class="app-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">

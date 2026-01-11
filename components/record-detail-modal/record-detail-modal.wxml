@@ -1,0 +1,97 @@
+<!--components/record-detail-modal/record-detail-modal.wxml-->
+<view class="detail-modal-mask" wx:if="{{visible}}" bindtap="onClose">
+  <view class="detail-modal-container" catchtap="">
+    <!-- 顶部图片区域 -->
+    <view class="detail-header" wx:if="{{record.imageUrl}}">
+      <image src="{{record.imageUrl}}" mode="aspectFill" class="header-image" bindtap="previewImage"></image>
+    </view>
+
+    <!-- 无图片时的默认头部 -->
+    <view class="detail-header-empty" wx:if="{{!record.imageUrl}}">
+      <view class="header-background"></view>
+    </view>
+
+    <!-- 内容区域 -->
+    <view class="detail-content">
+      <!-- 活动类型和日期 -->
+      <view class="content-section">
+        <view class="activity-type-row">
+          <view class="type-badge" style="background: {{record.gradient || 'linear-gradient(135deg, #4CAF50 0%, #81C784 100%)'}}">
+            <text class="type-emoji">{{record.emoji || '🌱'}}</text>
+            <text class="type-name">{{record.activityType}}</text>
+          </view>
+          <view class="date-badge">
+            <text class="date-icon">📅</text>
+            <text class="date-text">{{formatDate(record.date)}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 原始活动数据 -->
+      <view class="content-section activity-data-section">
+        <view class="data-grid">
+          <view class="data-item">
+            <text class="data-label">活动数量</text>
+            <text class="data-value">{{record.amount || '-'}} {{record.unit || ''}}</text>
+          </view>
+          <view class="data-item">
+            <text class="data-label">活动日期</text>
+            <text class="data-value">{{formatDate(record.date)}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 统计数据 -->
+      <view class="content-section stats-section">
+        <view class="stat-item">
+          <view class="stat-icon-box" style="background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);">
+            <text class="stat-icon">🌍</text>
+          </view>
+          <view class="stat-info">
+            <text class="stat-label">减少碳排放</text>
+            <text class="stat-value">{{record.carbonValue}} kg</text>
+          </view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <view class="stat-icon-box" style="background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);">
+            <text class="stat-icon">⭐</text>
+          </view>
+          <view class="stat-info">
+            <text class="stat-label">获得积分</text>
+            <text class="stat-value">+{{record.points}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 活动详情 -->
+      <view class="content-section">
+        <view class="section-title">活动详情</view>
+        <view class="detail-text">
+          {{record.activityDetail}}
+        </view>
+      </view>
+
+      <!-- 描述 -->
+      <view class="content-section" wx:if="{{record.description}}">
+        <view class="section-title">描述</view>
+        <view class="description-text">
+          {{record.description}}
+        </view>
+      </view>
+
+      <!-- 创建时间 -->
+      <view class="content-section last-section">
+        <view class="create-time">
+          <text class="time-icon">⏰</text>
+          <text class="time-text">记录时间: {{formatDateTime(record.createTime)}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 关闭按钮 -->
+    <view class="close-button" bindtap="onClose">
+      <text class="close-icon">✕</text>
+    </view>
+  </view>
+</view>

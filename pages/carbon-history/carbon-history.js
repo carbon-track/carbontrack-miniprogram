@@ -18,7 +18,9 @@ Page({
     filter: 'all', // all: 全部
     filterOptions: [
       { key: 'all', name: '全部' }
-    ]
+    ],
+    showDetailModal: false,
+    selectedRecord: {}
   },
 
   onLoad: function() {
@@ -73,17 +75,34 @@ Page({
       });
 
       if (result.success) {
-        const newRecords = result.records.map(record => ({
-          id: record._id,
-          date: record.date,
-          activityType: record.activityType,
-          activityDetail: record.activityDetail,
-          carbonValue: record.carbonValue,
-          points: record.points,
-          imageUrl: record.imageUrl,
-          description: record.description,
-          createTime: record.createTime
-        }));
+        const newRecords = result.records.map(record => {
+          // 尝试从activityDetail中提取数量和单位
+          const detailText = record.activityDetail || '';
+          let amount = '-';
+          let unit = '';
+          
+          // 从activityDetail中解析数量和单位（格式如："🚶 步行 5 公里"）
+          const match = detailText.match(/(\d+\.?\d*)\s*([^\s]+)/);
+          if (match) {
+            amount = match[1];
+            unit = match[2];
+          }
+          
+          return {
+            id: record._id,
+            date: record.date,
+            activityType: record.activityType,
+            activityDetail: record.activityDetail,
+            carbonValue: record.carbonValue,
+            points: record.points,
+            imageUrl: record.imageUrl,
+            description: record.description,
+            createTime: record.createTime,
+            amount: amount,
+            unit: unit,
+            emoji: detailText.substring(0, 2)
+          };
+        });
 
         // 计算总碳减排量
         const allRecords = refresh ? newRecords : [...this.data.records, ...newRecords];
@@ -142,11 +161,21 @@ Page({
   // 查看记录详情
   viewDetail: function(e) {
     const recordId = e.currentTarget.dataset.id;
-    // 可以跳转到详情页或显示弹窗
-    wx.showModal({
-      title: '记录详情',
-      content: `活动类型：${e.currentTarget.dataset.type}\n碳减排量：${e.currentTarget.dataset.carbon}kg\n获得积分：${e.currentTarget.dataset.points}`,
-      showCancel: false
+    const record = this.data.records.find(r => r.id === recordId);
+
+    if (record) {
+      this.setData({
+        selectedRecord: record,
+        showDetailModal: true
+      });
+    }
+  },
+
+  // 关闭详情弹窗
+  onCloseDetailModal: function() {
+    this.setData({
+      showDetailModal: false,
+      selectedRecord: {}
     });
   },
 

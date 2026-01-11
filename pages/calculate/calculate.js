@@ -23,6 +23,7 @@ Page({
     description: '', // 活动描述
     imageUrl: '', // 上传的图片路径
     showImagePickerModal: false, // 是否显示图片选择弹窗
+    showCalendar: false, // 是否显示日历选择器
     carbonResult: 0, // 碳减排结果
     pointsResult: 0, // 积分结果
     loading: false, // 加载状态
@@ -188,119 +189,20 @@ Page({
     }
   },
 
-  // 显示日期选择器 - 优化版本
-  showDatePicker: function() {
-    // 获取今天的日期
-    const today = new Date();
-    const formatDate = (date) => {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
-    
-    // 准备常用日期选项
-    const todayStr = formatDate(today);
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = formatDate(yesterday);
-    
-    const twoDaysAgo = new Date(today);
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const twoDaysAgoStr = formatDate(twoDaysAgo);
-    
-    // 显示日期选择菜单
-    wx.showActionSheet({
-      itemList: ['今天', '昨天', '前天', '自定义日期'],
-      success: (res) => {
-        let selectedDateStr = todayStr;
-        
-        // 根据选择设置日期
-        switch(res.tapIndex) {
-          case 0: // 今天
-            selectedDateStr = todayStr;
-            break;
-          case 1: // 昨天
-            selectedDateStr = yesterdayStr;
-            break;
-          case 2: // 前天
-            selectedDateStr = twoDaysAgoStr;
-            break;
-          case 3: // 自定义日期
-            // 对于自定义日期，我们使用输入框方式
-            const currentDate = this.data.date || todayStr;
-            wx.showModal({
-              title: '自定义日期',
-              content: `请输入日期 (格式: YYYY-MM-DD)\n\n例如: ${todayStr}`,
-              editable: true,
-              placeholderText: currentDate,
-              success: (modalRes) => {
-                if (modalRes.confirm && modalRes.content) {
-                  // 验证日期格式
-                  if (/^\d{4}-\d{2}-\d{2}$/.test(modalRes.content)) {
-                    // 验证日期有效性
-                    const dateParts = modalRes.content.split('-');
-                    const year = parseInt(dateParts[0]);
-                    const month = parseInt(dateParts[1]) - 1; // 月份从0开始
-                    const day = parseInt(dateParts[2]);
-                    
-                    const dateObj = new Date(year, month, day);
-                    
-                    // 验证日期是否有效
-                    if (dateObj.getFullYear() === year && 
-                        dateObj.getMonth() === month && 
-                        dateObj.getDate() === day) {
-                      // 检查是否为未来日期
-                      const normalizedToday = new Date(today);
-                      normalizedToday.setHours(0, 0, 0, 0);
-                      dateObj.setHours(0, 0, 0, 0);
-                      
-                      if (dateObj <= normalizedToday) {
-                        this.setData({
-                          date: modalRes.content
-                        });
-                        wx.showToast({
-                          title: '日期已更新',
-                          icon: 'success'
-                        });
-                      } else {
-                        wx.showToast({
-                          title: '不能选择未来日期',
-                          icon: 'none'
-                        });
-                      }
-                    } else {
-                      wx.showToast({
-                        title: '日期不存在',
-                        icon: 'none'
-                      });
-                    }
-                  } else {
-                    wx.showToast({
-                      title: '日期格式应为 YYYY-MM-DD',
-                      icon: 'none'
-                    });
-                  }
-                }
-              }
-            });
-            return; // 结束函数
-        }
-        
-        // 更新选择的日期
-        this.setData({
-          date: selectedDateStr
-        });
-        
-        wx.showToast({
-          title: '日期已更新',
-          icon: 'success'
-        });
-      },
-      fail: () => {
-        console.log('取消日期选择');
-      }
-    });
+  // 显示日历选择器
+  showCalendarPicker: function() {
+    this.setData({ showCalendar: true });
+  },
+
+  // 日历日期选择回调
+  onCalendarChange: function(e) {
+    const selectedDate = e.detail.value;
+    this.setData({ date: selectedDate });
+  },
+
+  // 关闭日历选择器
+  onCalendarClose: function() {
+    this.setData({ showCalendar: false });
   },
 
   // 日期变化（兼容其他组件可能调用的方法）
@@ -422,19 +324,7 @@ Page({
       return false;
     }
     
-    // 检查日期是否合理（不允许未来日期）
-    const selectedDate = new Date(date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    if (selectedDate > today) {
-      wx.showToast({
-        title: '日期不能超过今天',
-        icon: 'none'
-      });
-      return false;
-    }
-    
+    // 日期验证已由日历选择器组件内部处理，无需重复验证
     return true;
   },
 

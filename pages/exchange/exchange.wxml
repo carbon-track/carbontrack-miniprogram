@@ -1,5 +1,7 @@
 <!--pages/exchange/exchange.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 返回按钮 -->
+  <uni-back-button title="兑换中心" theme="{{theme}}" />
   <!-- 我的积分 -->
   <view class="points-card">
     <view class="points-info">

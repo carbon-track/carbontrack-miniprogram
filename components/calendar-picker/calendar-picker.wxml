@@ -1,0 +1,47 @@
+<!--components/calendar-picker/calendar-picker.wxml-->
+<view class="calendar-picker-mask" wx:if="{{visible}}" bindtap="onClose">
+  <view class="calendar-container" catchtap="">
+    <view class="calendar-header">
+      <view class="month-navigation">
+        <view class="nav-button" bindtap="prevMonth">
+          <text class="arrow">‹</text>
+        </view>
+        <view class="current-month">{{currentYear}}年{{currentMonth}}月</view>
+        <view class="nav-button" bindtap="nextMonth">
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <view class="close-button" bindtap="onClose">✕</view>
+    </view>
+
+    <view class="calendar-body">
+      <!-- 星期标题 -->
+      <view class="weekdays">
+        <view class="weekday" wx:for="{{weekdays}}" wx:key="index">{{item}}</view>
+      </view>
+
+      <!-- 日期网格 -->
+      <view class="days-grid">
+        <view 
+          class="day-cell"
+          wx:for="{{calendarDays}}"
+          wx:key="index"
+          data-date="{{item.date}}"
+          data-disabled="{{item.disabled}}"
+          bindtap="onSelectDate"
+        >
+          <view class="day-content {{item.selected ? 'selected' : ''}} {{item.today ? 'today' : ''}} {{item.disabled ? 'disabled' : ''}}">
+            {{item.day}}
+            <view wx:if="{{item.hasRecord}}" class="record-dot"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="calendar-footer">
+      <view class="footer-button cancel" bindtap="onClose">取消</view>
+      <view class="footer-button confirm" bindtap="onConfirm">确定</view>
+    </view>
+  </view>
+</view>

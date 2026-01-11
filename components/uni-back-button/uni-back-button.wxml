@@ -1,0 +1,6 @@
+<view class="uni-back-button {{theme === 'dark' ? 'dark' : ''}}">
+  <view class="back-btn" bindtap="onBack">
+    <text class="back-icon">⬅️</text>
+  </view>
+  <view class="page-title" wx:if="{{title}}">{{title}}</view>
+</view>

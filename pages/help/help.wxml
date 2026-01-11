@@ -1,5 +1,7 @@
 <!--pages/help/help.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 返回按钮 -->
+  <uni-back-button title="帮助与反馈" theme="{{theme}}" />
   <!-- 常见问题 -->
   <view class="help-section">
     <view class="section-header">

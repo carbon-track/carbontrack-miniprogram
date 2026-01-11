@@ -1,5 +1,9 @@
 <!--pages/carbon-history/carbon-history.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 返回按钮 -->
+  <uni-back-button title="碳足迹记录" theme="{{theme}}" />
+  <!-- 返回按钮 -->
+  <uni-back-button title="碳足迹记录" theme="{{theme}}" />
   <!-- 筛选器 -->
   <view class="filter-section">
     <picker mode="selector" range="{{filterOptions}}" range-key="name" bindchange="onFilterChange">
@@ -99,4 +103,11 @@
       <text>没有更多记录了</text>
     </view>
   </view>
+
+  <!-- 记录详情弹窗 -->
+  <record-detail-modal
+    visible="{{showDetailModal}}"
+    record="{{selectedRecord}}"
+    bind:close="onCloseDetailModal"
+  />
 </view>

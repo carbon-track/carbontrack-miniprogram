@@ -1,5 +1,7 @@
 <!--pages/settings/settings.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 返回按钮 -->
+  <uni-back-button title="设置" theme="{{theme}}" />
   <!-- 通知设置 -->
   <view class="settings-group">
     <view class="group-title">

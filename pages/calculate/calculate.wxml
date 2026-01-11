@@ -88,7 +88,7 @@
         <view class="section-icon">📅</view>
         <view class="section-title">活动日期</view>
       </view>
-      <view class="date-picker" bindtap="showDatePicker">
+      <view class="date-picker" bindtap="showCalendarPicker">
         <text>{{date || '请选择日期'}}</text>
         <text class="emoji">📅</text>
       </view>
@@ -147,6 +147,14 @@
       <text>{{submitting ? '提交中...' : '提交记录'}}</text>
     </button>
   </view>
+
+  <!-- 日历选择器 -->
+  <calendar-picker
+    visible="{{showCalendar}}"
+    value="{{date}}"
+    bind:change="onCalendarChange"
+    bind:close="onCalendarClose"
+  />
 
   <!-- 图片选择弹窗 -->
   <view class="image-picker-modal" wx:if="{{showImagePickerModal}}">

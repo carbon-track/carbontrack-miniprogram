@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "calendar-picker": "/components/calendar-picker/calendar-picker"
+  }
+}
