@@ -2,6 +2,7 @@
 const app = getApp();
 const { requireAuth } = require('../../utils/auth.js');
 const { getRank } = require('../../utils/cloud-api.js');
+const { cachedRequest, throttle } = require('../../utils/performance.js');
 
 Page({
   data: {
@@ -23,10 +24,13 @@ Page({
   onLoad: function() {
     // 获取主题设置
     this.setTheme();
-    
+
+    // 创建节流函数
+    this.throttledLoadMore = throttle(this._loadMore.bind(this), 500);
+
     // 加载排行榜数据（允许未登录用户查看模拟数据）
     this.loadRankData();
-    
+
     // 检查登录状态（只在需要操作时强制登录）
     // 如果未登录，仍然允许查看排行榜
   },
@@ -59,14 +63,30 @@ Page({
 
   // 加载排行榜数据
   loadRankData: async function() {
-    const { currentTab, page } = this.data;
+    const { currentTab, page, refreshing } = this.data;
 
     try {
-      const result = await getRank({
-        type: currentTab,
-        page,
-        limit: 20
-      });
+      const cacheKey = `rank:${currentTab}:page${page}`;
+
+      // 第一页且非刷新时使用缓存
+      const shouldUseCache = page === 1 && !refreshing;
+
+      let result;
+      if (shouldUseCache) {
+        result = await cachedRequest(cacheKey, async () => {
+          return await getRank({
+            type: currentTab,
+            page,
+            limit: 20
+          });
+        }, { expire: 2 * 60 * 1000 }); // 缓存2分钟
+      } else {
+        result = await getRank({
+          type: currentTab,
+          page,
+          limit: 20
+        });
+      }
 
       if (result.success) {
         // 合并数据（下拉加载更多）
@@ -126,26 +146,26 @@ Page({
   },
 
   // 生成模拟排行榜数据
-  generateMockRankData: function(page) {
+  generateMockRankData: async function(page) {
     const baseRank = (page - 1) * 20;
     const avatarColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57', '#FF8C42', '#6A0572', '#AB83A1'];
-    
+
     // 更真实的用户名列表
     const usernames = [
-      '绿色先锋🌱', '低碳达人💡', '环保卫士🌍', '自然爱好者🌸', 
+      '绿色先锋🌱', '低碳达人💡', '环保卫士🌍', '自然爱好者🌸',
       '地球守护者🌳', '节能小能手⚡', '生态平衡者♻️', '环保志愿者🎯',
       '绿色生活家🏡', '可持续发展者🌊', '清洁地球人🚮', '绿植养护师🌿',
       '环保创新者💚', '低碳出行者🚲', '资源回收师📦', '环保教师👩‍🏫',
       '生态摄影师📸', '环保设计师🎨', '绿色科学家🔬', '碳中和倡导者🌱'
     ];
-    
+
     // 更多样化的学校名称
     const schools = [
-      '北京大学', '清华大学', '复旦大学', '上海交通大学', 
+      '北京大学', '清华大学', '复旦大学', '上海交通大学',
       '浙江大学', '南京大学', '武汉大学', '中山大学',
       '环保科技大学', '绿色能源学院', '生态工程学院', '可持续发展大学'
     ];
-    
+
     // 根据不同榜单类型生成差异化数据
     const generatePoints = (rank) => {
       const basePoints = {
@@ -155,7 +175,7 @@ Page({
       };
       return Math.max(100, basePoints[this.data.currentTab]);
     };
-    
+
     const generateCarbonSaved = (rank) => {
       const baseCarbon = {
         'global': 150 - rank * 0.6 + Math.random() * 3,
@@ -164,29 +184,45 @@ Page({
       };
       return (Math.max(10, baseCarbon[this.data.currentTab])).toFixed(2);
     };
-    
+
     // Emoji头像映射
     const emojiAvatars = ['🌱', '💡', '🌍', '🌸', '🌳', '⚡', '♻️', '🎯', '🏡', '🌊', '🚮', '🌿', '💚', '🚲', '📦', '👩‍🏫', '📸', '🎨', '🔬', '🌱'];
-    
-    return Array.from({ length: 20 }, (_, index) => {
-      const rank = baseRank + index + 1;
-      const usernameIndex = (baseRank + index) % usernames.length;
-      
-      return {
-        id: rank,
-        rank: rank,
-        username: usernames[usernameIndex],
-        avatarEmoji: emojiAvatars[usernameIndex],
-        avatarColor: avatarColors[rank % avatarColors.length],
-        points: generatePoints(rank),
-        carbonSaved: generateCarbonSaved(rank),
-        level: Math.min(15, Math.floor(rank / 3) + 1 + Math.floor(Math.random() * 3)),
-        school: schools[Math.floor(Math.random() * schools.length)],
-        // 添加更多真实数据字段
-        contributionDays: Math.floor(Math.random() * 365) + 30,
-        activitiesCompleted: Math.floor(Math.random() * 500) + 50
-      };
-    });
+
+    // 优化：分批生成数据，避免阻塞UI
+    const batchSize = 5;
+    const rankList = [];
+    const total = 20;
+
+    for (let i = 0; i < total; i += batchSize) {
+      const batch = Array.from({ length: Math.min(batchSize, total - i) }, (_, index) => {
+        const rank = baseRank + i + index + 1;
+        const usernameIndex = (baseRank + i + index) % usernames.length;
+
+        return {
+          id: rank,
+          rank: rank,
+          username: usernames[usernameIndex],
+          avatarEmoji: emojiAvatars[usernameIndex],
+          avatarColor: avatarColors[rank % avatarColors.length],
+          points: generatePoints(rank),
+          carbonSaved: generateCarbonSaved(rank),
+          level: Math.min(15, Math.floor(rank / 3) + 1 + Math.floor(Math.random() * 3)),
+          school: schools[Math.floor(Math.random() * schools.length)],
+          // 添加更多真实数据字段
+          contributionDays: Math.floor(Math.random() * 365) + 30,
+          activitiesCompleted: Math.floor(Math.random() * 500) + 50
+        };
+      });
+
+      rankList.push(...batch);
+
+      // 每处理一批后稍微让出主线程
+      if (i + batchSize < total) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    }
+
+    return rankList;
   },
 
   // 生成模拟用户排名数据
@@ -226,10 +262,16 @@ Page({
     this.loadRankData();
   },
 
-  // 上拉加载更多
+  // 上拉加载更多（带节流）
   onReachBottom: function() {
+    // 使用节流函数
+    this.throttledLoadMore();
+  },
+
+  // 实际加载更多（内部方法）
+  _loadMore: function() {
     if (this.data.loading || !this.data.hasMore) return;
-    
+
     this.setData({
       page: this.data.page + 1,
       loading: true

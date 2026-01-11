@@ -1,7 +1,8 @@
 // pages/calculate/calculate.js
 const app = getApp();
 const { requireAuth } = require('../../utils/auth.js');
-const { saveCarbonRecord, getCarbonRules, checkIncentiveBonus } = require('../../utils/cloud-api.js');
+const { saveCarbonRecord, getCarbonRules, getActivities } = require('../../utils/cloud-api.js');
+const { debounce, cachedRequest } = require('../../utils/performance.js');
 const {
   calculateCarbonSavings,
   calculatePoints,
@@ -32,10 +33,14 @@ Page({
   onLoad: function() {
     // 获取主题设置
     this.setTheme();
-    
+
+    // 创建防抖函数
+    this.debouncedSearch = debounce(this._performSearch.bind(this), 300);
+    this.debouncedCalculate = debounce(this.calculateResults.bind(this), 300);
+
     // 加载活动类型
     this.loadActivityTypes();
-    
+
     // 设置默认日期为今天
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
@@ -62,11 +67,14 @@ Page({
   // 加载活动类型
   loadActivityTypes: async function() {
     try {
-      // 并行加载活动类型和碳核算规则
-      const [{ getActivities } = require('../../utils/cloud-api.js'), activitiesResult, carbonRulesResult] = await Promise.all([
-        Promise.resolve(),
-        getActivities({ status: 'active' }),
-        getCarbonRules({ status: 'active' })
+      // 使用缓存加载活动类型和碳核算规则
+      const [activitiesResult, carbonRulesResult] = await Promise.all([
+        cachedRequest('activities:active', async () => {
+          return await getActivities({ status: 'active' });
+        }, { expire: 60 * 60 * 1000 }), // 缓存1小时
+        cachedRequest('carbonRules:active', async () => {
+          return await getCarbonRules({ status: 'active' });
+        }, { expire: 60 * 60 * 1000 }) // 缓存1小时
       ]);
       
       let activityTypes = [];
@@ -124,16 +132,21 @@ Page({
     }
   },
 
-  // 搜索活动
+  // 搜索活动（带防抖）
   onSearch: function(e) {
     const query = e.detail.value || '';
-    const filtered = this.data.activityTypes.filter(activity => 
+    this.setData({ searchQuery: query });
+
+    // 使用防抖函数执行搜索
+    this.debouncedSearch(query);
+  },
+
+  // 实际执行搜索（内部方法）
+  _performSearch: function(query) {
+    const filtered = this.data.activityTypes.filter(activity =>
       activity.name.toLowerCase().includes(query.toLowerCase())
     );
-    this.setData({
-      searchQuery: query,
-      filteredActivities: filtered
-    });
+    this.setData({ filteredActivities: filtered });
   },
 
   // 选择活动
@@ -158,11 +171,21 @@ Page({
     });
   },
 
-  // 输入数量变化
+  // 输入数量变化（带防抖）
   onAmountChange: function(e) {
     const amount = e.detail.value;
     this.setData({ amount });
-    this.calculateResults(amount);
+
+    // 使用防抖函数执行计算
+    if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+      this.debouncedCalculate(amount);
+    } else {
+      // 清空时立即清零
+      this.setData({
+        carbonResult: 0,
+        pointsResult: 0
+      });
+    }
   },
 
   // 显示日期选择器 - 优化版本

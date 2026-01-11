@@ -1,6 +1,7 @@
 // pages/profile/profile.js
 const app = getApp();
 const { updateProfile } = require('../../utils/cloud-api.js');
+const { cachedRequest } = require('../../utils/performance.js');
 
 Page({
   data: {
@@ -77,8 +78,12 @@ Page({
   loadSchools: async function() {
     try {
       const { getSchools } = require('../../utils/cloud-api.js');
-      const result = await getSchools();
-      
+
+      // 使用缓存加载学校列表
+      const result = await cachedRequest('schools:list', async () => {
+        return await getSchools();
+      }, { expire: 60 * 60 * 1000 }); // 缓存1小时
+
       if (result.success && result.data.length > 0) {
         const schools = result.data.map(school => ({
           id: school._id,

@@ -1,6 +1,7 @@
 // pages/wallet/wallet.js
 const app = getApp();
 const { getTransactions } = require('../../utils/cloud-api.js');
+const { cachedRequest, throttle } = require('../../utils/performance.js');
 
 Page({
   data: {
@@ -22,6 +23,10 @@ Page({
 
   onLoad: function() {
     this.setTheme();
+
+    // 创建节流函数
+    this.throttledLoadMore = throttle(this._loadMore.bind(this), 500);
+
     this.loadWalletData();
   },
 
@@ -35,48 +40,83 @@ Page({
     });
   },
 
+  // 格式化单个交易记录
+  _formatTransaction: function(t) {
+    const emojiMap = {
+      income: '💰',
+      expense: '💸'
+    };
+    const gradientMap = {
+      income: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
+      expense: 'linear-gradient(135deg, #FF9800 0%, #FFC107 100%)'
+    };
+
+    return {
+      id: t._id,
+      type: t.type,
+      amount: t.amount,
+      title: t.title,
+      description: t.description,
+      date: t.createTime ? new Date(t.createTime).toLocaleString() : t.date,
+      status: t.status || 'completed',
+      emoji: t.emoji || emojiMap[t.type] || '💰',
+      gradient: t.gradient || gradientMap[t.type],
+      formattedAmount: t.type === 'income' ? `+${t.amount} 积分` : `-${t.amount} 积分`
+    };
+  },
+
   // 加载钱包数据
   loadWalletData: async function() {
     this.setData({ isLoading: true });
 
     try {
-      // 调用云函数获取交易记录
-      const result = await getTransactions({
-        page: this.data.page,
-        limit: 20,
-        type: this.data.activeTab === 'all' ? undefined : this.data.activeTab
-      });
+      const cacheKey = `transactions:${this.data.activeTab}:page${this.data.page}`;
+
+      // 第一页时使用缓存
+      const shouldUseCache = this.data.page === 1 && !this.data.isRefreshing;
+
+      let result;
+      if (shouldUseCache) {
+        result = await cachedRequest(cacheKey, async () => {
+          return await getTransactions({
+            page: this.data.page,
+            limit: 20,
+            type: this.data.activeTab === 'all' ? undefined : this.data.activeTab
+          });
+        }, { expire: 2 * 60 * 1000 }); // 缓存2分钟
+      } else {
+        result = await getTransactions({
+          page: this.data.page,
+          limit: 20,
+          type: this.data.activeTab === 'all' ? undefined : this.data.activeTab
+        });
+      }
 
       if (result.success) {
-        // 转换数据格式
-        const formattedTransactions = result.transactions.map(t => {
-          // 根据类型设置 emoji 和渐变色
-          const emojiMap = {
-            income: '💰',
-            expense: '💸'
-          };
-          const gradientMap = {
-            income: 'linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)',
-            expense: 'linear-gradient(135deg, #FF9800 0%, #FFC107 100%)'
-          };
+        // 优化：使用分批处理避免阻塞
+        const batchSize = 10;
+        const formattedTransactions = [];
+        const transactions = result.transactions || [];
 
-          return {
-            id: t._id,
-            type: t.type,
-            amount: t.amount,
-            title: t.title,
-            description: t.description,
-            date: t.createTime ? new Date(t.createTime).toLocaleString() : t.date,
-            status: t.status || 'completed',
-            emoji: t.emoji || emojiMap[t.type] || '💰',
-            gradient: t.gradient || gradientMap[t.type],
-            formattedAmount: t.type === 'income' ? `+${t.amount} 积分` : `-${t.amount} 积分`
-          };
-        });
+        for (let i = 0; i < transactions.length; i += batchSize) {
+          const batch = transactions.slice(i, i + batchSize);
+          const formattedBatch = batch.map(t => this._formatTransaction(t));
+          formattedTransactions.push(...formattedBatch);
+
+          // 每处理一批后稍微让出主线程
+          if (i + batchSize < transactions.length) {
+            await new Promise(resolve => setTimeout(resolve, 0));
+          }
+        }
+
+        // 合并或替换数据
+        const finalTransactions = this.data.page === 1
+          ? formattedTransactions
+          : [...this.data.transactions, ...formattedTransactions];
 
         this.setData({
           totalPoints: result.totalPoints,
-          transactions: formattedTransactions,
+          transactions: finalTransactions,
           isLoading: false,
           isRefreshing: false,
           hasMore: result.hasMore
@@ -110,8 +150,8 @@ Page({
   // 切换标签
   switchTab: function(e) {
     const tab = e.currentTarget.dataset.tab;
-    this.setData({ activeTab: tab });
-    this.updateTransactionList();
+    this.setData({ activeTab: tab, page: 1, hasMore: true });
+    this.loadWalletData();
   },
 
   // 查看交易详情
@@ -141,21 +181,22 @@ Page({
     });
   },
 
-  // 上拉加载更多
+  // 上拉加载更多（带节流）
   onReachBottom: function() {
+    if (!this.data.hasMore || this.data.isLoading) return;
+
+    // 使用节流函数
+    this.throttledLoadMore();
+  },
+
+  // 实际加载更多（内部方法）
+  _loadMore: function() {
     if (!this.data.hasMore || this.data.isLoading) return;
 
     this.setData({
       page: this.data.page + 1,
       isLoading: true
     });
-    this.loadWalletData();
-  },
-
-  // 切换标签时重新加载
-  switchTab: function(e) {
-    const tab = e.currentTarget.dataset.tab;
-    this.setData({ activeTab: tab, page: 1, hasMore: true });
     this.loadWalletData();
   }
 });
