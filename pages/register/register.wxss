@@ -1,0 +1,227 @@
+/* pages/register/register.wxss */
+
+/* 主题变量 */
+.container {
+  --primary-color: #34C759;
+  --background-color: #F2F2F7;
+  --text-color: #000000;
+  --border-color: #E5E5EA;
+  --error-color: #FF3B30;
+  --placeholder-color: #8E8E93;
+  --button-background: #34C759;
+  --button-text: #FFFFFF;
+  --card-background: #FFFFFF;
+  
+  padding: 40rpx 30rpx;
+  background-color: var(--background-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.container.dark {
+  --primary-color: #4ECDC4;
+  --background-color: #1C1C1E;
+  --text-color: #FFFFFF;
+  --border-color: #38383A;
+  --placeholder-color: #8E8E93;
+  --button-background: #4ECDC4;
+  --button-text: #FFFFFF;
+  --card-background: #2C2C2E;
+}
+
+/* 页面头部 */
+.header {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* 表单样式 */
+.register-form {
+  max-width: 600rpx;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.input-wrapper {
+  background-color: var(--card-background);
+  border: 1rpx solid var(--border-color);
+  border-radius: 12rpx;
+  padding: 0 30rpx;
+  display: flex;
+  align-items: center;
+  height: 100rpx;
+  position: relative;
+}
+
+.input-wrapper input {
+  flex: 1;
+  height: 100%;
+  font-size: 32rpx;
+  color: var(--text-color);
+  background-color: transparent;
+}
+
+.input-wrapper .placeholder {
+  color: var(--placeholder-color);
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.arrow-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 10rpx;
+  opacity: 0.5;
+}
+
+.error-message {
+  font-size: 24rpx;
+  color: var(--error-color);
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 协议部分 */
+.agreement-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.checkbox {
+  margin-right: 16rpx;
+}
+
+.checkbox-inner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--card-background);
+}
+
+.checkbox-inner.checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkbox-inner image {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.agreement-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.link {
+  color: var(--primary-color);
+}
+
+/* 注册按钮 */
+.register-button {
+  background-color: var(--button-background);
+  color: var(--button-text);
+  font-size: 34rpx;
+  font-weight: bold;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-radius: 16rpx;
+  margin-top: 20rpx;
+}
+
+.register-button::after {
+  border: none;
+}
+
+/* 登录链接 */
+.login-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.login-link .link {
+  margin-left: 8rpx;
+}
+
+/* 学校选择器 */
+.school-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 999;
+}
+
+.school-picker {
+  width: 100%;
+  background-color: var(--card-background);
+  border-top-left-radius: 30rpx;
+  border-top-right-radius: 30rpx;
+  padding-bottom: 40rpx;
+}
+
+.picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.picker-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.cancel-button, .confirm-button {
+  font-size: 32rpx;
+  color: var(--primary-color);
+}
+
+.school-picker-view {
+  height: 400rpx;
+  color: var(--text-color);
+}
+
+.school-item {
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: 32rpx;
+  color: var(--text-color);
+}

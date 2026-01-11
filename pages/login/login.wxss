@@ -1,0 +1,233 @@
+/* pages/login/login.wxss */
+
+/* 页面容器 */
+.container {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+.container.dark {
+  background-color: var(--background-color);
+}
+
+/* 登录内容区域 */
+.login-content {
+  width: 100%;
+  max-width: 500rpx;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--tertiary-background);
+  box-shadow: var(--shadow-md);
+}
+
+/* Logo区域 */
+.logo-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: var(--spacing-md);
+}
+
+.app-name {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.app-slogan {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary-color);
+}
+
+/* 表单样式 */
+.login-form {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary-background);
+  border-radius: var(--border-radius-md);
+  padding: 0 var(--spacing-md);
+  border: 1rpx solid var(--border-color);
+}
+
+.input-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: var(--spacing-sm);
+}
+
+.form-input {
+  flex: 1;
+  height: 88rpx;
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  background-color: transparent;
+  border: none;
+}
+
+.form-input::placeholder {
+  color: var(--text-tertiary-color);
+}
+
+.password-toggle {
+  padding: var(--spacing-sm);
+}
+
+.password-toggle image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+/* 忘记密码 */
+.forgot-password {
+  text-align: right;
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--primary-color);
+}
+
+/* 登录按钮 */
+.login-button {
+  height: 96rpx;
+  line-height: 96rpx;
+  font-size: var(--font-size-lg);
+  border-radius: var(--border-radius-md);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-button[disabled] {
+  background-color: var(--text-tertiary-color);
+  opacity: 0.7;
+}
+
+/* 微信登录容器 */
+.wechat-login-container {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 微信登录按钮 */
+.wechat-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 96rpx;
+  background-color: #07C160;
+  border-radius: var(--border-radius-md);
+  color: white;
+  padding: 0;
+  line-height: normal;
+  border: none;
+}
+
+.wechat-login-btn::after {
+  border: none;
+}
+
+.wechat-login-btn image {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: var(--spacing-sm);
+}
+
+.wechat-login-btn text {
+  font-size: var(--font-size-base);
+  color: white;
+}
+
+/* 注册入口 */
+.register-section {
+  text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--text-tertiary-color);
+}
+
+.register-link {
+  color: var(--primary-color);
+  margin-left: var(--spacing-xs);
+}
+
+/* 响应式调整 */
+@media (min-width: 768px) {
+  .login-content {
+    max-width: 600rpx;
+  }
+}
+
+.debug-toggle {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+}
+
+.debug-panel {
+  background-color: var(--secondary-background);
+  border: 1rpx solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+}
+
+.debug-row {
+  margin-bottom: var(--spacing-sm);
+}
+
+.debug-label {
+  display: inline-block;
+  width: 220rpx;
+  color: var(--text-secondary-color);
+}
+
+.debug-value {
+  color: var(--text-color);
+}
+
+.debug-mono {
+  display: block;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary-color);
+  word-break: break-all;
+}
+
+.debug-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
+}
+
+.debug-btn {
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  flex: 1;
+}

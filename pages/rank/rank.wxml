@@ -1,0 +1,163 @@
+<!--pages/rank/rank.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 顶部标签栏 -->
+  <view class="tab-bar">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="id"
+      class="tab-item {{currentTab === item.id ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="{{item.id}}"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <!-- 排行榜头部（前三名） -->
+  <view class="rank-header" wx:if="{{rankList.length > 0}}">
+    <!-- 第二名 -->
+    <view class="rank-item rank-second" bindtap="viewUserDetail" data-user-id="{{rankList[1] && rankList[1].id}}">
+      <view class="rank-number rank-second-bg">2</view>
+      <view class="user-info">
+        <view class="avatar-wrapper" style="background-color: {{rankList[1] && rankList[1].avatarColor ? rankList[1].avatarColor : '#ccc'}}">
+          <block wx:if="{{rankList[1] && rankList[1].avatarUrl}}">
+            <image class="avatar-image" src="{{rankList[1].avatarUrl}}" mode="aspectFill"></image>
+          </block>
+          <block wx:else>
+            {{rankList[1] && rankList[1].avatarEmoji ? rankList[1].avatarEmoji : (rankList[1] && rankList[1].username ? rankList[1].username.substring(0, 2) : '')}}
+          </block>
+        </view>
+        <view class="user-details">
+          <view class="username">{{rankList[1] && rankList[1].username}}</view>
+          <view class="points">{{rankList[1] && rankList[1].points}} 积分</view>
+        </view>
+      </view>
+      <view class="carbon-info">{{rankList[1] && rankList[1].carbonSaved}} kg</view>
+    </view>
+
+    <!-- 第一名 -->
+    <view class="rank-item rank-first" bindtap="viewUserDetail" data-user-id="{{rankList[0] && rankList[0].id}}">
+      <image class="crown" src="/assets/icons/crown.png" mode="aspectFit"></image>
+      <view class="user-info">
+        <view class="avatar-wrapper" style="background-color: {{rankList[0] && rankList[0].avatarColor ? rankList[0].avatarColor : '#ccc'}}">
+          <block wx:if="{{rankList[0] && rankList[0].avatarUrl}}">
+            <image class="avatar-image" src="{{rankList[0].avatarUrl}}" mode="aspectFill"></image>
+          </block>
+          <block wx:else>
+            {{rankList[0] && rankList[0].avatarEmoji ? rankList[0].avatarEmoji : (rankList[0] && rankList[0].username ? rankList[0].username.substring(0, 2) : '')}}
+          </block>
+        </view>
+        <view class="user-details">
+          <view class="username">{{rankList[0] && rankList[0].username}}</view>
+          <view class="points">{{rankList[0] && rankList[0].points}} 积分</view>
+        </view>
+      </view>
+      <view class="carbon-info">{{rankList[0] && rankList[0].carbonSaved}} kg</view>
+    </view>
+
+    <!-- 第三名 -->
+    <view class="rank-item rank-third" bindtap="viewUserDetail" data-user-id="{{rankList[2] && rankList[2].id}}">
+      <view class="rank-number rank-third-bg">3</view>
+      <view class="user-info">
+        <view class="avatar-wrapper" style="background-color: {{rankList[2] && rankList[2].avatarColor ? rankList[2].avatarColor : '#ccc'}}">
+          <block wx:if="{{rankList[2] && rankList[2].avatarUrl}}">
+            <image class="avatar-image" src="{{rankList[2].avatarUrl}}" mode="aspectFill"></image>
+          </block>
+          <block wx:else>
+            {{rankList[2] && rankList[2].avatarEmoji ? rankList[2].avatarEmoji : (rankList[2] && rankList[2].username ? rankList[2].username.substring(0, 2) : '')}}
+          </block>
+        </view>
+        <view class="user-details">
+          <view class="username">{{rankList[2] && rankList[2].username}}</view>
+          <view class="points">{{rankList[2] && rankList[2].points}} 积分</view>
+        </view>
+      </view>
+      <view class="carbon-info">{{rankList[2] && rankList[2].carbonSaved}} kg</view>
+    </view>
+  </view>
+
+  <!-- 排行榜列表 -->
+  <view class="rank-list">
+    <!-- 列表头部 -->
+    <view class="list-header">
+      <view class="header-item">排名</view>
+      <view class="header-item">用户</view>
+      <view class="header-item">积分</view>
+      <view class="header-item">碳减排</view>
+    </view>
+
+    <!-- 列表内容 -->
+    <block wx:if="{{!loading || rankList.length > 0}}">
+        <view
+          wx:for="{{rankList}}"
+          wx:key="id"
+          wx:if="{{index >= 3}}"
+          class="list-item"
+          bindtap="viewUserDetail"
+          data-user-id="{{item.id}}"
+        >
+        <view class="list-cell rank-cell">{{item.rank}}</view>
+        <view class="list-cell user-cell">
+          <view class="avatar-wrapper" style="background-color: {{item.avatarColor}}">
+            <block wx:if="{{item.avatarUrl}}">
+              <image class="avatar-image" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+            </block>
+            <block wx:else>
+              {{item.avatarEmoji ? item.avatarEmoji : (item.username ? item.username.substring(0, 2) : '')}}
+            </block>
+          </view>
+          <view class="username">{{item.username}}</view>
+        </view>
+        <view class="list-cell points-cell">{{item.points}}</view>
+        <view class="list-cell carbon-cell">{{item.carbonSaved}} kg</view>
+      </view>
+
+      <!-- 当前用户排名 -->
+      <view wx:if="{{userRank}}" class="user-rank-item">
+        <view class="list-cell rank-cell">{{userRank.rank}}</view>
+        <view class="list-cell user-cell">
+          <view class="avatar-wrapper current-avatar">
+            <block wx:if="{{userRank && userRank.avatarUrl}}">
+              <image class="avatar-image" src="{{userRank.avatarUrl}}" mode="aspectFill"></image>
+            </block>
+            <block wx:else>
+              👤
+            </block>
+          </view>
+          <view class="username">当前用户</view>
+        </view>
+        <view class="list-cell points-cell">{{userRank.points}}</view>
+        <view class="list-cell carbon-cell">{{userRank.carbonSaved}} kg</view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && rankList.length === 0}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit"></image>
+      <view>暂无排名数据</view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && rankList.length === 0}}" class="loading-state">
+      <view class="loading-spinner"></view>
+      <view>加载中...</view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{loading && rankList.length > 0}}" class="loading-more">
+      <view class="loading-spinner"></view>
+      <view>加载更多...</view>
+    </view>
+
+    <!-- 没有更多 -->
+    <view wx:if="{{!hasMore && rankList.length > 0}}" class="no-more">
+      没有更多了
+    </view>
+  </view>
+
+  <!-- 下拉刷新指示器 -->
+  <view wx:if="{{refreshing}}" class="refresh-indicator">
+    <view class="loading-spinner"></view>
+    <view>刷新中...</view>
+  </view>
+</view>

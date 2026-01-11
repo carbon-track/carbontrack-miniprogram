@@ -1,0 +1,63 @@
+<!--pages/login/login.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <view class="login-content">
+    <!-- Logo和标题 -->
+    <view class="logo-section">
+      <image class="logo" src="/assets/icons/logo.png" mode="aspectFit"></image>
+      <view class="app-name">CarbonTrack</view>
+      <view class="app-slogan">校园碳账户平台</view>
+    </view>
+
+    <view class="login-form">
+      <view class="wechat-login-container">
+        <button
+          lang="zh_CN"
+          bindtap="onWechatLoginTap"
+          class="wechat-login-btn"
+        >
+          <image src="/assets/icons/wechat.png" mode="aspectFit"></image>
+          <text>微信一键登录</text>
+        </button>
+      </view>
+      <view class="debug-toggle" bindtap="toggleDebug">
+        <text>{{debugVisible ? '隐藏调试面板' : '显示调试面板'}}</text>
+      </view>
+      <view wx:if="{{debugVisible}}" class="debug-panel">
+        <view class="debug-row">
+          <text class="debug-label">基础库版本</text>
+          <text class="debug-value">{{debugInfo.sdkVersion}}</text>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">wx.login code</text>
+          <text class="debug-mono">{{debugInfo.loginCode || ''}}</text>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">支持getUserProfile</text>
+          <text class="debug-value">{{debugInfo.canGetUserProfile ? '是' : '否'}}</text>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">云开发已初始化</text>
+          <text class="debug-value">{{debugInfo.cloudInited ? '是' : '否'}}</text>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">本地用户</text>
+          <text class="debug-mono">{{debugInfo.userInfoStr}}</text>
+        </view>
+        <view class="debug-actions">
+          <button class="debug-btn" bindtap="refreshDebug">刷新信息</button>
+          <button class="debug-btn" bindtap="onDebugGetProfile">测试获取用户资料</button>
+          <button class="debug-btn" bindtap="onDebugCloudLogin">测试云登录</button>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">授权返回</text>
+          <text class="debug-mono">{{debugInfo.userProfileStr}}</text>
+        </view>
+        <view class="debug-row">
+          <text class="debug-label">云登录结果</text>
+          <text class="debug-mono">{{debugInfo.cloudLoginResultStr}}</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+</view>

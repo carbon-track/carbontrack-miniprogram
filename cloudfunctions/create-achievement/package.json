@@ -1,0 +1,1 @@
+{"name": "create-achievement","version": "1.0.0","description": "创建成就（管理员）","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}

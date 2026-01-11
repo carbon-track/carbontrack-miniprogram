@@ -1,0 +1,15 @@
+{
+  "libVersion": "3.13.0",
+  "projectname": "carbon-track-miniapp",
+  "setting": {
+    "urlCheck": true,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": false,
+    "skylineRenderEnable": false,
+    "preloadBackgroundData": true,
+    "autoAudits": true,
+    "showShadowRootInWxmlPanel": true,
+    "compileHotReLoad": true,
+    "bigPackageSizeSupport": true
+  }
+}

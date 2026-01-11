@@ -1,0 +1,203 @@
+/* 全局样式 */
+page {
+  --ios-red: #FF3B30;
+  --ios-orange: #FF9500;
+  --ios-yellow: #FFCC00;
+  --ios-green: #34C759;
+  --ios-teal: #5AC8FA;
+  --ios-blue: #007AFF;
+  --ios-purple: #AF52DE;
+  --ios-pink: #FF2D55;
+  
+  --primary-color: var(--ios-green);
+  --secondary-color: var(--ios-blue);
+  --danger-color: var(--ios-red);
+  --warning-color: var(--ios-orange);
+  --info-color: var(--ios-teal);
+  
+  --font-size-xs: 24rpx;
+  --font-size-sm: 28rpx;
+  --font-size-base: 32rpx;
+  --font-size-lg: 36rpx;
+  --font-size-xl: 40rpx;
+  --font-size-2xl: 48rpx;
+  
+  --border-radius-sm: 8rpx;
+  --border-radius-md: 16rpx;
+  --border-radius-lg: 24rpx;
+  --border-radius-xl: 32rpx;
+  
+  --spacing-xs: 16rpx;
+  --spacing-sm: 24rpx;
+  --spacing-md: 32rpx;
+  --spacing-lg: 48rpx;
+  --spacing-xl: 64rpx;
+  
+  --shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4rpx 8rpx rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8rpx 16rpx rgba(0, 0, 0, 0.2);
+  
+  /* 默认使用浅色主题 */
+  --background-color: #FFFFFF;
+  --secondary-background: #F2F2F7;
+  --tertiary-background: #FFFFFF;
+  
+  --text-color: #000000;
+  --text-secondary-color: #3A3A3C;
+  --text-tertiary-color: #8E8E93;
+  
+  --border-color: #E5E5EA;
+  --divider-color: #C6C6C8;
+  
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  background-image: url('/images/carbontracks.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+/* 深色主题 */
+page.dark {
+  --background-color: #1C1C1E;
+  --secondary-background: #2C2C2E;
+  --tertiary-background: #3A3A3C;
+  
+  --text-color: #FFFFFF;
+  --text-secondary-color: #E5E5EA;
+  --text-tertiary-color: #8E8E93;
+  
+  --border-color: #38383A;
+  --divider-color: #48484A;
+}
+
+/* 通用样式 */
+.container {
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card {
+  background-color: var(--tertiary-background);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-background);
+  color: var(--text-color);
+  border: 1rpx solid var(--border-color);
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1rpx solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--secondary-background);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 工具类 */
+.text-center {
+  text-align: center;
+}
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+.ml-sm { margin-left: var(--spacing-sm); }
+.ml-md { margin-left: var(--spacing-md); }
+.ml-lg { margin-left: var(--spacing-lg); }
+
+.mr-sm { margin-right: var(--spacing-sm); }
+.mr-md { margin-right: var(--spacing-md); }
+.mr-lg { margin-right: var(--spacing-lg); }
+
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }

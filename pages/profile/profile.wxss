@@ -1,0 +1,641 @@
+/* pages/profile/profile.wxss */
+
+.container {
+  background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
+  min-height: 100vh;
+  padding: 40rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.container.dark {
+  background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+}
+
+/* 个人资料头部 */
+.profile-header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8rpx;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.container.dark .profile-header {
+  background: linear-gradient(135deg, #2C2C2E 0%, #3A3A3C 100%);
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.avatar {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+.avatar-emoji {
+  font-size: 88rpx;
+  filter: drop-shadow(0 2rpx 8rpx rgba(0, 0, 0, 0.1));
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: bold;
+  border: 6rpx solid white;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.edit-icon:active {
+  transform: scale(0.95);
+}
+
+.container.dark .edit-icon {
+  border-color: #2C2C2E;
+}
+
+.avatar-actions {
+  margin-top: 16rpx;
+}
+
+.choose-avatar-btn {
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #34C759 0%, #4CD964 100%);
+  color: white;
+  border: none;
+}
+
+.choose-avatar-btn::after {
+  border: none;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.username-section {
+  margin-bottom: 15rpx;
+}
+
+.username {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #000000;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .username {
+  color: #FFFFFF;
+}
+
+.username-input {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #333;
+  padding: 0;
+  background-color: transparent;
+  border-bottom: 4rpx solid #667eea;
+  margin-bottom: 15rpx;
+}
+
+.container.dark .username-input {
+  color: #FFFFFF;
+  border-color: #764ba2;
+}
+
+.user-email {
+  font-size: 30rpx;
+  color: #8E8E93;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.container.dark .user-email {
+  color: #8E8E93;
+}
+
+.user-school {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.school-emoji {
+  font-size: 32rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.user-school text {
+  font-size: 30rpx;
+  color: #667eea;
+  font-weight: 500;
+}
+
+/* 个人简介部分 */
+.section {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.container.dark .section {
+  background: linear-gradient(135deg, #2C2C2E 0%, #3A3A3C 100%);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-icon {
+  font-size: 36rpx;
+  margin-right: 15rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #000000;
+  flex: 1;
+}
+
+.container.dark .section-title {
+  color: #FFFFFF;
+}
+
+.edit-btn {
+  font-size: 32rpx;
+  color: white;
+  padding: 8rpx 24rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2rpx 10rpx rgba(102, 126, 234, 0.3);
+  transition: all 0.2s;
+}
+
+.edit-btn:active {
+  transform: scale(0.95);
+}
+
+.container.dark .edit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.section-content {
+  padding: 10rpx 0;
+}
+
+.bio-textarea {
+  width: 100%;
+  font-size: 32rpx;
+  color: #333;
+  line-height: 50rpx;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 15rpx;
+  border: none;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.container.dark .bio-textarea {
+  color: #FFFFFF;
+  background-color: #3c3c3e;
+}
+
+.bio-text {
+  font-size: 32rpx;
+  color: #666;
+  line-height: 50rpx;
+}
+
+.container.dark .bio-text {
+  color: #cccccc;
+}
+
+/* 按钮样式 */
+.button-group {
+  margin-top: 20rpx;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 30rpx;
+}
+
+.cancel-button, .save-button {
+  flex: 1;
+  border-radius: 30rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  padding: 28rpx 0;
+  border: none;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.cancel-button {
+  background: linear-gradient(135deg, #F0F0F0 0%, #E0E0E0 100%);
+  color: #8E8E93;
+}
+
+.cancel-button:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.container.dark .cancel-button {
+  background: linear-gradient(135deg, #3C3C3E 0%, #48484A 100%);
+  color: #8E8E93;
+}
+
+.save-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.save-button:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.2);
+}
+
+.save-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.save-button:active::before {
+  left: 100%;
+}
+
+.placeholder {
+  color: #999;
+}
+
+.container.dark .placeholder {
+  color: #666;
+}
+
+/* 学校选择器样式 */
+.school-picker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 20rpx 20rpx 0 0;
+  padding: 30rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.container.dark .school-picker {
+  background-color: #2C2C2E;
+}
+
+.school-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.school-picker-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.container.dark .school-picker-title {
+  color: #FFFFFF;
+}
+
+.school-picker-close {
+  font-size: 44rpx;
+  color: #666;
+  padding: 10rpx;
+}
+
+.container.dark .school-picker-close {
+  color: #999;
+}
+
+/* 个人资料头部 */
+.profile-header {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-background);
+  border-radius: 16rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.avatar {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  background-color: var(--border-color);
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  border: 4rpx solid var(--card-background);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.username-section {
+  margin-bottom: 10rpx;
+}
+
+.username {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.username-input {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  padding: 0;
+  background-color: transparent;
+  border-bottom: 2rpx solid var(--border-color);
+  margin-bottom: 10rpx;
+}
+
+.user-email {
+  font-size: 28rpx;
+  color: var(--secondary-text);
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.user-school {
+  font-size: 28rpx;
+  color: var(--primary-color);
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.user-union {
+  font-size: 26rpx;
+  color: var(--secondary-text);
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.union-emoji {
+  font-size: 28rpx;
+}
+
+.union-text {
+  word-break: break-all;
+}
+
+/* 个人简介部分 */
+.section {
+  background-color: var(--card-background);
+  border-radius: 16rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.section-content {
+  padding-top: 10rpx;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.field-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: var(--secondary-text);
+}
+
+.field-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+.field-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-color);
+  background-color: transparent;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.link {
+  color: var(--primary-color);
+}
+.bio-text {
+  font-size: 30rpx;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.bio-textarea {
+  font-size: 30rpx;
+  color: var(--text-color);
+  line-height: 1.6;
+  width: 100%;
+  background-color: transparent;
+  padding: 0;
+  min-height: 120rpx;
+}
+
+.placeholder {
+  color: var(--placeholder-color);
+}
+
+/* 按钮样式 */
+.button-group {
+  margin-top: 50rpx;
+  padding: 0 40rpx;
+}
+
+.primary-button {
+  background-color: var(--button-background);
+  color: var(--button-text);
+  font-size: 34rpx;
+  font-weight: bold;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-radius: 16rpx;
+}
+
+.primary-button::after {
+  border: none;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-button {
+  flex: 1;
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 34rpx;
+  border: 1rpx solid var(--border-color);
+  margin-right: 20rpx;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-radius: 16rpx;
+}
+
+.cancel-button::after {
+  border: none;
+}
+
+.save-button {
+  flex: 2;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  font-size: 34rpx;
+  font-weight: bold;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-radius: 16rpx;
+}
+
+.save-button::after {
+  border: none;
+}
+
+/* 学校选择器样式 */
+.school-picker {
+  background-color: var(--card-background);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  margin-top: 20rpx;
+}
+
+.school-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.school-picker-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.school-picker-close {
+  font-size: 48rpx;
+  color: var(--secondary-text);
+  padding: 0 10rpx;
+}

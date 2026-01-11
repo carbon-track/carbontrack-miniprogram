@@ -1,0 +1,75 @@
+{
+  "pages": [
+    "pages/navigation/navigation",
+    "pages/index/index",
+    "pages/login/login",
+    "pages/register/register",
+    "pages/calculate/calculate",
+    "pages/carbon-history/carbon-history",
+    "pages/rank/rank",
+    "pages/center/center",
+    "pages/store/store",
+    "pages/messages/messages",
+    "pages/forgot-password/forgot-password",
+    "pages/profile/profile",
+    "pages/my-activities/my-activities",
+    "pages/achievements/achievements",
+    "pages/wallet/wallet",
+    "pages/exchange/exchange",
+    "pages/settings/settings",
+    "pages/help/help",
+    "pages/webview/webview",
+    "pages/about/about",
+    "pages/agreement/agreement",
+    "pages/incentive-rules/incentive-rules"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "CarbonTrack",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default",
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#34C759",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home.png"
+      },
+      {
+        "pagePath": "pages/calculate/calculate",
+        "text": "计算",
+        "iconPath": "assets/icons/calculator.png",
+        "selectedIconPath": "assets/icons/calculator.png"
+      },
+      {
+        "pagePath": "pages/rank/rank",
+        "text": "排行榜",
+        "iconPath": "assets/icons/rank.png",
+        "selectedIconPath": "assets/icons/rank.png"
+      },
+      {
+        "pagePath": "pages/center/center",
+        "text": "我的",
+        "iconPath": "assets/icons/user.png",
+        "selectedIconPath": "assets/icons/user.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 30000,
+    "downloadFile": 30000
+  },
+  "debug": true,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

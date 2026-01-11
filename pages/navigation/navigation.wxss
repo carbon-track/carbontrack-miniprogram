@@ -1,0 +1,502 @@
+/* pages/navigation/navigation.wxss */
+
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.container.dark {
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40rpx;
+  padding: 40rpx 30rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.container.dark .header {
+  background: rgba(30, 30, 46, 0.8);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.container.dark .title {
+  color: #fff;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.container.dark .subtitle {
+  color: #ccc;
+}
+
+.section {
+  margin-bottom: 40rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.container.dark .section {
+  background: rgba(30, 30, 46, 0.8);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.container.dark .section-title {
+  color: #fff;
+}
+
+/* 流程图样式 */
+.flow-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.flow-item {
+  padding: 20rpx 40rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  text-align: center;
+  min-width: 200rpx;
+}
+
+.flow-item.start {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.flow-item.decision {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border-radius: 50%;
+  width: 160rpx;
+  height: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.flow-item.page {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.flow-arrow {
+  font-size: 40rpx;
+  color: #667eea;
+}
+
+.flow-branch {
+  display: flex;
+  gap: 40rpx;
+  margin: 20rpx 0;
+}
+
+.branch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+/* Tab导航图样式 */
+.tab-bar-diagram {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20rpx;
+  padding: 30rpx 20rpx;
+  margin: 20rpx 0;
+}
+
+.container.dark .tab-bar-diagram {
+  background: rgba(30, 30, 46, 0.6);
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  transition: all 0.3s;
+}
+
+.tab-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: translateY(-10rpx);
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+}
+
+.tab-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.tab-item.active .tab-icon {
+  color: white;
+  text-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.tab-label {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.tab-item.active .tab-label {
+  color: white;
+}
+
+.container.dark .tab-label {
+  color: #ccc;
+}
+
+/* 导航网格样式 */
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.nav-item {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15rpx;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.container.dark .nav-item {
+  background: rgba(30, 30, 46, 0.6);
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-icon {
+  font-size: 56rpx;
+  color: #667eea;
+}
+
+.nav-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.container.dark .nav-title {
+  color: #fff;
+}
+
+.nav-desc {
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+}
+
+.container.dark .nav-desc {
+  color: #ccc;
+}
+
+/* 导航列表样式 */
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16rpx;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.container.dark .nav-row {
+  background: rgba(30, 30, 46, 0.6);
+}
+
+.nav-row:active {
+  transform: translateX(10rpx);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.nav-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+  color: #667eea;
+}
+
+.nav-info {
+  flex: 1;
+}
+
+.nav-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.container.dark .nav-title {
+  color: #fff;
+}
+
+.nav-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.container.dark .nav-desc {
+  color: #ccc;
+}
+
+.nav-arrow {
+  font-size: 48rpx;
+  color: #999;
+  font-weight: bold;
+}
+
+/* 流程列表样式 */
+.process-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.process-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+}
+
+.process-number {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 5rpx;
+}
+
+.process-content {
+  flex: 1;
+}
+
+.process-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.container.dark .process-title {
+  color: #fff;
+}
+
+.process-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.container.dark .process-desc {
+  color: #ccc;
+}
+
+/* 快速访问样式 */
+.quick-access {
+  margin: 20rpx 0;
+}
+
+.access-row {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20rpx;
+  padding: 30rpx 20rpx;
+}
+
+.container.dark .access-row {
+  background: rgba(30, 30, 46, 0.6);
+}
+
+.access-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.access-item:active {
+  background: rgba(102, 126, 234, 0.1);
+  transform: scale(0.95);
+}
+
+.access-icon {
+  font-size: 56rpx;
+  color: #667eea;
+}
+
+.access-label {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.container.dark .access-label {
+  color: #ccc;
+}
+
+/* 提示样式 */
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+}
+
+.tip-icon {
+  font-size: 48rpx;
+  color: #667eea;
+  margin-top: 5rpx;
+}
+
+.tip-content {
+  flex: 1;
+}
+
+.tip-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.container.dark .tip-title {
+  color: #fff;
+}
+
+.tip-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.container.dark .tip-desc {
+  color: #ccc;
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  margin-top: 60rpx;
+  padding: 30rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20rpx;
+}
+
+.container.dark .version-info {
+  background: rgba(30, 30, 46, 0.6);
+}
+
+.version-text {
+  font-size: 28rpx;
+  color: #667eea;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.version-desc {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.container.dark .version-desc {
+  color: #ccc;
+}
+
+.section.tips {
+  background: linear-gradient(135deg, rgba(255, 249, 196, 0.3) 0%, rgba(255, 238, 173, 0.3) 100%);
+  border: 2rpx solid rgba(255, 204, 0, 0.3);
+}
+
+.container.dark .section.tips {
+  background: linear-gradient(135deg, rgba(30, 30, 0, 0.3) 0%, rgba(50, 40, 0, 0.3) 100%);
+  border-color: rgba(204, 153, 0, 0.3);
+}
+
+/* 响应式调整 */
+@media (max-width: 375px) {
+  .nav-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .flow-branch {
+    flex-direction: column;
+    gap: 30rpx;
+  }
+  
+  .access-row {
+    flex-wrap: wrap;
+    gap: 20rpx;
+  }
+  
+  .access-item {
+    min-width: 120rpx;
+  }
+}

@@ -1,0 +1,129 @@
+<!--pages/index/index.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 顶部用户信息和设置 -->
+  <view class="header">
+    <view class="user-section" bindtap="onUserCenterTap">
+      <view class="avatar">👤</view>
+      <view class="user-info">
+        <view class="welcome">👋 欢迎来到CarbonTrack</view>
+        <view class="user-stats" wx:if="{{userStats.carbonSaved > 0}}">
+          🏆 累计减排 {{userStats.carbonSaved}} kg
+        </view>
+      </view>
+    </view>
+    <view class="actions">
+      <view class="theme-toggle" bindtap="onToggleTheme">⚙️</view>
+    </view>
+  </view>
+  <view class="version-banner" bindtap="onVersionBannerTap">
+    <view class="version-text">基础库 {{sdkVersion}} · getUserProfile {{canGetUserProfile ? '支持' : '不支持'}}</view>
+    <view class="version-action">调试</view>
+  </view>
+
+  <!-- 轮播图 -->
+  <view class="banner-section">
+    <view class="banner-container" wx:if="{{banners.length > 0}}">
+      <swiper class="banner-swiper" indicator-dots indicator-active-color="#667eea">
+        <block wx:for="{{banners}}" wx:key="id">
+          <swiper-item>
+            <view class="banner-item" bindtap="onBannerTap" data-url="{{item.url}}">
+              <view class="banner-content">
+                <view class="banner-title">{{item.emoji || '🌱'}} {{item.title}}</view>
+              </view>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+  </view>
+
+  <!-- 欢迎卡片 -->
+  <view class="welcome-card">
+    <view class="card-content">
+      <view class="card-icon">🌱</view>
+      <view class="card-text">
+        <view class="card-title">🌍 让地球更绿色</view>
+        <view class="card-subtitle">记录每一次环保行动，共建美好未来</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 公告区域 -->
+  <view class="announcement-section">
+    <view class="section-header">
+      <view class="section-icon">📢</view>
+      <view class="section-title">最新公告</view>
+      <view class="more">查看更多</view>
+    </view>
+    <view class="announcement-list">
+      <block wx:for="{{announcements}}" wx:key="id">
+        <view class="announcement-item" bindtap="onAnnouncementTap" data-id="{{item.id}}">
+          <view class="announcement-title">{{item.title}}</view>
+          <view class="announcement-date">📅 {{item.date}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 功能卡片 -->
+  <view class="feature-section">
+    <view class="section-header">
+      <view class="section-icon">🎯</view>
+      <view class="section-title">环保功能</view>
+    </view>
+    <view class="feature-grid">
+      <block wx:for="{{features}}" wx:key="id">
+        <view class="feature-item" bindtap="onFeatureTap" data-url="{{item.url}}">
+          <view class="feature-icon" style="background: {{item.gradient}}">
+            <text>{{item.emoji}}</text>
+          </view>
+          <view class="feature-info">
+            <view class="feature-title">{{item.title}}</view>
+            <view class="feature-desc">{{item.description}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 用户统计 -->
+  <view class="stats-section" wx:if="{{userStats.carbonSaved > 0}}">
+    <view class="section-header">
+      <view class="section-icon">📊</view>
+      <view class="section-title">我的环保成果</view>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <view class="stat-emoji">🌍</view>
+        <view class="stat-value">{{userStats.carbonSaved}} kg</view>
+        <view class="stat-label">碳减排量</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-emoji">📝</view>
+        <view class="stat-value">{{userStats.activities}}</view>
+        <view class="stat-label">环保活动</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-emoji">⭐</view>
+        <view class="stat-value">{{userStats.points}}</view>
+        <view class="stat-label">环保积分</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="action-button-container">
+    <view class="action-btn" bindtap="onRecordActivityTap">
+      <view class="btn-icon">✍️</view>
+      <view class="btn-text">记录活动</view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-content">
+      <view class="loading-emoji">⏳</view>
+      <view class="loading-text">加载中...</view>
+    </view>
+  </view>
+</view>

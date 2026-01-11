@@ -1,0 +1,43 @@
+<!--pages/agreement/agreement.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 协议内容 -->
+  <scroll-view 
+    wx:elif="{{content}}" 
+    class="content-scroll"
+    scroll-y="true"
+    bindscrolltolower="onScrollToLower"
+    bindscroll="onScroll"
+    scroll-into-view="{{scrollToView}}"
+  >
+    <!-- 协议头部 -->
+    <view class="agreement-header">
+      <text class="update-date">最后更新：{{lastUpdated}}</text>
+    </view>
+    
+    <!-- 协议内容 -->
+    <rich-text class="agreement-content" nodes="{{content}}"></rich-text>
+    
+    <!-- 底部空间 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 空状态 -->
+  <view wx:else class="empty-state">
+    <text class="empty-text">无法加载协议内容，请稍后重试</text>
+  </view>
+
+  <!-- 回到顶部按钮 -->
+  <view 
+    class="scroll-top-btn" 
+    wx:if="{{showScrollTop}}" 
+    bindtap="scrollToTop"
+  >
+    <text class="scroll-top-icon">↑</text>
+  </view>
+</view>

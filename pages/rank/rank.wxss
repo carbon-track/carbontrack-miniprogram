@@ -1,0 +1,331 @@
+/* pages/rank/rank.wxss */
+
+/* 页面容器 */
+.container {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.container.dark {
+  background-color: var(--background-color);
+}
+
+/* 标签栏样式 */
+.tab-bar {
+  display: flex;
+  background-color: var(--tertiary-background);
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-base);
+  color: var(--text-secondary-color);
+  border-bottom: 2rpx solid transparent;
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* 排行榜头部样式（前三名） */
+.rank-header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-md);
+  background-color: var(--tertiary-background);
+  margin-bottom: var(--spacing-sm);
+}
+
+.rank-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--secondary-background);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+
+.rank-item:active {
+  transform: scale(0.98);
+}
+
+.rank-first {
+  margin-top: -20rpx;
+  background-color: var(--tertiary-background);
+  box-shadow: var(--shadow-md);
+}
+
+.rank-second, .rank-third {
+  margin-top: var(--spacing-md);
+}
+
+.rank-number {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: white;
+  margin-bottom: var(--spacing-sm);
+}
+
+.rank-first-bg {
+  background-color: #FFD700;
+}
+
+.rank-second-bg {
+  background-color: #C0C0C0;
+}
+
+.rank-third-bg {
+  background-color: #CD7F32;
+}
+
+.crown {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: var(--spacing-xs);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: var(--spacing-sm);
+}
+
+.avatar-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  background-color: var(--primary-color);
+  font-size: 40rpx; /* 增大字体大小以更好地显示emoji */
+  line-height: 80rpx;
+  text-align: center;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.current-avatar {
+  border: 2rpx solid var(--primary-color);
+}
+
+.user-details {
+  text-align: center;
+}
+
+.username {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xs);
+  max-width: 180rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* 让用户名显示更完整 */
+}
+
+.points {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary-color);
+}
+
+.carbon-info {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 排行榜列表样式 */
+.rank-list {
+  background-color: var(--tertiary-background);
+  padding-bottom: var(--spacing-xl);
+}
+
+.list-header {
+  display: flex;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--secondary-background);
+  border-bottom: 1rpx solid var(--border-color);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary-color);
+}
+
+.header-item {
+  flex: 1;
+  text-align: center;
+}
+
+.list-item {
+  display: flex;
+  padding: var(--spacing-md);
+  border-bottom: 1rpx solid var(--border-color);
+  transition: background-color 0.2s;
+}
+
+.list-item:active {
+  background-color: var(--secondary-background);
+}
+
+.list-cell {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-base);
+}
+
+.rank-cell {
+  flex: 0.5;
+  justify-content: center;
+  color: var(--text-secondary-color);
+  font-weight: 500;
+}
+
+.user-cell {
+  flex: 2;
+  display: flex;
+  align-items: center;
+}
+
+.user-cell .avatar-wrapper {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: var(--spacing-sm);
+  margin-bottom: 0;
+  font-size: 32rpx; /* 为小头像调整emoji大小 */
+  line-height: 60rpx;
+}
+
+.user-cell .username {
+  margin-bottom: 0;
+  max-width: 220rpx;
+  /* 增加主列表中用户名的显示宽度 */
+}
+
+.points-cell {
+  flex: 1;
+  justify-content: center;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.carbon-cell {
+  flex: 1;
+  justify-content: center;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* 用户排名项 */
+.user-rank-item {
+  display: flex;
+  padding: var(--spacing-md);
+  background-color: var(--primary-color-light);
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+/* 空状态和加载状态 */
+.empty-state, .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl) var(--spacing-md);
+  color: var(--text-tertiary-color);
+}
+
+.empty-state image {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid var(--border-color);
+  border-top: 4rpx solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 加载更多和没有更多 */
+.loading-more, .no-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  color: var(--text-tertiary-color);
+  font-size: var(--font-size-sm);
+}
+
+.loading-more {
+  flex-direction: row;
+}
+
+.loading-more .loading-spinner {
+  margin-bottom: 0;
+  margin-right: var(--spacing-sm);
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* 下拉刷新指示器 */
+.refresh-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  color: var(--text-tertiary-color);
+  font-size: var(--font-size-sm);
+}
+
+.refresh-indicator .loading-spinner {
+  margin-bottom: 0;
+  margin-right: var(--spacing-sm);
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* 响应式调整 */
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}

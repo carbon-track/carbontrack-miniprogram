@@ -1,0 +1,1 @@
+{"name": "claim-activity-reward","version": "1.0.0","description": "领取活动奖励","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}

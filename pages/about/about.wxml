@@ -1,0 +1,182 @@
+<!--pages/about/about.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 应用信息 -->
+  <view class="app-info">
+    <view class="app-logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <text class="logo-emoji">🌱</text>
+    </view>
+    <view class="app-details">
+      <text class="app-name">{{appName}}</text>
+      <text class="app-slogan">{{slogan}}</text>
+      <text class="app-version">版本 {{appVersion}}</text>
+    </view>
+  </view>
+
+  <!-- 应用描述 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">📋</text>
+      <text class="section-title">关于应用 🌱</text>
+    </view>
+    <view class="section-content">
+      <text class="description">{{description}}</text>
+    </view>
+  </view>
+
+  <!-- 主要功能 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">✨</text>
+      <text class="section-title">主要功能 💡</text>
+    </view>
+    <view class="features-grid">
+      <view wx:for="{{features}}" wx:key="index" class="feature-item">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <text class="icon-emoji">{{item.icon}}</text>
+        </view>
+        <view class="feature-title">{{item.title}}</view>
+        <view class="feature-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系我们 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">📱</text>
+      <text class="section-title">联系我们 🤝</text>
+    </view>
+    <view class="contact-list">
+      <view class="contact-item" bindtap="visitWebsite">
+        <view class="contact-icon">🌐</view>
+        <view class="contact-info">
+          <view class="contact-label">官方网站</view>
+          <view class="contact-value">{{contactInfo.website}}</view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+      
+      <view class="contact-item" bindtap="sendEmail">
+        <view class="contact-icon">✉️</view>
+        <view class="contact-info">
+          <view class="contact-label">电子邮箱</view>
+          <view class="contact-value">{{contactInfo.email}}</view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+      
+      <view class="contact-item" bindtap="makeCall">
+        <view class="contact-icon">📞</view>
+        <view class="contact-info">
+          <view class="contact-label">联系电话</view>
+          <view class="contact-value">{{contactInfo.phone}}</view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我们的团队 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">👥</text>
+      <text class="section-title">我们的团队 💼</text>
+    </view>
+    <view class="section-content">
+      <text class="description">认识CarbonTrack背后致力于做出改变的专注个人。</text>
+    </view>
+    <view class="team-grid">
+      <view wx:for="{{teamMembers}}" wx:key="name" class="team-item">
+        <view class="team-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <text class="avatar-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="team-info">
+          <view class="team-name">{{item.name}}</view>
+          <view class="team-role">{{item.role}}</view>
+          <view class="team-desc">{{item.description}}</view>
+          <view wx:if="{{item.link}}" class="team-link" bindtap="openLink" data-url="{{item.link}}">
+            <text class="link-text">了解更多</text>
+            <text class="link-arrow">›</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我们的使命 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">🎯</text>
+      <text class="section-title">我们的使命 🌍</text>
+    </view>
+    <view class="section-content">
+      <text class="description">我们的使命是利用碳账户系统帮助我们自己及他人实现以下目标：</text>
+      <view class="mission-list">
+        <view wx:for="{{missionPoints}}" wx:key="index" class="mission-item">
+          <text class="mission-dot">•</text>
+          <text class="mission-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我们的成就 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">🏆</text>
+      <text class="section-title">我们的成就 📈</text>
+    </view>
+    <view class="section-content">
+      <text class="description">通过使用CarbonTrack碳核算系统，我们实现了以下里程碑：</text>
+    </view>
+    <view class="achievements-grid">
+      <view wx:for="{{achievements}}" wx:key="title" class="achievement-item">
+        <view class="achievement-icon">{{item.icon}}</view>
+        <view class="achievement-title">{{item.title}}</view>
+        <view class="achievement-value">{{item.value}}</view>
+        <view class="achievement-desc">{{item.description}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 社交媒体 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">🔗</text>
+      <text class="section-title">关注我们 📢</text>
+    </view>
+    <view class="social-grid">
+      <view wx:for="{{socialMedia}}" wx:key="index" class="social-item">
+        <view class="social-icon">
+          <text class="social-emoji">{{item.icon}}</text>
+        </view>
+        <view class="social-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享按钮 -->
+  <view class="share-section">
+    <button class="share-btn" open-type="share">
+      <text class="share-icon">👥</text>
+      <text>分享给好友 🚀</text>
+    </button>
+    <button class="share-moments-btn" open-type="share">
+      <text class="share-icon">🌐</text>
+      <text>分享到朋友圈</text>
+    </button>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright">
+    <text>{{copyright}} ©️</text>
+  </view>
+  
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading-overlay">
+    <view class="loading-content">
+      <view class="loading-emoji">🔄</view>
+      <text>正在加载信息...</text>
+    </view>
+  </view>
+</view>

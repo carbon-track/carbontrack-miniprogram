@@ -1,0 +1,14 @@
+{
+  "name": "check-incentive-bonus",
+  "version": "1.0.0",
+  "description": "检查并发放激励奖励（连续奖励、特殊时段双倍）",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

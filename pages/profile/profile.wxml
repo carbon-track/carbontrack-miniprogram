@@ -1,0 +1,152 @@
+<!--pages/profile/profile.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 用户基本信息 -->
+  <view class="profile-header">
+    <view class="avatar-container" wx:if="{{!editing}}">
+      <view class="avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <block wx:if="{{userInfo.avatar}}">
+          <image class="avatar-image" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+        </block>
+        <block wx:else>
+          <text class="avatar-emoji">{{userInfo.avatarEmoji || '👤'}}</text>
+        </block>
+      </view>
+    </view>
+    <view class="avatar-container" wx:else>
+      <view class="avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <block wx:if="{{userInfo.avatar}}">
+          <image class="avatar-image" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+        </block>
+        <block wx:else>
+          <text class="avatar-emoji">{{userInfo.avatarEmoji || '👤'}}</text>
+        </block>
+      </view>
+      <view class="edit-icon" bindtap="uploadAvatar">
+        <text>+</text>
+      </view>
+      <view class="avatar-actions">
+        <button
+          class="choose-avatar-btn"
+          open-type="chooseAvatar"
+          bindchooseavatar="onChooseAvatar"
+        >
+          选择微信头像
+        </button>
+      </view>
+    </view>
+    <view class="user-info">
+      <view class="username-section">
+        <input
+          wx:if="{{editing}}"
+          class="username-input"
+          type="nickname"
+          value="{{userInfo.username}}"
+          bindinput="onInputChange"
+          data-field="username"
+          placeholder="请输入用户名"
+          placeholder-class="placeholder"
+        />
+        <text wx:else class="username">{{userInfo.username}}</text>
+      </view>
+      <text class="user-email">✉️ {{userInfo.email}}</text>
+      <view class="user-school">
+        <text class="school-emoji">🏫</text>
+        <text>{{userInfo.school}}</text>
+      </view>
+      <view class="user-union" wx:if="{{userInfo.unionId}}">
+        <text class="union-emoji">🆔</text>
+        <text class="union-text">UnionID: {{userInfo.unionId}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人简介 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">📝</text>
+      <text class="section-title">个人简介</text>
+      <text wx:if="{{!editing}}" class="edit-btn" bindtap="startEditing">✏️ 编辑</text>
+    </view>
+    <view class="section-content">
+      <textarea
+        wx:if="{{editing}}"
+        class="bio-textarea"
+        value="{{userInfo.bio}}"
+        bindinput="onInputChange"
+        data-field="bio"
+        placeholder="介绍一下自己"
+        placeholder-class="placeholder"
+        auto-height
+      ></textarea>
+      <text wx:else class="bio-text">{{userInfo.bio || '👤 暂无简介'}}</text>
+    </view>
+  </view>
+
+  <!-- 学校与学号 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-icon">🏫</text>
+      <text class="section-title">学校与学号</text>
+      <text wx:if="{{!editing}}" class="edit-btn" bindtap="startEditing">✏️ 编辑</text>
+    </view>
+    <view class="section-content">
+      <view class="field-row">
+        <text class="field-label">学校</text>
+        <view wx:if="{{editing}}" class="field-value link" bindtap="showSchoolSelector">
+          <text>{{userInfo.school || '点击选择学校'}}</text>
+        </view>
+        <text wx:else class="field-value">{{userInfo.school || '未填写'}}</text>
+      </view>
+      <view class="field-row">
+        <text class="field-label">学号</text>
+        <input
+          wx:if="{{editing}}"
+          class="field-input"
+          value="{{userInfo.studentId}}"
+          bindinput="onInputChange"
+          data-field="studentId"
+          placeholder="请输入学号"
+          placeholder-class="placeholder"
+        />
+        <text wx:else class="field-value">{{userInfo.studentId || '未填写'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑按钮 -->
+  <view class="button-group" wx:if="{{editing}}">
+    <view class="action-buttons">
+      <button
+        class="cancel-button"
+        bindtap="cancelEditing"
+      >
+        ❌ 取消
+      </button>
+      <button
+        class="save-button"
+        loading="{{saving}}"
+        disabled="{{saving}}"
+        bindtap="saveChanges"
+      >
+        ✅ 保存
+      </button>
+    </view>
+  </view>
+
+  <!-- 学校选择器 -->
+  <picker
+    wx:if="{{showSchoolPicker}}"
+    mode="selector"
+    range="{{schools}}"
+    range-key="name"
+    bindchange="selectSchool"
+    value="{{schoolIndex}}"
+  >
+    <view class="school-picker">
+      <view class="school-picker-header">
+        <text class="school-picker-title">选择学校</text>
+        <text class="school-picker-close" bindtap="closeSchoolPicker">×</text>
+      </view>
+    </view>
+  </picker>
+</view>

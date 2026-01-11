@@ -1,0 +1,71 @@
+<!--pages/my-activities/my-activities.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab {{filter === item.key ? 'active' : ''}}"
+      bindtap="switchFilter"
+      data-filter="{{item.key}}"
+    >
+      <text class="tab-text">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 活动列表 -->
+  <view class="activities-list">
+    <view
+      wx:for="{{activities}}"
+      wx:key="id"
+      class="activity-item {{item.status}}"
+      bindtap="viewActivity"
+      data-id="{{item.id}}"
+    >
+      <view class="activity-icon">
+        <image src="{{item.icon}}" mode="aspectFit"></image>
+      </view>
+      
+      <view class="activity-content">
+        <view class="activity-header">
+          <text class="activity-title">{{item.title}}</text>
+          <text class="activity-status">{{item.joined ? (item.status === 'ongoing' ? '进行中' : '已完成') : '未参加'}}</text>
+        </view>
+
+        <text class="activity-description">{{item.description}}</text>
+
+        <view class="activity-footer">
+          <view wx:if="{{item.joined}}" class="activity-progress-info">
+            <text class="progress-detail">{{item.currentProgress || 0}}/{{item.targetValue || 0}}</text>
+          </view>
+          <text class="activity-points">{{item.points}}积分</text>
+        </view>
+
+        <!-- 进度条 -->
+        <view wx:if="{{item.joined}}" class="progress-bar-container">
+          <view class="progress-bar">
+            <view class="progress" style="width: {{item.progress}}%"></view>
+          </view>
+          <text class="progress-text">{{item.progress}}%</text>
+        </view>
+
+        <!-- 未参加提示 -->
+        <view wx:if="{{!item.joined}}" class="join-hint">
+          <text class="hint-text">点击活动卡片参加</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-state">
+      <view class="spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && activities.length === 0}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit" class="empty-icon"></image>
+      <text class="empty-text">暂无活动</text>
+    </view>
+  </view>
+</view>

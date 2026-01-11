@@ -1,0 +1,304 @@
+/* pages/incentive-rules/incentive-rules.wxss */
+
+.container {
+  padding: 30rpx;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+}
+
+.container.theme-dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* 页面标题 */
+.page-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+  position: relative;
+}
+
+.back-btn {
+  font-size: 48rpx;
+  color: #4a90e2;
+  margin-right: 20rpx;
+  font-weight: bold;
+}
+
+.theme-dark .back-btn {
+  color: #6bb6ff;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.theme-dark .page-title {
+  color: #ffffff;
+}
+
+/* 页面描述 */
+.page-description {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30rpx;
+  border-radius: 20rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(102, 126, 234, 0.2);
+}
+
+.desc-text {
+  font-size: 28rpx;
+  color: #ffffff;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 规则区块 */
+.rule-section {
+  margin-bottom: 40rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.theme-dark .rule-section {
+  background: #2a2a2a;
+}
+
+/* 区块头部 */
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.theme-dark .section-header {
+  border-bottom-color: #444;
+}
+
+.section-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+}
+
+.section-title-wrapper {
+  flex: 1;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8rpx;
+}
+
+.theme-dark .section-title {
+  color: #ffffff;
+}
+
+.section-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #7f8c8d;
+}
+
+.theme-dark .section-subtitle {
+  color: #bdc3c7;
+}
+
+/* 规则卡片 */
+.rule-cards {
+  padding: 20rpx;
+}
+
+.rule-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  border-left: 8rpx solid;
+}
+
+.theme-dark .rule-card {
+  background: #333;
+}
+
+.card-left {
+  flex: 1;
+}
+
+.card-right {
+  text-align: right;
+}
+
+/* 活动卡片 */
+.activity-card {
+  border-left-color: #4CAF50;
+}
+
+.activity-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 8rpx;
+}
+
+.theme-dark .activity-name {
+  color: #ffffff;
+}
+
+.activity-unit {
+  font-size: 24rpx;
+  color: #7f8c8d;
+}
+
+.theme-dark .activity-unit {
+  color: #bdc3c7;
+}
+
+.points {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+/* 连续打卡卡片 */
+.streak-card {
+  border-left-color: #FF9800;
+}
+
+.streak-days {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.streak-desc {
+  font-size: 24rpx;
+  color: #7f8c8d;
+}
+
+.theme-dark .streak-desc {
+  color: #bdc3c7;
+}
+
+.bonus-wrapper {
+  text-align: center;
+}
+
+.bonus-label {
+  display: block;
+  font-size: 20rpx;
+  color: #95a5a6;
+  margin-bottom: 4rpx;
+}
+
+.theme-dark .bonus-label {
+  color: #7f8c8d;
+}
+
+.bonus-value {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+/* 特殊时段卡片 */
+.special-card {
+  border-left-color: #9C27B0;
+}
+
+.special-date {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8rpx;
+}
+
+.theme-dark .special-date {
+  color: #ffffff;
+}
+
+.special-datestr {
+  font-size: 24rpx;
+  color: #7f8c8d;
+}
+
+.theme-dark .special-datestr {
+  color: #bdc3c7;
+}
+
+.special-bonus {
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 8rpx 16rpx;
+  background: rgba(156, 39, 176, 0.1);
+  border-radius: 8rpx;
+}
+
+/* 成就和社交卡片 */
+.achievement-card {
+  border-left-color: #2196F3;
+}
+
+.achievement-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 8rpx;
+}
+
+.theme-dark .achievement-name {
+  color: #ffffff;
+}
+
+.achievement-condition {
+  font-size: 24rpx;
+  color: #7f8c8d;
+}
+
+.theme-dark .achievement-condition {
+  color: #bdc3c7;
+}
+
+.achievement-bonus {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+/* 底部提示 */
+.bottom-tip {
+  margin-top: 40rpx;
+  padding: 30rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  text-align: center;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .container {
+    padding: 20rpx;
+  }
+  
+  .page-header {
+    margin-bottom: 30rpx;
+  }
+  
+  .page-title {
+    font-size: 36rpx;
+  }
+}

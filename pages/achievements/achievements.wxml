@@ -1,0 +1,98 @@
+<!--pages/achievements/achievements.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 成就统计 -->
+  <view class="stats-container">
+    <view class="section-header">
+      <view class="section-icon">🏆</view>
+      <view class="section-title">成就统计</view>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <view class="stat-emoji">⭐</view>
+        <text class="stat-number">{{unlockedCount}}</text>
+        <text class="stat-label">已获得</text>
+      </view>
+      <view class="stat-item">
+        <view class="stat-emoji">🎯</view>
+        <text class="stat-number">{{totalPoints}}</text>
+        <text class="stat-label">累计积分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-container">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab {{activeTab === item.key ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-tab="{{item.key}}"
+    >
+      <text class="tab-text">
+        {{item.key === 'all' ? '🏆 ' : 
+         item.key === 'unlocked' ? '⭐ ' : '🔒 '}}
+        {{item.name}}
+      </text>
+    </view>
+  </view>
+
+  <!-- 成就列表 -->
+  <view class="achievements-list">
+    <view
+      wx:for="{{filteredAchievements}}"
+      wx:key="id"
+      class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}">
+      <view class="achievement-icon" style="background: {{item.gradient}}">
+        <text class="achievement-emoji">{{item.emoji}}</text>
+        <view wx:if="{{!item.unlocked}}" class="lock-overlay">
+          <text class="emoji">🔒</text>
+        </view>
+      </view>
+      
+      <view class="achievement-content">
+        <view class="achievement-header">
+          <text class="achievement-name">{{item.name}}</text>
+          <view class="achievement-points">
+            <text class="emoji">⭐</text>
+            <text>+{{item.points}}</text>
+          </view>
+        </view>
+        
+        <text class="achievement-description">{{item.description}}</text>
+        
+        <view wx:if="{{!item.unlocked}}" class="achievement-progress">
+          <view class="progress-bar">
+            <view class="progress" style="width: {{(item.progress / item.target) * 100}}%" data-rarity="{{item.rarity}}"></view>
+          </view>
+          <text class="progress-text">{{item.progress}}/{{item.target}}</text>
+        </view>
+        
+        <view wx:if="{{item.unlocked}}" class="unlock-date">
+          <text class="emoji">📅</text>
+          <text>获得日期: {{item.date}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{isLoading}}" class="loading-state">
+      <view class="loading-content">
+        <view class="loading-emoji">⏳</view>
+        <text>加载中...</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!isLoading && getFilteredAchievements().length === 0}}" class="empty-state">
+      <view class="empty-emoji">
+        {{activeTab === 'unlocked' ? '🔍' : 
+         activeTab === 'locked' ? '🎉' : '📝'}}
+      </view>
+      <text class="empty-text">
+        {{activeTab === 'unlocked' ? '还没有获得任何成就' : 
+         activeTab === 'locked' ? '所有成就都已获得' : '暂无成就'}}
+      </text>
+    </view>
+  </view>
+</view>

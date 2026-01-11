@@ -1,0 +1,246 @@
+/* pages/settings/settings.wxss */
+
+/* 容器样式 */
+.container {
+  background-color: #F2F2F7;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 50rpx;
+  color: #000000;
+}
+
+.container.dark {
+  background-color: #1C1C1E;
+  color: #FFFFFF;
+}
+
+/* 设置组 */
+.settings-group {
+  background-color: #FFFFFF;
+  margin-top: 30rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .settings-group {
+  background-color: #2C2C2E;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
+}
+
+.group-title {
+  font-size: 28rpx;
+  color: #8E8E93;
+  padding: 30rpx 30rpx 20rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.container.dark .group-title {
+  color: #8E8E93;
+}
+
+/* 设置项 */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 30rpx;
+  position: relative;
+}
+
+.setting-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 30rpx;
+  right: 30rpx;
+  height: 1rpx;
+  background-color: #E5E5EA;
+}
+
+.container.dark .setting-item:not(:last-child)::after {
+  background-color: #38383A;
+}
+
+.setting-label {
+  flex: 1;
+}
+
+.setting-name {
+  font-size: 32rpx;
+  color: #000000;
+  display: block;
+  font-weight: 500;
+}
+
+.setting-desc {
+  font-size: 24rpx;
+  color: #8E8E93;
+  margin-top: 8rpx;
+  display: block;
+}
+
+.container.dark .setting-name {
+  color: #FFFFFF;
+}
+
+.container.dark .setting-desc {
+  color: #8E8E93;
+}
+
+/* 开关样式 */
+switch {
+  transform: scale(0.9);
+}
+
+switch .wx-switch-input {
+  border-radius: 40rpx !important;
+  height: 44rpx;
+}
+
+switch .wx-switch-input::before {
+  border-radius: 40rpx;
+  width: 80rpx;
+}
+
+switch .wx-switch-input::after {
+  border-radius: 50%;
+  width: 36rpx;
+  height: 36rpx;
+  top: 4rpx;
+  left: 4rpx;
+}
+
+switch[checked] .wx-switch-input {
+  background: linear-gradient(135deg, #34C759, #4CD964);
+}
+
+switch[disabled] {
+  opacity: 0.5;
+}
+
+/* 单选按钮组 */
+.radio-group {
+  font-size: 28rpx;
+  color: #000000;
+  display: flex;
+  gap: 40rpx;
+}
+
+.container.dark .radio-group {
+  color: #FFFFFF;
+}
+
+radio {
+  margin: 0 10rpx 0 0;
+  transform: scale(0.8);
+}
+
+radio .wx-radio-input {
+  border-radius: 50%;
+  width: 32rpx;
+  height: 32rpx;
+}
+
+radio .wx-radio-input::before {
+  border-radius: 50%;
+  width: 20rpx;
+  height: 20rpx;
+  top: 6rpx;
+  left: 6rpx;
+  background: linear-gradient(135deg, #34C759, #4CD964);
+}
+
+/* 箭头图标 */
+.arrow {
+  font-size: 40rpx;
+  color: #8E8E93;
+  transition: transform 0.2s;
+}
+
+.container.dark .arrow {
+  color: #8E8E93;
+}
+
+/* 可点击的设置项 */
+.setting-item.action {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.setting-item.action:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .setting-item.action:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.setting-item.action:active .arrow {
+  transform: translateX(8rpx);
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  margin: 60rpx 0 30rpx;
+  font-size: 26rpx;
+  color: #8E8E93;
+  font-weight: 500;
+}
+
+.container.dark .version-info {
+  color: #8E8E93;
+}
+
+/* 退出登录按钮 */
+.logout-btn {
+  margin: 0 30rpx 30rpx;
+  background: linear-gradient(135deg, #FF3B30, #FF453A);
+  color: white;
+  font-size: 32rpx;
+  font-weight: bold;
+  padding: 26rpx 0;
+  border-radius: 36rpx;
+  border: none;
+  outline: none;
+  box-shadow: 0 4rpx 16rpx rgba(255, 59, 48, 0.3);
+  transition: all 0.2s;
+}
+
+.logout-btn:active {
+  opacity: 0.9;
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(255, 59, 48, 0.3);
+}
+
+/* 设置图标容器 */
+.setting-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  font-size: 36rpx;
+}
+
+/* 设置项内容 */
+.setting-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* 分组标题图标 */
+.section-icon {
+  font-size: 32rpx;
+  background: linear-gradient(135deg, #34C759, #4CD964);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

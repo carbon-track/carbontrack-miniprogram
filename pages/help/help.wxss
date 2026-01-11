@@ -1,0 +1,352 @@
+/* pages/help/help.wxss */
+
+/* 主题变量 */
+.container {
+  --primary-color: #34C759;
+  --background-color: #F2F2F7;
+  --text-color: #000000;
+  --border-color: #E5E5EA;
+  --card-background: #FFFFFF;
+  --secondary-text: #8E8E93;
+  
+  background-color: var(--background-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.container.dark {
+  --primary-color: #4ECDC4;
+  --background-color: #1C1C1E;
+  --text-color: #FFFFFF;
+  --border-color: #38383A;
+  --card-background: #2C2C2E;
+  --secondary-text: #8E8E93;
+}
+
+/* 帮助章节 */
+.help-section {
+  margin-top: 20rpx;
+  background-color: var(--card-background);
+  border-top: 1rpx solid var(--border-color);
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.section-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* 分类标签 */
+.category-tabs {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.category-tabs scroll-view {
+  white-space: nowrap;
+  padding: 0 20rpx;
+}
+
+.category-tab {
+  display: inline-block;
+  padding: 12rpx 24rpx;
+  margin-right: 16rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: var(--secondary-text);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .category-tab {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.category-tab.active {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+/* FAQ列表 */
+.faq-list {
+  padding: 20rpx;
+}
+
+.faq-item {
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  border: 1rpx solid var(--border-color);
+  overflow: hidden;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  background-color: var(--card-background);
+  transition: background-color 0.2s;
+}
+
+.faq-question:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .faq-question:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.question-icon {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-right: 16rpx;
+}
+
+.question-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.faq-answer {
+  padding: 20rpx 28rpx 30rpx;
+  background-color: rgba(0, 0, 0, 0.02);
+  font-size: 28rpx;
+  color: var(--secondary-text);
+  line-height: 1.6;
+}
+
+.container.dark .faq-answer {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* 联系我们 */
+.contact-info {
+  padding: 20rpx;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.contact-label {
+  font-size: 30rpx;
+  color: var(--text-color);
+}
+
+.contact-btn,
+.feedback-btn {
+  font-size: 28rpx;
+  padding: 12rpx 32rpx;
+  border-radius: 20rpx;
+}
+
+.contact-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.feedback-btn {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-color);
+  border: 1rpx solid var(--border-color);
+}
+
+.container.dark .feedback-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--border-color);
+  border-top: 4rpx solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state text {
+  font-size: 28rpx;
+  color: var(--secondary-text);
+}
+
+/* 空状态 */
+.empty-state {
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--secondary-text);
+}
+
+/* 反馈弹窗 */
+.feedback-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  width: 100%;
+  max-height: 80vh;
+  border-radius: 20rpx 20rpx 0 0;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.close-btn {
+  font-size: 44rpx;
+  color: var(--secondary-text);
+  padding: 0 10rpx;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: var(--text-color);
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+/* 单选按钮组 */
+radio-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.radio-label {
+  margin-right: 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-color);
+}
+
+radio {
+  margin-right: 8rpx;
+}
+
+/* 文本域 */
+.feedback-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border: 1rpx solid var(--border-color);
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+.char-count {
+  font-size: 24rpx;
+  color: var(--secondary-text);
+  text-align: right;
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 输入框 */
+.contact-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 1rpx solid var(--border-color);
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: var(--text-color);
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+/* 弹窗底部按钮 */
+.modal-footer {
+  display: flex;
+  padding: 20rpx 30rpx 30rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.cancel-btn,
+.submit-btn {
+  flex: 1;
+  font-size: 32rpx;
+  padding: 20rpx 0;
+  border-radius: 12rpx;
+  margin: 0 10rpx;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1rpx solid var(--border-color);
+}
+
+.submit-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.submit-btn[disabled] {
+  background-color: var(--border-color);
+}

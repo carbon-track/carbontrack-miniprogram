@@ -1,0 +1,74 @@
+<!--pages/store/store.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 用户积分信息 -->
+  <view class="points-info">
+    <view class="points-card">
+      <text class="points-label">我的积分</text>
+      <text class="points-value">{{userPoints || 0}}</text>
+      <image src="/assets/icons/wallet.png" mode="aspectFit" class="points-icon"></image>
+    </view>
+  </view>
+
+  <!-- 分类选择 -->
+  <scroll-view class="category-scroll" scroll-x show-scrollbar="false">
+    <view
+      wx:for="{{categories}}"
+      wx:key="index"
+      class="category-item {{activeCategory === index ? 'active' : ''}}"
+      bindtap="switchCategory"
+      data-index="{{index}}"
+    >
+      <text class="category-text">{{item}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 商品列表 -->
+  <view class="products-container">
+    <view wx:if="{{products.length > 0}}" class="products-grid">
+      <view
+        wx:for="{{products}}"
+        wx:key="id"
+        class="product-card"
+        bindtap="viewProduct"
+        data-id="{{item.id}}"
+      >
+        <view class="product-image">
+          <image src="{{item.image}}" mode="aspectFill"></image>
+        </view>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-description">{{item.description}}</text>
+          <view class="product-bottom">
+            <view class="product-price">
+              <text class="price-icon">💎</text>
+              <text class="price-value">{{item.price}}</text>
+            </view>
+            <text class="stock-info">库存: {{item.stock}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{!loading}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit" class="empty-icon"></image>
+      <text class="empty-text">暂无商品</text>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && products.length === 0}}" class="loading-state">
+      <view class="spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{loading && products.length > 0}}" class="loading-more">
+      <text>加载更多...</text>
+    </view>
+
+    <!-- 没有更多 -->
+    <view wx:if="{{!hasMore && products.length > 0}}" class="no-more">
+      <text>没有更多商品了</text>
+    </view>
+  </view>
+</view>

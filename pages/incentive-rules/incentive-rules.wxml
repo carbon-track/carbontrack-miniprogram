@@ -1,0 +1,86 @@
+<!--pages/incentive-rules/incentive-rules.wxml-->
+<view class="container theme-{{theme}}">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="back-btn" bindtap="onBack">‹</text>
+    <text class="page-title">激励规则</text>
+  </view>
+
+  <!-- 页面描述 -->
+  <view class="page-description">
+    <text class="desc-text">了解积分获取规则，积极参与环保行动，赢取丰厚奖励！</text>
+  </view>
+
+  <!-- 规则列表 -->
+  <view class="rules-list">
+    <view class="rule-section" wx:for="{{rules}}" wx:key="id">
+      <!-- 区块标题 -->
+      <view class="section-header">
+        <view class="section-icon">{{item.icon}}</view>
+        <view class="section-title-wrapper">
+          <text class="section-title">{{item.title}}</text>
+          <text class="section-subtitle">{{item.description}}</text>
+        </view>
+      </view>
+
+      <!-- 规则详情 -->
+      <view class="rule-cards">
+        <block wx:if="{{item.id === 'daily'}}">
+          <view class="rule-card activity-card" wx:for="{{item.rules}}" wx:key="activity">
+            <view class="card-left">
+              <view class="activity-name">{{item.activity}}</view>
+              <view class="activity-unit">{{item.unit}}</view>
+            </view>
+            <view class="card-right">
+              <text class="points" style="color: {{item.color}}">+{{item.points}}</text>
+            </view>
+          </view>
+        </block>
+
+        <block wx:if="{{item.id === 'streak'}}">
+          <view class="rule-card streak-card" wx:for="{{item.rules}}" wx:key="days">
+            <view class="card-left">
+              <view class="streak-days" style="color: {{item.color}}">{{item.title}}</view>
+              <view class="streak-desc">坚持打卡</view>
+            </view>
+            <view class="card-right">
+              <view class="bonus-wrapper">
+                <text class="bonus-label">额外奖励</text>
+                <text class="bonus-value" style="color: {{item.color}}">+{{item.bonus}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <block wx:if="{{item.id === 'special'}}">
+          <view class="rule-card special-card" wx:for="{{item.rules}}" wx:key="date">
+            <view class="card-left">
+              <view class="special-date">{{item.date}}</view>
+              <view class="special-datestr">{{item.dateStr}}</view>
+            </view>
+            <view class="card-right">
+              <text class="special-bonus" style="color: {{item.color}}">{{item.bonus}}</text>
+            </view>
+          </view>
+        </block>
+
+        <block wx:if="{{item.id === 'achievement' || item.id === 'social'}}">
+          <view class="rule-card achievement-card" wx:for="{{item.rules}}" wx:key="name">
+            <view class="card-left">
+              <view class="achievement-name">{{item.name || item.action}}</view>
+              <view class="achievement-condition">{{item.condition}}</view>
+            </view>
+            <view class="card-right">
+              <text class="achievement-bonus" style="color: {{item.color}}">+{{item.bonus}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="bottom-tip">
+    <text class="tip-text">💡 提示：积极参与，坚持打卡，更多积分等你来拿！</text>
+  </view>
+</view>

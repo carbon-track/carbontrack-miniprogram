@@ -1,0 +1,30 @@
+<!--pages/webview/webview.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 网页加载中 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="spinner"></view>
+    <text>正在加载...</text>
+  </view>
+
+  <!-- 错误提示 -->
+  <view wx:elif="{{error}}" class="error-state">
+    <view class="error-icon">⚠️</view>
+    <text class="error-message">{{errorMsg}}</text>
+    <button class="refresh-btn" bindtap="refreshPage" type="primary">
+      重新加载
+    </button>
+    <button class="close-btn" bindtap="closePage" type="default">
+      关闭页面
+    </button>
+  </view>
+
+  <!-- 网页内容 -->
+  <web-view
+    wx:else
+    id="webview"
+    src="{{url}}"
+    bindload="onWebviewLoadEnd"
+    binderror="onWebviewLoadError"
+    bindmessage="onWebviewMessage"
+  ></web-view>
+</view>

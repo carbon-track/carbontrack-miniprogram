@@ -1,0 +1,170 @@
+/* pages/agreement/agreement.wxss */
+
+/* 主题变量 */
+.container {
+  --primary-color: #34C759;
+  --background-color: #F2F2F7;
+  --text-color: #000000;
+  --border-color: #E5E5EA;
+  --card-background: #FFFFFF;
+  --secondary-text: #8E8E93;
+  
+  background-color: var(--background-color);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.container.dark {
+  --primary-color: #4ECDC4;
+  --background-color: #1C1C1E;
+  --text-color: #FFFFFF;
+  --border-color: #38383A;
+  --card-background: #2C2C2E;
+  --secondary-text: #8E8E93;
+}
+
+/* 内容滚动区域 */
+.content-scroll {
+  min-height: 100vh;
+}
+
+/* 协议头部 */
+.agreement-header {
+  padding: 30rpx;
+  background-color: var(--card-background);
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.update-date {
+  font-size: 26rpx;
+  color: var(--secondary-text);
+}
+
+/* 协议内容 */
+.agreement-content {
+  padding: 40rpx 30rpx;
+  background-color: var(--card-background);
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+/* 富文本样式 */
+.agreement-content h2 {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.agreement-content h3 {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+.agreement-content p {
+  font-size: 28rpx;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+  text-indent: 56rpx;
+}
+
+.agreement-content ul, .agreement-content ol {
+  margin-bottom: 20rpx;
+  padding-left: 70rpx;
+}
+
+.agreement-content li {
+  font-size: 28rpx;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 10rpx;
+}
+
+/* 底部空间 */
+.bottom-space {
+  height: 100rpx;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--border-color);
+  border-top: 4rpx solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state text {
+  font-size: 28rpx;
+  color: var(--secondary-text);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--secondary-text);
+}
+
+/* 回到顶部按钮 */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 80rpx;
+  right: 30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.scroll-top-btn:active {
+  opacity: 1;
+}
+
+.scroll-top-icon {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 深色主题下的富文本样式 */
+.container.dark .agreement-content h2,
+.container.dark .agreement-content h3,
+.container.dark .agreement-content p,
+.container.dark .agreement-content li {
+  color: var(--text-color);
+}

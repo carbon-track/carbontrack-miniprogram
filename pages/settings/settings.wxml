@@ -1,0 +1,230 @@
+<!--pages/settings/settings.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 通知设置 -->
+  <view class="settings-group">
+    <view class="group-title">
+      <text class="section-icon">🔔</text>
+      通知设置
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FF9500, #FFB74D);">🔔</view>
+        <view class="setting-label">
+          <text class="setting-name">启用通知</text>
+          <text class="setting-desc">接收活动提醒和成就通知</text>
+        </view>
+      </view>
+      <switch 
+        checked="{{settings.notifications.enabled}}" 
+        bindchange="toggleSwitch"
+        data-category="notifications"
+        data-setting="enabled"
+      />
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #5AC8FA, #81D4FA);">📱</view>
+        <view class="setting-label">
+          <text class="setting-name">推送通知</text>
+          <text class="setting-desc">接收微信推送提醒</text>
+        </view>
+      </view>
+      <switch 
+        checked="{{settings.notifications.push}}" 
+        bindchange="toggleSwitch"
+        data-category="notifications"
+        data-setting="push"
+        disabled="{{!settings.notifications.enabled}}"
+      />
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FF2D55, #FF6B81);">📧</view>
+        <view class="setting-label">
+          <text class="setting-name">邮件通知</text>
+          <text class="setting-desc">接收活动报告邮件</text>
+        </view>
+      </view>
+      <switch 
+        checked="{{settings.notifications.email}}" 
+        bindchange="toggleSwitch"
+        data-category="notifications"
+        data-setting="email"
+        disabled="{{!settings.notifications.enabled}}"
+      />
+    </view>
+  </view>
+
+  <!-- 隐私设置 -->
+  <view class="settings-group">
+    <view class="group-title">
+      <text class="section-icon">🔒</text>
+      隐私设置
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #007AFF, #29B6F6);">🔄</view>
+        <view class="setting-label">
+          <text class="setting-name">分享活动数据</text>
+          <text class="setting-desc">允许分享您的环保活动成果</text>
+        </view>
+      </view>
+      <switch 
+        checked="{{settings.privacy.shareActivity}}" 
+        bindchange="toggleSwitch"
+        data-category="privacy"
+        data-setting="shareActivity"
+      />
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #34C759, #66BB6A);">📍</view>
+        <view class="setting-label">
+          <text class="setting-name">位置追踪</text>
+          <text class="setting-desc">用于计算步行和骑行距离</text>
+        </view>
+      </view>
+      <switch 
+        checked="{{settings.privacy.locationTracking}}" 
+        bindchange="toggleSwitch"
+        data-category="privacy"
+        data-setting="locationTracking"
+      />
+    </view>
+  </view>
+
+  <!-- 外观设置 -->
+  <view class="settings-group">
+    <view class="group-title">
+      <text class="section-icon">🎨</text>
+      外观设置
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #8E8E93, #BDBDBD);">🌙</view>
+        <view class="setting-label">
+          <text class="setting-name">主题</text>
+        </view>
+      </view>
+      <view class="radio-group">
+        <radio 
+          value="light" 
+          checked="{{settings.appearance.theme === 'light'}}" 
+          bindchange="changeTheme"
+        />浅色
+        <radio 
+          value="dark" 
+          checked="{{settings.appearance.theme === 'dark'}}" 
+          bindchange="changeTheme"
+        />深色
+        <radio 
+          value="auto" 
+          checked="{{settings.appearance.theme === 'auto'}}" 
+          bindchange="changeTheme"
+        />跟随系统
+      </view>
+    </view>
+  </view>
+
+  <!-- 语言设置 -->
+  <view class="settings-group">
+    <view class="group-title">
+      <text class="section-icon">🌐</text>
+      语言设置
+    </view>
+    
+    <view class="setting-item">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FFD60A, #FFEB3B);">🔤</view>
+        <view class="setting-label">
+          <text class="setting-name">应用语言</text>
+        </view>
+      </view>
+      <view class="radio-group">
+        <radio 
+          value="zh-CN" 
+          checked="{{settings.language === 'zh-CN'}}" 
+          bindchange="changeLanguage"
+        />简体中文
+        <radio 
+          value="en-US" 
+          checked="{{settings.language === 'en-US'}}" 
+          bindchange="changeLanguage"
+        />English
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他设置 -->
+  <view class="settings-group">
+    <view class="group-title">
+      <text class="section-icon">⚙️</text>
+      其他设置
+    </view>
+    
+    <view class="setting-item action" bindtap="clearCache">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #5856D6, #7986CB);">🗑️</view>
+        <view class="setting-label">
+          <text class="setting-name">清除缓存</text>
+        </view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
+    
+    <view class="setting-item action" bindtap="incentiveRules">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FFD700, #FFA500);">🎯</view>
+        <view class="setting-label">
+          <text class="setting-name">激励规则</text>
+          <text class="setting-desc">积分获取规则与奖励</text>
+        </view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
+    
+    <view class="setting-item action" bindtap="helpAndFeedback">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FF9500, #FFB74D);">💡</view>
+        <view class="setting-label">
+          <text class="setting-name">帮助与反馈</text>
+        </view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
+    
+    <view class="setting-item action" bindtap="userAgreement">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #007AFF, #29B6F6);">📝</view>
+        <view class="setting-label">
+          <text class="setting-name">用户协议</text>
+        </view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
+    
+    <view class="setting-item action" bindtap="privacyPolicy">
+      <view class="setting-content">
+        <view class="setting-icon" style="background: linear-gradient(135deg, #FF2D55, #FF6B81);">🔐</view>
+        <view class="setting-label">
+          <text class="setting-name">隐私政策</text>
+        </view>
+      </view>
+      <view class="arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>📱 版本 {{appVersion}}</text>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <button class="logout-btn" bindtap="logout">🚪 退出登录</button>
+</view>

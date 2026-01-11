@@ -1,0 +1,90 @@
+<!--pages/exchange/exchange.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 我的积分 -->
+  <view class="points-card">
+    <view class="points-info">
+      <text class="points-label">⭐ 我的积分</text>
+      <text class="points-amount">{{balance}} ⭐</text>
+    </view>
+    <view class="points-action">
+      <button bindtap="" class="points-detail-btn">💰 积分明细</button>
+    </view>
+  </view>
+
+  <!-- 分类筛选 -->
+  <view class="category-tabs">
+    <scroll-view scroll-x="true" enable-flex show-scrollbar="false">
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="category-tab {{activeCategory === item.id ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-category="{{item.id}}"
+      >
+        <text class="tab-text">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="products-container">
+    <view class="section-header">
+      <view class="section-icon">🎁</view>
+      <text class="section-title">可兑换商品</text>
+    </view>
+    <view
+      wx:for="{{filteredProducts}}"
+      wx:key="id"
+      class="product-item"
+    >
+      <view class="product-image" style="background: {{item.gradient}}">
+        <text class="product-emoji">{{item.emoji}}</text>
+      </view>
+      
+      <view class="product-content">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-description">{{item.description}}</text>
+        
+        <view class="product-footer">
+          <view class="product-stats">
+            <text class="product-points">
+              <text class="points-icon">⭐</text>
+              {{item.points}}
+            </text>
+            <text class="product-stock">📦 库存: {{item.stock}}</text>
+          </view>
+          
+          <view class="product-exchange">
+            <text class="exchange-count">🔄 已兑换{{item.exchangeCount}}次</text>
+            <button 
+              class="exchange-btn" 
+              bindtap="exchangeNow"
+              data-product="{{item}}"
+              disabled="{{balance < item.points || item.stock <= 0}}"
+            >
+              {{balance < item.points ? '积分不足' : item.stock <= 0 ? '已兑完' : '🛒 立即兑换'}}
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading && !refreshing}}" class="loading-state">
+      <view class="loading-content">⏳</view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 下拉刷新状态 -->
+    <view wx:if="{{refreshing}}" class="refreshing-state">
+      <view class="loading-content">⏳</view>
+      <text>刷新中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && !refreshing && filteredProducts.length === 0}}" class="empty-state">
+      <view class="empty-emoji">💫</view>
+      <text class="empty-text">暂无可兑换商品</text>
+    </view>
+  </view>
+</view>

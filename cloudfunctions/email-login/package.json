@@ -1,0 +1,12 @@
+{
+  "name": "email-login",
+  "version": "1.0.0",
+  "description": "邮箱密码登录云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

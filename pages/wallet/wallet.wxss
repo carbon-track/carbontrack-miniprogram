@@ -1,0 +1,428 @@
+/* pages/wallet/wallet.wxss */
+
+.container {
+  background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.container.dark {
+  background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+}
+
+/* 钱包卡片 */
+.wallet-card {
+  margin: 20rpx;
+  padding: 48rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+  color: white;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  transform: rotate(30deg);
+}
+
+.container.dark .wallet-card {
+  background: linear-gradient(135deg, #009688 0%, #673AB7 100%);
+}
+
+.balance-section {
+  text-align: center;
+}
+
+.balance-label {
+  font-size: 34rpx;
+  opacity: 0.95;
+  display: block;
+  margin-bottom: 15rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+  letter-spacing: 2rpx;
+}
+
+.balance-amount {
+  font-size: 70rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 35rpx;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+}
+
+.exchange-btn {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  color: #34C759;
+  font-weight: bold;
+  font-size: 32rpx;
+  padding: 18rpx 50rpx;
+  border-radius: 30rpx;
+  border: none;
+  outline: none;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.15);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.exchange-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+  transition: left 0.3s;
+}
+
+.exchange-btn:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 3rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.exchange-btn:active::before {
+  left: 100%;
+}
+
+.container.dark .exchange-btn {
+  background: linear-gradient(135deg, #2C2C2E 0%, #3A3A3C 100%);
+  color: #4ECDC4;
+}
+
+/* 标签切换 */
+.tab-container {
+  display: flex;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  border-bottom: 1rpx solid #E5E5EA;
+  margin-bottom: 20rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .tab-container {
+  background: linear-gradient(135deg, #2C2C2E 0%, #3A3A3C 100%);
+  border-bottom: 1rpx solid #38383A;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.3);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  position: relative;
+  font-size: 30rpx;
+  color: #8E8E93;
+  transition: all 0.2s;
+}
+
+.tab:active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .tab {
+  color: #8E8E93;
+}
+
+.container.dark .tab:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+  color: #34C759;
+  font-weight: bold;
+}
+
+.container.dark .tab.active {
+  color: #4ECDC4;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
+  height: 6rpx;
+  background: linear-gradient(90deg, #34C759 0%, #4CAF50 100%);
+  border-radius: 3rpx;
+}
+
+.container.dark .tab.active::after {
+  background: linear-gradient(90deg, #4ECDC4 0%, #5AC8FA 100%);
+}
+
+/* 交易记录列表 */
+.transactions-list {
+  padding: 0 20rpx 20rpx 20rpx;
+}
+
+/* 区域标题 */
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 20rpx 0;
+}
+
+.section-icon {
+  font-size: 40rpx;
+  margin-right: 10rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #000000;
+}
+
+.container.dark .section-title {
+  color: #FFFFFF;
+}
+
+.transaction-item {
+  display: flex;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  border: 1rpx solid #E5E5EA;
+  transition: all 0.2s;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.container.dark .transaction-item {
+  background: linear-gradient(135deg, #2C2C2E 0%, #3A3A3C 100%);
+  border: 1rpx solid #38383A;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
+}
+
+.transaction-item:active {
+  transform: scale(0.99);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.transaction-item.income::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+  background: linear-gradient(180deg, #34C759 0%, #4CAF50 100%);
+}
+
+.transaction-item.expense::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+  background: linear-gradient(180deg, #FF3B30 0%, #FF5722 100%);
+}
+
+/* 交易图标 */
+.transaction-icon {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.transaction-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.3), transparent 70%);
+}
+
+.transaction-emoji {
+  font-size: 52rpx;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+/* 交易内容 */
+.transaction-content {
+  flex: 1;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.transaction-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #000000;
+  flex: 1;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
+}
+
+.container.dark .transaction-title {
+  color: #FFFFFF;
+}
+
+.transaction-amount {
+  font-size: 34rpx;
+  font-weight: bold;
+  margin-left: 20rpx;
+  text-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.1);
+}
+
+.transaction-amount.income {
+  color: #34C759;
+  background: linear-gradient(135deg, #34C759 0%, #4CAF50 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: initial;
+}
+
+.transaction-amount.expense {
+  color: #FF3B30;
+  background: linear-gradient(135deg, #FF3B30 0%, #FF5722 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: initial;
+}
+
+.container.dark .transaction-amount.income {
+  color: #4ECDC4;
+}
+
+.container.dark .transaction-amount.expense {
+  color: #FF453A;
+}
+
+.transaction-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-description {
+  font-size: 26rpx;
+  color: #8E8E93;
+  flex: 1;
+}
+
+.transaction-date {
+  font-size: 24rpx;
+  color: #8E8E93;
+  margin-left: 20rpx;
+}
+
+/* 加载状态 */
+.loading-state,
+.refreshing-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50rpx 0;
+}
+
+.loading-content {
+  font-size: 72rpx;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state text,
+.refreshing-state text {
+  font-size: 28rpx;
+  color: #8E8E93;
+  font-weight: 500;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 150rpx 0;
+}
+
+.empty-emoji {
+  font-size: 180rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 6rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+.empty-text {
+  font-size: 34rpx;
+  color: #8E8E93;
+  font-weight: 500;
+}
+
+/* 没有更多数据 */
+.no-more {
+  text-align: center;
+  padding: 30rpx 0;
+}
+
+.no-more text {
+  font-size: 26rpx;
+  color: #8E8E93;
+}

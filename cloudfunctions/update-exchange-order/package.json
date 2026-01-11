@@ -1,0 +1,1 @@
+{"name": "update-exchange-order","version": "1.0.0","description": "更新兑换订单状态（管理员）","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}

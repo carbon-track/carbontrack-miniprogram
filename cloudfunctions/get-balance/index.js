@@ -1,0 +1,40 @@
+// 云函数入口文件
+const cloud = require('wx-server-sdk')
+cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
+const db = cloud.database()
+
+// 云函数入口函数
+exports.main = async (event, context) => {
+  const wxContext = cloud.getWXContext()
+  
+  try {
+    // 查询用户积分余额
+    const result = await db.collection('users')
+      .where({ _openid: wxContext.OPENID })
+      .field({ points: true })
+      .get()
+    
+    if (result.data.length === 0) {
+      return {
+        success: false,
+        error: '用户不存在'
+      }
+    }
+    
+    const balance = result.data[0].points || 0
+    
+    return {
+      success: true,
+      data: {
+        balance,
+        message: '查询成功'
+      }
+    }
+  } catch (error) {
+    console.error('获取积分余额失败:', error)
+    return {
+      success: false,
+      error: error.message
+    }
+  }
+}

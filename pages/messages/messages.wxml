@@ -1,0 +1,53 @@
+<!--pages/messages/messages.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 消息类型选择 -->
+  <view class="message-tabs">
+    <view
+      wx:for="{{types}}"
+      wx:key="index"
+      class="tab-item {{activeType === index ? 'active' : ''}}"
+      bindtap="switchType"
+      data-index="{{index}}"
+    >
+      <text class="tab-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 操作栏 -->
+  <view wx:if="{{messages.length > 0}}" class="action-bar">
+    <text class="action-button" bindtap="markAllAsRead">全部已读</text>
+  </view>
+
+  <!-- 消息列表 -->
+  <view class="message-list">
+    <view
+      wx:for="{{messages}}"
+      wx:key="id"
+      class="message-item {{item.read ? 'read' : 'unread'}}"
+      bindtap="viewMessage"
+      data-id="{{item.id}}"
+    >
+      <view class="message-left">
+        <view class="message-type">{{item.type}}</view>
+        <text class="message-title">{{item.title}}</text>
+        <text class="message-content">{{item.content}}</text>
+        <text class="message-time">{{item.time}}</text>
+      </view>
+      <view class="message-right">
+        <view wx:if="{{!item.read}}" class="unread-dot"></view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-state">
+      <view class="spinner"></view>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && messages.length === 0}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit" class="empty-icon"></image>
+      <text class="empty-text">暂无消息</text>
+    </view>
+  </view>
+</view>

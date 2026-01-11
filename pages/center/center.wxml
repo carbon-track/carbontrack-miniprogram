@@ -1,0 +1,118 @@
+<!--pages/center/center.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 用户信息区域 -->
+  <view class="user-section">
+    <view class="user-info" bindtap="onAvatarTap">
+      <view class="avatar-wrapper">
+        <block wx:if="{{userInfo && (userInfo.avatarUrl || userInfo.avatar)}}">
+          <image class="avatar-image" src="{{userInfo.avatarUrl || userInfo.avatar}}" mode="aspectFill"></image>
+        </block>
+        <block wx:else>
+          <view class="avatar-emoji">
+            {{userInfo && userInfo.avatarEmoji ? userInfo.avatarEmoji : '👤'}}
+          </view>
+        </block>
+      </view>
+      <view class="user-details">
+        <view class="username">{{userInfo && userInfo.username ? userInfo.username : '用户'}}</view>
+        <view class="user-level" bindtap="onLevelTap">
+          Lv.{{stats.level}} <text class="emoji">🔼</text>
+        </view>
+      </view>
+    </view>
+    <view class="message-icon" bindtap="onMessageTap">
+      <text class="emoji">💬</text>
+      <view wx:if="{{unreadMessages > 0}}" class="unread-badge">{{unreadMessages > 99 ? '99+' : unreadMessages}}</view>
+    </view>
+  </view>
+
+  <!-- 统计信息区域 -->
+  <view class="stats-section">
+    <view class="section-header">
+      <view class="section-icon">📊</view>
+      <view class="section-title">环保统计</view>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <view class="stat-emoji">⭐</view>
+        <view class="stat-value">{{stats.totalPoints}}</view>
+        <view class="stat-label">总积分 🎯</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-emoji">🌍</view>
+        <view class="stat-value">{{stats.totalCarbon}} kg</view>
+        <view class="stat-label">碳减排 🌱</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-emoji">📊</view>
+        <view class="stat-value">{{stats.activityCount}}</view>
+        <view class="stat-label">活动次数 📈</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单区域 -->
+  <view class="menu-section">
+    <view class="section-header">
+      <view class="section-icon">✨</view>
+      <view class="section-title">环保功能</view>
+    </view>
+    <view class="menu-group">
+      <view 
+        wx:for="{{menuItems1}}" 
+        wx:key="id"
+        class="menu-item"
+        bindtap="onMenuItemTap"
+        data-route="{{item.route}}"
+      >
+        <view class="menu-icon" style="background: {{item.gradient}}">
+          <text class="emoji">{{item.emoji}}</text>
+        </view>
+        <view class="menu-content">
+          <view class="menu-title">{{item.title}}</view>
+          <view class="menu-subtitle">{{item.subtitle}}</view>
+        </view>
+        <text class="emoji">➡️</text>
+      </view>
+    </view>
+
+    <view class="section-header">
+      <view class="section-icon">🛠️</view>
+      <view class="section-title">账户设置</view>
+    </view>
+    <view class="menu-group">
+      <view 
+        wx:for="{{menuItems2}}" 
+        wx:key="id"
+        class="menu-item"
+        bindtap="onMenuItemTap"
+        data-route="{{item.route}}"
+      >
+        <view class="menu-icon" style="background: {{item.gradient}}">
+          <text class="emoji">{{item.emoji}}</text>
+        </view>
+        <view class="menu-content">
+          <view class="menu-title">{{item.title}}</view>
+          <view class="menu-subtitle">{{item.subtitle}}</view>
+        </view>
+        <text class="emoji">➡️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-section">
+    <view class="logout-button" bindtap="logout">
+      <text class="emoji">🚪</text>
+      <text>退出登录 👋</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{isLoading}}" class="loading-overlay">
+    <view class="loading-content">
+      <view class="loading-emoji">🔄</view>
+      <view>正在加载个人信息...</view>
+    </view>
+  </view>
+</view>

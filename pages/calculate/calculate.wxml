@@ -1,0 +1,171 @@
+<!--pages/calculate/calculate.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="back-button" bindtap="onBack">
+      <text class="emoji">⬅️</text>
+    </view>
+    <view class="title">碳足迹计算</view>
+    <view class="empty"></view>
+  </view>
+
+  <view class="content">
+    <!-- 活动选择 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-icon">🌱</view>
+        <view class="section-title">选择环保活动</view>
+      </view>
+      
+      <!-- 搜索框 -->
+      <view class="search-wrapper">
+        <text class="emoji">🔍</text>
+        <input
+          class="search-input"
+          placeholder="搜索活动"
+          placeholder-class="placeholder"
+          value="{{searchQuery}}"
+          bindinput="onSearch"
+          focus="{{searchFocus}}"
+        />
+        <view wx:if="{{searchQuery}}" class="clear-search" bindtap="onSearch">
+          <text class="emoji">✕</text>
+        </view>
+      </view>
+      
+      <!-- 已选活动 -->
+      <view wx:if="{{selectedActivity}}" class="selected-activity card">
+        <view class="activity-info">
+          <view class="activity-icon" style="background: {{selectedActivity.gradient}}">
+            <text class="emoji">{{selectedActivity.emoji}}</text>
+          </view>
+          <view class="activity-details">
+            <view class="activity-name">{{selectedActivity.name}}</view>
+            <view class="activity-unit">单位：{{selectedActivity.unit}}</view>
+          </view>
+        </view>
+        <view class="clear-selection" bindtap="clearActivitySelection">
+          <text class="emoji">✕</text>
+        </view>
+      </view>
+      
+      <!-- 活动列表 -->
+      <view wx:if="{{!selectedActivity}}" class="activity-list">
+        <block wx:for="{{filteredActivities}}" wx:key="id">
+          <view class="activity-item card" bindtap="selectActivity" data-id="{{item.id}}">
+            <view class="activity-icon" style="background: {{item.gradient}}">
+              <text class="emoji">{{item.emoji}}</text>
+            </view>
+            <view class="activity-details">
+              <view class="activity-name">{{item.name}}</view>
+              <view class="activity-unit">单位：{{item.unit}}</view>
+            </view>
+            <text class="emoji">▶️</text>
+          </view>
+        </block>
+        
+        <!-- 无搜索结果 -->
+        <view wx:if="{{filteredActivities.length === 0}}" class="no-results">
+          <view>未找到相关活动</view>
+        </view>
+      </view>
+    </view>
+  
+    <!-- 数量输入 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-icon">📊</view>
+        <view class="section-title">活动数量</view>
+      </view>
+      <view class="input-group">
+        <input type="number" value="{{amount}}" bindinput="onAmountChange" placeholder="请输入数量" class="input" />
+        <text class="unit" wx:if="{{selectedActivity}}">{{selectedActivity.unit}}</text>
+      </view>
+    </view>
+    
+    <!-- 日期选择 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-icon">📅</view>
+        <view class="section-title">活动日期</view>
+      </view>
+      <view class="date-picker" bindtap="showDatePicker">
+        <text>{{date || '请选择日期'}}</text>
+        <text class="emoji">📅</text>
+      </view>
+    </view>
+    
+    <!-- 描述 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-icon">✏️</view>
+        <view class="section-title">活动描述（可选）</view>
+      </view>
+      <textarea value="{{description}}" bindinput="onDescriptionChange" placeholder="添加活动描述" class="textarea" />
+    </view>
+    
+    <!-- 上传图片 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-icon">📷</view>
+        <view class="section-title">上传图片（可选）</view>
+      </view>
+      <view class="image-upload-trigger" bindtap="showImagePickerModal">
+        <text class="emoji">📤</text>
+        <text>{{imageUrl ? '更换图片' : '添加图片'}}</text>
+      </view>
+      <view class="image-preview" wx:if="{{imageUrl}}">
+        <image src="{{imageUrl}}" mode="aspectFill" class="preview-image"></image>
+        <view class="delete-button" bindtap="deleteImage">
+          <text class="emoji">🗑️</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 计算结果 -->
+    <view class="section results" wx:if="{{carbonResult > 0 || pointsResult > 0}}">
+      <view class="section-header">
+        <view class="section-icon">🏅</view>
+        <view class="section-title">计算结果</view>
+      </view>
+      <view class="results-grid">
+        <view class="result-item" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <text class="result-emoji">🌍</text>
+          <text class="result-label">减少碳排放</text>
+          <text class="result-value">{{carbonResult}} kg</text>
+        </view>
+        <view class="result-item" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+          <text class="result-emoji">⭐</text>
+          <text class="result-label">获得积分</text>
+          <text class="result-value">{{pointsResult}} 分</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="submit-button" bindtap="submitActivity" disabled="{{submitting}}">
+      <text class="button-emoji">✅</text>
+      <text>{{submitting ? '提交中...' : '提交记录'}}</text>
+    </button>
+  </view>
+
+  <!-- 图片选择弹窗 -->
+  <view class="image-picker-modal" wx:if="{{showImagePickerModal}}">
+    <view class="modal-mask" bindtap="hideImagePickerModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">选择图片</text>
+        <view class="modal-close" bindtap="hideImagePickerModal">✕</view>
+      </view>
+      <view class="modal-body">
+        <view class="picker-option" bindtap="chooseImageFromCamera">
+          <view class="option-icon">📷</view>
+          <text class="option-text">拍照</text>
+        </view>
+        <view class="picker-option" bindtap="chooseImageFromAlbum">
+          <view class="option-icon">🖼️</view>
+          <text class="option-text">从相册选择</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

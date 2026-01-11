@@ -1,0 +1,249 @@
+<!--pages/navigation/navigation.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <view class="header">
+    <view class="title">🗺️ 导航指南</view>
+    <view class="subtitle">CarbonTrack 页面导航示意图</view>
+  </view>
+
+  <!-- 启动流程 -->
+  <view class="section">
+    <view class="section-title">🚀 启动流程</view>
+    <view class="flow-chart">
+      <view class="flow-item start">启动页</view>
+      <view class="flow-arrow">⬇️</view>
+      <view class="flow-item decision">检测登录</view>
+      <view class="flow-arrow">⬇️</view>
+      <view class="flow-branch">
+        <view class="branch-item">
+          <view class="flow-item">已登录</view>
+          <view class="flow-arrow">➡️</view>
+          <view class="flow-item page">🏠 首页</view>
+        </view>
+        <view class="branch-item">
+          <view class="flow-item">未登录</view>
+          <view class="flow-arrow">➡️</view>
+          <view class="flow-item page">🔐 登录</view>
+          <view class="flow-arrow">➡️</view>
+          <view class="flow-item page">📝 注册</view>
+          <view class="flow-arrow">➡️</view>
+          <view class="flow-item page">🏠 首页</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab导航 -->
+  <view class="section">
+    <view class="section-title">📱 底部Tab导航</view>
+    <view class="tab-bar-diagram">
+      <view class="tab-item active">
+        <view class="tab-icon">🏠</view>
+        <view class="tab-label">首页</view>
+      </view>
+      <view class="tab-item">
+        <view class="tab-icon">🧮</view>
+        <view class="tab-label">计算</view>
+      </view>
+      <view class="tab-item">
+        <view class="tab-icon">🏆</view>
+        <view class="tab-label">排行</view>
+      </view>
+      <view class="tab-item">
+        <view class="tab-icon">👤</view>
+        <view class="tab-label">我的</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 首页导航 -->
+  <view class="section">
+    <view class="section-title">🏠 首页导航</view>
+    <view class="nav-grid">
+      <view class="nav-item" data-route="/pages/center/center" bindtap="navigateToPage">
+        <view class="nav-icon">👤</view>
+        <view class="nav-title">个人中心</view>
+        <view class="nav-desc">点击头像进入</view>
+      </view>
+      <view class="nav-item" data-route="/pages/calculate/calculate" bindtap="navigateToPage">
+        <view class="nav-icon">✍️</view>
+        <view class="nav-title">记录活动</view>
+        <view class="nav-desc">底部按钮</view>
+      </view>
+      <view class="nav-item" data-route="/pages/store/store" bindtap="navigateToPage">
+        <view class="nav-icon">🛒</view>
+        <view class="nav-title">积分商城</view>
+        <view class="nav-desc">查看商品</view>
+      </view>
+      <view class="nav-item" data-route="/pages/webview/webview" data-url="https://www.carbontrackapp.com" bindtap="navigateToWebview">
+        <view class="nav-icon">🌐</view>
+        <view class="nav-title">官网</view>
+        <view class="nav-desc">点击轮播图</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人中心导航 -->
+  <view class="section">
+    <view class="section-title">👤 个人中心导航</view>
+    <view class="nav-list">
+      <view class="nav-row" data-route="/pages/profile/profile" bindtap="navigateToPage">
+        <view class="nav-icon">👤</view>
+        <view class="nav-info">
+          <view class="nav-title">个人资料</view>
+          <view class="nav-desc">编辑个人信息</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/carbon-history/carbon-history" bindtap="navigateToPage">
+        <view class="nav-icon">🌱</view>
+        <view class="nav-info">
+          <view class="nav-title">碳足迹记录</view>
+          <view class="nav-desc">查看历史记录</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/my-activities/my-activities" bindtap="navigateToPage">
+        <view class="nav-icon">📋</view>
+        <view class="nav-info">
+          <view class="nav-title">我的活动</view>
+          <view class="nav-desc">查看活动进度</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/achievements/achievements" bindtap="navigateToPage">
+        <view class="nav-icon">🏆</view>
+        <view class="nav-info">
+          <view class="nav-title">我的成就</view>
+          <view class="nav-desc">环保徽章</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/wallet/wallet" bindtap="navigateToPage">
+        <view class="nav-icon">💰</view>
+        <view class="nav-info">
+          <view class="nav-title">积分钱包</view>
+          <view class="nav-desc">积分明细</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/exchange/exchange" bindtap="navigateToPage">
+        <view class="nav-icon">🎁</view>
+        <view class="nav-info">
+          <view class="nav-title">积分兑换</view>
+          <view class="nav-desc">兑换礼品</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/settings/settings" bindtap="navigateToPage">
+        <view class="nav-icon">⚙️</view>
+        <view class="nav-info">
+          <view class="nav-title">设置</view>
+          <view class="nav-desc">账号管理</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+      <view class="nav-row" data-route="/pages/help/help" bindtap="navigateToPage">
+        <view class="nav-icon">❓</view>
+        <view class="nav-info">
+          <view class="nav-title">帮助与反馈</view>
+          <view class="nav-desc">常见问题</view>
+        </view>
+        <view class="nav-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 核心流程 -->
+  <view class="section">
+    <view class="section-title">🎯 核心操作流程</view>
+    <view class="process-list">
+      <view class="process-item">
+        <view class="process-number">1</view>
+        <view class="process-content">
+          <view class="process-title">记录环保活动</view>
+          <view class="process-desc">首页 → 记录活动 → 选择类型 → 填写信息 → 提交</view>
+        </view>
+      </view>
+      <view class="process-item">
+        <view class="process-number">2</view>
+        <view class="process-content">
+          <view class="process-title">查看积分</view>
+          <view class="process-desc">个人中心 → 积分钱包 → 查看明细</view>
+        </view>
+      </view>
+      <view class="process-item">
+        <view class="process-number">3</view>
+        <view class="process-content">
+          <view class="process-title">兑换奖励</view>
+          <view class="process-desc">积分商城 → 选择商品 → 确认兑换</view>
+        </view>
+      </view>
+      <view class="process-item">
+        <view class="process-number">4</view>
+        <view class="process-content">
+          <view class="process-title">查看排名</view>
+          <view class="process-desc">排行榜 → 切换榜单 → 查看排名</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速访问 -->
+  <view class="section">
+    <view class="section-title">⚡ 快速访问</view>
+    <view class="quick-access">
+      <view class="access-row">
+        <view class="access-item" data-route="/pages/calculate/calculate" bindtap="navigateToPage">
+          <view class="access-icon">🧮</view>
+          <view class="access-label">计算</view>
+        </view>
+        <view class="access-item" data-route="/pages/rank/rank" bindtap="navigateToPage">
+          <view class="access-icon">🏆</view>
+          <view class="access-label">排行</view>
+        </view>
+        <view class="access-item" data-route="/pages/store/store" bindtap="navigateToPage">
+          <view class="access-icon">🛒</view>
+          <view class="access-label">商城</view>
+        </view>
+        <view class="access-item" data-route="/pages/messages/messages" bindtap="navigateToPage">
+          <view class="access-icon">💬</view>
+          <view class="access-label">消息</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="section tips">
+    <view class="section-title">💡 使用提示</view>
+    <view class="tips-list">
+      <view class="tip-item">
+        <view class="tip-icon">📱</view>
+        <view class="tip-content">
+          <view class="tip-title">底部Tab导航</view>
+          <view class="tip-desc">随时切换主要功能模块</view>
+        </view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">⬅️</view>
+        <view class="tip-content">
+          <view class="tip-title">返回操作</view>
+          <view class="tip-desc">点击左上角返回按钮或使用手机返回键</view>
+        </view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">👆</view>
+        <view class="tip-content">
+          <view class="tip-title">点击操作</view>
+          <view class="tip-desc">点击卡片或按钮进入对应功能</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <view class="version-text">CarbonTrack 导航指南 v1.0.0</view>
+    <view class="version-desc">更新于 2026-01-10</view>
+  </view>
+</view>

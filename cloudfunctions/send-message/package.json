@@ -1,0 +1,1 @@
+{"name": "send-message","version": "1.0.0","description": "发送消息（系统/管理员）","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}

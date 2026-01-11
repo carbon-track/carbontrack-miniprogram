@@ -1,0 +1,145 @@
+<!--pages/help/help.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 常见问题 -->
+  <view class="help-section">
+    <view class="section-header">
+      <text class="section-title">常见问题</text>
+    </view>
+
+    <!-- 分类筛选 -->
+    <view class="category-tabs">
+      <scroll-view scroll-x="true" enable-flex show-scrollbar="false">
+        <view
+          wx:for="{{categories}}"
+          wx:key="id"
+          class="category-tab {{activeCategory === item.id ? 'active' : ''}}"
+          bindtap="switchCategory"
+          data-category="{{item.id}}"
+        >
+          <text class="tab-text">{{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- FAQ列表 -->
+    <view class="faq-list">
+      <view
+        wx:for="{{filteredFaqItems}}"
+        wx:key="id"
+        class="faq-item"
+        bindtap="toggleFaqItem"
+        data-id="{{item.id}}"
+      >
+        <view class="faq-question">
+          <text class="question-icon">{{item.expand ? '−' : '+'}}</text>
+          <text class="question-text">{{item.question}}</text>
+        </view>
+        
+        <view class="faq-answer" wx:if="{{item.expand}}">
+          <text>{{item.answer}}</text>
+        </view>
+      </view>
+
+      <!-- 加载状态 -->
+      <view wx:if="{{loading}}" class="loading-state">
+        <view class="spinner"></view>
+        <text>加载中...</text>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:if="{{!loading && filteredFaqItems.length === 0}}" class="empty-state">
+        <text class="empty-text">暂无相关问题</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系我们 -->
+  <view class="help-section">
+    <view class="section-header">
+      <text class="section-title">联系我们</text>
+    </view>
+    
+    <view class="contact-info">
+      <view class="contact-item">
+        <text class="contact-label">有其他问题？</text>
+        <button class="contact-btn" bindtap="contactSupport" type="primary">
+          联系客服
+        </button>
+      </view>
+      
+      <view class="contact-item">
+        <text class="contact-label">反馈问题或建议</text>
+        <button class="feedback-btn" bindtap="showFeedbackForm" type="default">
+          意见反馈
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 反馈表单弹窗 -->
+  <view class="feedback-modal" wx:if="{{showFeedback}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">意见反馈</text>
+        <text class="close-btn" bindtap="hideFeedbackForm">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 反馈类型 -->
+        <view class="form-item">
+          <text class="form-label">反馈类型</text>
+          <radio-group bindchange="selectFeedbackType">
+            <label class="radio-label">
+              <radio value="question" checked="{{feedbackType === 'question'}}"/>
+              <text>问题咨询</text>
+            </label>
+            <label class="radio-label">
+              <radio value="suggestion" checked="{{feedbackType === 'suggestion'}}"/>
+              <text>功能建议</text>
+            </label>
+            <label class="radio-label">
+              <radio value="bug" checked="{{feedbackType === 'bug'}}"/>
+              <text>Bug反馈</text>
+            </label>
+          </radio-group>
+        </view>
+        
+        <!-- 反馈内容 -->
+        <view class="form-item">
+          <text class="form-label">反馈内容</text>
+          <textarea 
+            placeholder="请详细描述您的问题或建议（至少10个字符）" 
+            value="{{feedbackContent}}"
+            bindinput="inputFeedback"
+            class="feedback-textarea"
+            maxlength="500"
+          />
+          <text class="char-count">{{feedbackContent.length}}/500</text>
+        </view>
+        
+        <!-- 联系方式 -->
+        <view class="form-item">
+          <text class="form-label">联系方式（选填）</text>
+          <input 
+            placeholder="请留下您的手机号或邮箱，方便我们联系您" 
+            value="{{contactInfo}}"
+            bindinput="inputContact"
+            class="contact-input"
+          />
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="cancel-btn" bindtap="hideFeedbackForm">取消</button>
+        <button 
+          class="submit-btn" 
+          bindtap="submitFeedback"
+          loading="{{submitting}}"
+          disabled="{{submitting || feedbackContent.length < 10}}"
+        >
+          提交反馈
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

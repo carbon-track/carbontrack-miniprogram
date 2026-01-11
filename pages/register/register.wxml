@@ -1,0 +1,137 @@
+<!--pages/register/register.wxml-->
+<view class="container {{theme === 'dark' ? 'dark' : ''}}">
+  <view class="header">
+    <text class="title">创建账号</text>
+    <text class="subtitle">加入CarbonTrack，开始记录您的环保足迹</text>
+  </view>
+
+  <form class="register-form">
+    <!-- 用户名 -->
+    <view class="form-group">
+      <view class="input-wrapper">
+        <input
+          type="text"
+          placeholder="用户名"
+          placeholder-class="placeholder"
+          value="{{formData.username}}"
+          bindinput="onInputChange"
+          data-field="username"
+        />
+      </view>
+      <text wx:if="{{errors.username}}" class="error-message">{{errors.username}}</text>
+    </view>
+
+    <!-- 邮箱 -->
+    <view class="form-group">
+      <view class="input-wrapper">
+        <input
+          type="text"
+          placeholder="邮箱"
+          placeholder-class="placeholder"
+          value="{{formData.email}}"
+          bindinput="onInputChange"
+          data-field="email"
+        />
+      </view>
+      <text wx:if="{{errors.email}}" class="error-message">{{errors.email}}</text>
+    </view>
+
+    <!-- 密码 -->
+    <view class="form-group">
+      <view class="input-wrapper">
+        <input
+          type="password"
+          placeholder="密码（至少6个字符）"
+          placeholder-class="placeholder"
+          value="{{formData.password}}"
+          bindinput="onInputChange"
+          data-field="password"
+        />
+      </view>
+      <text wx:if="{{errors.password}}" class="error-message">{{errors.password}}</text>
+    </view>
+
+    <!-- 确认密码 -->
+    <view class="form-group">
+      <view class="input-wrapper">
+        <input
+          type="password"
+          placeholder="确认密码"
+          placeholder-class="placeholder"
+          value="{{formData.confirmPassword}}"
+          bindinput="onInputChange"
+          data-field="confirmPassword"
+        />
+      </view>
+      <text wx:if="{{errors.confirmPassword}}" class="error-message">{{errors.confirmPassword}}</text>
+    </view>
+
+    <!-- 学校选择 -->
+    <view class="form-group">
+      <view class="input-wrapper select-wrapper" bindtap="showSchoolSelector">
+        <input
+          type="text"
+          placeholder="选择学校"
+          placeholder-class="placeholder"
+          value="{{formData.school}}"
+          disabled
+        />
+        <image src="/assets/icons/arrow-right.png" mode="aspectFit" class="arrow-icon"></image>
+      </view>
+      <text wx:if="{{errors.school}}" class="error-message">{{errors.school}}</text>
+    </view>
+
+    <!-- 协议同意 -->
+    <view class="agreement-group">
+      <view class="checkbox" bindtap="toggleAgreement">
+        <view class="checkbox-inner {{agreements ? 'checked' : ''}}">
+          <image wx:if="{{agreements}}" src="/assets/icons/check.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <text class="agreement-text">
+        我已阅读并同意
+        <text class="link">《用户协议》</text>
+        和
+        <text class="link">《隐私政策》</text>
+      </text>
+    </view>
+    <text wx:if="{{errors.agreements}}" class="error-message">{{errors.agreements}}</text>
+
+    <!-- 注册按钮 -->
+    <button
+      class="register-button"
+      type="primary"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+      bindtap="onRegister"
+    >
+      注册
+    </button>
+
+    <!-- 登录入口 -->
+    <view class="login-link">
+      <text>已有账号？</text>
+      <text class="link" bindtap="goToLogin">立即登录</text>
+    </view>
+  </form>
+
+  <!-- 学校选择器 -->
+  <view wx:if="{{showSchoolPicker}}" class="school-picker-overlay" bindtap="closeSchoolPicker">
+    <view class="school-picker" catchtap="">
+      <view class="picker-header">
+        <text class="cancel-button" bindtap="closeSchoolPicker">取消</text>
+        <text class="picker-title">选择学校</text>
+        <text class="confirm-button" bindtap="confirmSchool">确定</text>
+      </view>
+      <picker-view
+        value="{{schoolIndex}}"
+        bindchange="onSchoolChange"
+        class="school-picker-view"
+      >
+        <picker-view-column>
+          <view wx:for="{{schools}}" wx:key="id" class="school-item">{{item.name}}</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+  </view>
+</view>

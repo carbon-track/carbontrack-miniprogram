@@ -1,0 +1,1 @@
+{"name": "join-activity","version": "1.0.0","description": "参与活动","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}

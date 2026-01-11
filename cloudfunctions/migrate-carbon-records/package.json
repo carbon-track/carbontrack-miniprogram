@@ -1,0 +1,9 @@
+{
+  "name": "migrate-carbon-records",
+  "version": "1.0.0",
+  "description": "迁移碳足迹记录的用户ID",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

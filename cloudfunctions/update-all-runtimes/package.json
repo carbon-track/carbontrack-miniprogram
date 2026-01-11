@@ -1,0 +1,1 @@
+{"name": "update-all-runtimes","version": "1.0.0","description": "批量更新所有云函数运行时到Node.js 16.13","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3","@cloudbase/manager-node": "^3.16.0"}}

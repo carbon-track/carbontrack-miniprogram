@@ -1,0 +1,1 @@
+{"name": "create-test-store-data","version": "1.0.0","description": "创建完整的测试数据（含业务关联）","main": "index.js","dependencies": {"wx-server-sdk": "~2.6.3"},"engines": {"node": "16.x"}}
