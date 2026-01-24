@@ -17,7 +17,11 @@ exports.main = async (event, context) => {
   const openid = userId || wxContext.OPENID;
 
   try {
-    const now = new Date();
+    // 使用传入日期或当前日期
+    const now = event.currentDate ? new Date(event.currentDate) : new Date();
+    if (isNaN(now.getTime())) {
+      throw new Error('无效的日期格式');
+    }
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
     // 获取用户今天的碳记录

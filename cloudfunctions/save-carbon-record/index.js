@@ -44,9 +44,11 @@ exports.main = async (event, context) => {
       points: parseInt(points) || 0,
       date,
       description,
-      imageUrl,
+      imageUrl: imageUrl || '', // 确保imageUrl字段存在
       createTime: db.serverDate()
     }
+
+    console.log('保存记录数据:', JSON.stringify(recordData)) // 添加日志
 
     const addRes = await db.collection('carbon_records').add({
       data: recordData

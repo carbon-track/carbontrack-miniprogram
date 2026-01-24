@@ -182,7 +182,7 @@ Page({
         'school': 120 - rank * 0.8 + Math.random() * 2.5,
         'friend': 100 - rank * 0.5 + Math.random() * 3.5
       };
-      return (Math.max(10, baseCarbon[this.data.currentTab])).toFixed(2);
+      return Math.floor(Math.max(10, baseCarbon[this.data.currentTab]));
     };
 
     // Emoji头像映射

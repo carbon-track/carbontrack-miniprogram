@@ -74,30 +74,52 @@ Page({
         activityType: this.data.filter === 'all' ? undefined : this.data.filter
       });
 
+      console.log('云函数返回结果:', result);
+      console.log('记录数量:', result.records?.length || 0);
+      if (result.records && result.records.length > 0) {
+        console.log('第一条记录:', result.records[0]);
+        console.log('第一条记录的imageUrl:', result.records[0].imageUrl);
+      }
+
       if (result.success) {
         const newRecords = result.records.map(record => {
           // 尝试从activityDetail中提取数量和单位
           const detailText = record.activityDetail || '';
           let amount = '-';
           let unit = '';
-          
+
           // 从activityDetail中解析数量和单位（格式如："🚶 步行 5 公里"）
           const match = detailText.match(/(\d+\.?\d*)\s*([^\s]+)/);
           if (match) {
             amount = match[1];
             unit = match[2];
           }
-          
+
+          // 处理日期字段，兼容多种可能的字段名
+          const date = record.date || record._createTime || record.createTime || new Date().toISOString();
+
+          // 处理创建时间字段，优先使用_createTime（云数据库自动生成）
+          const createTime = record.createTime || record._createTime || record.date || new Date().toISOString();
+
+          // 调试：打印imageUrl信息
+          console.log('记录图片信息:', {
+            id: record._id,
+            activityType: record.activityType,
+            imageUrl: record.imageUrl,
+            imageUrlLength: record.imageUrl ? record.imageUrl.length : 0,
+            hasImage: !!record.imageUrl
+          });
+
           return {
             id: record._id,
-            date: record.date,
+            date: date,
             activityType: record.activityType,
             activityDetail: record.activityDetail,
-            carbonValue: record.carbonValue,
+            carbonValue: Math.floor(record.carbonValue) || 0,
             points: record.points,
             imageUrl: record.imageUrl,
             description: record.description,
-            createTime: record.createTime,
+            createTime: createTime,
             amount: amount,
             unit: unit,
             emoji: detailText.substring(0, 2)
@@ -106,7 +128,7 @@ Page({
 
         // 计算总碳减排量
         const allRecords = refresh ? newRecords : [...this.data.records, ...newRecords];
-        const totalCarbon = allRecords.reduce((sum, r) => sum + (r.carbonValue || 0), 0).toFixed(1);
+        const totalCarbon = Math.floor(allRecords.reduce((sum, r) => sum + (r.carbonValue || 0), 0));
 
         this.setData({
           records: refresh ? newRecords : [...this.data.records, ...newRecords],
@@ -146,6 +168,7 @@ Page({
   previewImage: function(e) {
     const url = e.currentTarget.dataset.url;
     if (url) {
+      // 直接使用云存储fileID预览,微信会自动处理
       wx.previewImage({
         urls: [url],
         current: url
@@ -164,6 +187,10 @@ Page({
     const record = this.data.records.find(r => r.id === recordId);
 
     if (record) {
+      console.log('选中的记录:', record);
+      console.log('选中的记录imageUrl:', record.imageUrl);
+      console.log('imageUrl类型:', typeof record.imageUrl);
+      console.log('imageUrl是否为真值:', !!record.imageUrl);
       this.setData({
         selectedRecord: record,
         showDetailModal: true
@@ -205,5 +232,10 @@ Page({
     if (!dateString) return '';
     const date = new Date(dateString);
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  },
+
+  // 取整函数
+  toInteger: function(value) {
+    return Math.floor(value)
   }
 });

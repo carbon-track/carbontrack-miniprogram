@@ -469,6 +469,38 @@
   transform: scale(0.98);
 }
 
+/* 图片检测状态样式 */
+.security-check-panel {
+  width: 100%;
+  padding: 30rpx;
+  background: #F7F7F7;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.check-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.loading-icon {
+  font-size: 40rpx;
+  animation: spin 1s linear infinite;
+}
+
+.check-text {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* 图片选择弹窗样式 */
 .image-picker-modal {
   position: fixed;

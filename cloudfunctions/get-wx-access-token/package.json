@@ -1,0 +1,9 @@
+{
+  "name": "get-wx-access-token",
+  "version": "1.0.0",
+  "description": "获取微信小程序access_token",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}

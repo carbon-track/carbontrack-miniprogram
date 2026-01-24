@@ -125,7 +125,7 @@ Page({
             description: '了解更多环保知识和小贴士',
             emoji: '💡',
             gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-            url: '/pages/knowledge/knowledge'
+            url: '/pages/help/help'
           }
         ],
         loading: false
@@ -147,9 +147,10 @@ Page({
       const result = await getUserStats();
 
       if (result.success) {
+        // 碳减排数值取整
         this.setData({
           userStats: {
-            carbonSaved: result.stats.totalCarbon || 0,
+            carbonSaved: Math.floor(result.stats.totalCarbon || 0),
             activities: result.stats.activityCount || 0,
             points: result.stats.totalPoints || 0
           }

@@ -1,7 +1,7 @@
 <!--pages/messages/messages.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="消息中心" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 消息类型选择 -->
   <view class="message-tabs">
     <view

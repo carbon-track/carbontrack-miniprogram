@@ -1,7 +1,7 @@
 <!--pages/wallet/wallet.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="我的钱包" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 钱包卡片 -->
   <view class="wallet-card">
     <view class="balance-section">

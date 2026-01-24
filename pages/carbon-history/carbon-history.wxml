@@ -1,9 +1,7 @@
 <!--pages/carbon-history/carbon-history.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="碳足迹记录" theme="{{theme}}" />
-  <!-- 返回按钮 -->
-  <uni-back-button title="碳足迹记录" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 筛选器 -->
   <view class="filter-section">
     <picker mode="selector" range="{{filterOptions}}" range-key="name" bindchange="onFilterChange">
@@ -23,7 +21,7 @@
     <view class="stat-divider"></view>
     <view class="stat-item">
       <text class="stat-label">总碳减排</text>
-      <text class="stat-value carbon-value">{{totalCarbon}}kg</text>
+      <text class="stat-value carbon-value">{{totalCarbon | toInteger}}kg</text>
     </view>
   </view>
 
@@ -62,7 +60,7 @@
         <view class="record-stats">
           <view class="stat-badge carbon">
             <text class="badge-icon">🌱</text>
-            <text class="badge-text">{{item.carbonValue}}kg</text>
+            <text class="badge-text">{{item.carbonValue | toInteger}}kg</text>
           </view>
           <view class="stat-badge points">
             <text class="badge-icon">⭐</text>

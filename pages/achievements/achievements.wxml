@@ -1,7 +1,7 @@
 <!--pages/achievements/achievements.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="我的成就" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 成就统计 -->
   <view class="stats-container">
     <view class="section-header">

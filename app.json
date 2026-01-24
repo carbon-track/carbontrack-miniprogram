@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/navigation/navigation",
+    "pages/splash/splash",
     "pages/index/index",
+    "pages/navigation/navigation",
     "pages/login/login",
     "pages/register/register",
     "pages/calculate/calculate",
@@ -26,7 +27,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "CarbonTrack",
+    "navigationBarTitleText": "carbontrack",
     "navigationBarTextStyle": "black",
     "navigationStyle": "default",
     "enablePullDownRefresh": true,
@@ -45,7 +46,7 @@
       },
       {
         "pagePath": "pages/calculate/calculate",
-        "text": "计算",
+        "text": "记录",
         "iconPath": "assets/icons/calculator.png",
         "selectedIconPath": "assets/icons/calculator.png"
       },

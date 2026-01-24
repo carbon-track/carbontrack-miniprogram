@@ -107,13 +107,22 @@
     <view class="section">
       <view class="section-header">
         <view class="section-icon">📷</view>
-        <view class="section-title">上传图片（可选）</view>
+        <view class="section-title">上传凭证图片（可选）</view>
       </view>
-      <view class="image-upload-trigger" bindtap="showImagePickerModal">
+      
+      <!-- 图片检测状态 -->
+      <view class="security-check-panel" wx:if="{{checkingImage}}">
+        <view class="check-status">
+          <text class="loading-icon">⏳</text>
+          <text class="check-text">正在检测图片安全性...</text>
+        </view>
+      </view>
+      
+      <view class="image-upload-trigger" bindtap="showImagePickerModal" wx:if="{{!checkingImage}}">
         <text class="emoji">📤</text>
         <text>{{imageUrl ? '更换图片' : '添加图片'}}</text>
       </view>
-      <view class="image-preview" wx:if="{{imageUrl}}">
+      <view class="image-preview" wx:if="{{imageUrl && !checkingImage}}">
         <image src="{{imageUrl}}" mode="aspectFill" class="preview-image"></image>
         <view class="delete-button" bindtap="deleteImage">
           <text class="emoji">🗑️</text>

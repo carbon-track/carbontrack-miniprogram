@@ -1,0 +1,35 @@
+<view class="uploader-container {{theme === 'dark' ? 'dark' : ''}}">
+  <!-- 上传区域 -->
+  <view class="upload-area" bindtap="chooseImage" wx:if="{{!tempImagePath}}">
+    <text class="icon">📷</text>
+    <text class="tip">拍照或选择图片</text>
+    <text class="sub-tip">支持jpg/png格式，最大10MB</text>
+  </view>
+  
+  <!-- 图片预览 -->
+  <view class="preview-area" wx:else>
+    <image src="{{tempImagePath}}" mode="aspectFill" class="preview-image"></image>
+    <view class="image-actions">
+      <text class="action-btn" bindtap="rechooseImage">重新选择</text>
+      <text class="action-btn primary" bindtap="uploadImage">确认上传</text>
+    </view>
+  </view>
+  
+  <!-- 检测状态提示 -->
+  <view class="status-panel" wx:if="{{showStatus}}">
+    <view class="status-loading" wx:if="{{status === 'checking'}}">
+      <text class="loading-icon">⏳</text>
+      <text>正在检测图片安全性...</text>
+    </view>
+    
+    <view class="status-success" wx:if="{{status === 'success'}}">
+      <text class="status-icon">✅</text>
+      <text>图片检测通过</text>
+    </view>
+    
+    <view class="status-error" wx:if="{{status === 'error'}}">
+      <text class="status-icon">❌</text>
+      <text>{{errorMsg}}</text>
+    </view>
+  </view>
+</view>

@@ -1,7 +1,7 @@
 // pages/calculate/calculate.js
 const app = getApp();
 const { requireAuth } = require('../../utils/auth.js');
-const { saveCarbonRecord, getCarbonRules, getActivities } = require('../../utils/cloud-api.js');
+const { saveCarbonRecord, getCarbonRules, getActivities, checkIncentiveBonus } = require('../../utils/cloud-api.js');
 const { debounce, cachedRequest } = require('../../utils/performance.js');
 const {
   calculateCarbonSavings,
@@ -28,7 +28,8 @@ Page({
     pointsResult: 0, // 积分结果
     loading: false, // 加载状态
     submitting: false, // 提交状态
-    searchFocus: false // 搜索框焦点状态
+    searchFocus: false, // 搜索框焦点状态
+    checkingImage: false // 图片检测状态
   },
 
   onLoad: function() {
@@ -328,49 +329,10 @@ Page({
     return true;
   },
 
-  // 提交活动记录
-  submitActivity: async function() {
-    if (!this.validateForm()) return;
-
-    // 检查登录状态
-    const { isLoggedIn } = require('../../utils/auth.js');
-    const loggedIn = isLoggedIn();
-
-    if (!loggedIn) {
-      wx.showModal({
-        title: '提示',
-        content: '登录后可以保存您的活动记录并获得积分奖励，是否去登录？',
-        success: (res) => {
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/login/login'
-            });
-          }
-        }
-      });
-      return;
-    }
-
-    this.setData({ submitting: true });
-
+  // 内部保存记录方法
+  saveRecordInternal: async function(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult) {
     try {
-      const { selectedActivity, amount, date, description, imageUrl, carbonResult, pointsResult } = this.data;
-
-      // 上传图片到云存储（如果有）
-      let cloudImageUrl = '';
-      if (imageUrl) {
-        try {
-          const uploadResult = await wx.cloud.uploadFile({
-            cloudPath: `activity-images/${Date.now()}.jpg`,
-            filePath: imageUrl
-          });
-          cloudImageUrl = uploadResult.fileID;
-        } catch (error) {
-          console.error('图片上传失败:', error);
-          // 图片上传失败不影响主流程
-        }
-      }
-
+      console.log('saveRecordInternal 调用云函数，imageUrl:', cloudImageUrl); // 添加日志
       // 调用云函数保存记录
       const result = await saveCarbonRecord({
         activityType: selectedActivity.name,
@@ -382,6 +344,8 @@ Page({
         imageUrl: cloudImageUrl
       });
 
+      console.log('云函数返回结果:', result); // 添加日志
+
       if (result.success) {
         // 显示记录成功
         wx.showToast({
@@ -392,11 +356,14 @@ Page({
 
         // 检查并发放激励奖励
         try {
-          const incentiveResult = await checkIncentiveBonus();
-          
+          const incentiveResult = await checkIncentiveBonus({
+            userId: app.globalData.userInfo._id,
+            currentDate: this.data.date
+          });
+
           if (incentiveResult.success && incentiveResult.data) {
             const { consecutiveDays, streakBonus, specialBonus, bonusDetails } = incentiveResult.data;
-            
+
             // 如果有连续打卡奖励，显示提示
             if (streakBonus > 0) {
               setTimeout(() => {
@@ -408,7 +375,7 @@ Page({
                 });
               }, 1600);
             }
-            
+
             // 如果是特殊时段，显示提示
             if (specialBonus.isSpecial) {
               setTimeout(() => {
@@ -453,13 +420,152 @@ Page({
         throw new Error(result.message || '保存失败');
       }
     } catch (error) {
+      console.error('保存记录失败:', error);
+      wx.showToast({
+        title: error.message || '保存失败，请稍后重试',
+        icon: 'none'
+      });
+      this.setData({ submitting: false });
+    }
+  },
+
+  // 提交活动记录
+  submitActivity: async function() {
+    if (!this.validateForm()) return;
+
+    // 检查登录状态
+    const { isLoggedIn } = require('../../utils/auth.js');
+    const loggedIn = isLoggedIn();
+
+    if (!loggedIn) {
+      wx.showModal({
+        title: '提示',
+        content: '登录后可以保存您的活动记录并获得积分奖励，是否去登录？',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/pages/login/login'
+            });
+          }
+        }
+      });
+      return;
+    }
+
+    this.setData({ submitting: true });
+
+    try {
+      const { selectedActivity, amount, date, description, imageUrl, carbonResult, pointsResult } = this.data;
+
+      // 上传图片到云存储（如果有）
+      let cloudImageUrl = '';
+      if (imageUrl) {
+        try {
+          // 上传图片
+          console.log('开始上传图片...');
+          const uploadResult = await wx.cloud.uploadFile({
+            cloudPath: `activity-images/${Date.now()}.jpg`,
+            filePath: imageUrl
+          });
+          console.log('图片上传成功，fileID:', uploadResult.fileID);
+
+          // 调用微信安全API检测图片
+          this.setData({ checkingImage: true });
+
+          const checkResult = await this.checkImageSecurity(uploadResult.fileID);
+
+          this.setData({ checkingImage: false });
+
+          // 无论检测结果如何，都保存图片URL（检测失败不阻止提交）
+          cloudImageUrl = uploadResult.fileID;
+          console.log('图片处理完成，imageUrl:', cloudImageUrl);
+
+          if (!checkResult.passed && checkResult.errcode !== -1) {
+            // 检测明确未通过（非异常），询问用户
+            wx.showModal({
+              title: '图片检测未通过',
+              content: checkResult.errMsg || '图片包含违规内容（如二维码、水印、敏感图案等）。是否继续提交记录？',
+              confirmText: '继续提交',
+              cancelText: '取消',
+              success: (modalRes) => {
+                if (modalRes.confirm) {
+                  // 用户选择继续提交，保留图片URL保存
+                  this.saveRecordInternal(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult);
+                } else {
+                  // 用户选择取消，删除已上传的文件
+                  wx.cloud.deleteFile({ fileList: [cloudImageUrl] });
+                  this.setData({ submitting: false });
+                }
+              }
+            });
+            return;
+          }
+
+          // 检测通过或检测异常，直接保存记录（带图片）
+          await this.saveRecordInternal(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult);
+          return;
+        } catch (error) {
+          console.error('图片处理失败:', error);
+          this.setData({ checkingImage: false });
+          // 图片上传失败不影响主流程，继续提交（不带图片）
+        }
+      }
+
+      // 如果没有图片或图片上传失败，直接保存记录
+      await this.saveRecordInternal(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult);
+    } catch (error) {
       console.error('提交失败:', error);
       wx.showToast({
         title: error.message || '提交失败，请稍后重试',
         icon: 'none'
       });
-    } finally {
-      this.setData({ submitting: false });
+      this.setData({ submitting: false, checkingImage: false });
+    }
+  },
+  
+  // 调用微信安全检测API
+  async checkImageSecurity(fileID) {
+    try {
+      console.log('开始检测图片，fileID:', fileID);
+      // 调用云函数进行检测
+      const result = await wx.cloud.callFunction({
+        name: 'check-image-security',
+        data: {
+          fileID: fileID
+        }
+      });
+      
+      console.log('图片检测结果:', result);
+      
+      if (result.result.errcode === 0) {
+        console.log('图片检测通过');
+        return {
+          passed: true,
+          errcode: 0
+        };
+      } else if (result.result.errcode === 87014) {
+        console.log('图片检测未通过：包含违规内容');
+        return {
+          passed: false,
+          errcode: 87014,
+          errMsg: '图片包含违规内容（如二维码、水印、敏感图案等）'
+        };
+      } else {
+        console.log('图片检测返回错误码:', result.result.errcode, result.result.errmsg);
+        return {
+          passed: false,
+          errcode: result.result.errcode,
+          errMsg: result.result.errmsg || '图片检测失败'
+        };
+      }
+    } catch (error) {
+      console.error('图片检测异常:', error);
+      // 检测异常时，允许继续提交（避免用户数据丢失）
+      return {
+        passed: true, // 检测失败时不阻止提交
+        errcode: -1,
+        errMsg: '检测服务异常，但已允许继续提交'
+      };
     }
   }
 });

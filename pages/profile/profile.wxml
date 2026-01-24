@@ -1,9 +1,7 @@
 <!--pages/profile/profile.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="个人资料" theme="{{theme}}" />
-  <!-- 返回按钮 -->
-  <uni-back-button title="个人资料" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 用户基本信息 -->
   <view class="profile-header">
     <view class="avatar-container" wx:if="{{!editing}}">

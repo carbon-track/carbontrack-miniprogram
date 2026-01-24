@@ -148,9 +148,15 @@ Page({
       if (result.success) {
         const userInfo = wx.getStorageSync('userInfo') || app.globalData.userInfo;
 
+        // 碳减排数值取整
+        const stats = {
+          ...result.stats,
+          totalCarbon: Math.floor(result.stats.totalCarbon || 0)
+        };
+
         this.setData({
           userInfo,
-          stats: result.stats,
+          stats,
           isLoading: false
         });
       } else {
@@ -168,7 +174,7 @@ Page({
         },
         stats: {
           totalPoints: userInfo?.points || 0,
-          totalCarbon: userInfo?.totalCarbon || 0,
+          totalCarbon: Math.floor(userInfo?.totalCarbon || 0),
           activityCount: 0,
           level: userInfo?.level || 1
         },

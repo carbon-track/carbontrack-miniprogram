@@ -1,0 +1,6 @@
+<!--pages/splash/splash.wxml-->
+<view class="splash-container {{animationClass}}">
+  <view class="logo-wrapper">
+    <image class="logo-image" scale-mode="aspectFit" src="/images/carbontracks.png" mode="aspectFit"></image>
+  </view>
+</view>

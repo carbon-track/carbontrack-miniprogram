@@ -1,7 +1,7 @@
 <!--pages/my-activities/my-activities.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 返回按钮 -->
-  <uni-back-button title="我的活动" theme="{{theme}}" />
+  <uni-back-button title="carbontrack" theme="{{theme}}" />
   <!-- 筛选标签 -->
   <view class="filter-tabs">
     <view

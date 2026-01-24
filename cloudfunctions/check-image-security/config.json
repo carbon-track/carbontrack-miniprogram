@@ -1,0 +1,11 @@
+{
+  "name": "check-image-security",
+  "version": "1.0.0",
+  "description": "微信图片内容安全检测",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "form-data": "^4.0.0"
+  },
+  "timeout": 20
+}

@@ -159,7 +159,7 @@
 }
 
 .carbon-info {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--primary-color);
 }

@@ -32,14 +32,15 @@ Component({
 
     // 预览图片（放大查看）
     previewImage: function() {
-    const { record } = this.data;
-    if (record.imageUrl) {
-      wx.previewImage({
-        urls: [record.imageUrl],
-        current: record.imageUrl
-      });
-    }
-  },
+      const { record } = this.data;
+      if (record.imageUrl) {
+        // 直接使用云存储fileID预览,微信会自动处理
+        wx.previewImage({
+          urls: [record.imageUrl],
+          current: record.imageUrl
+        });
+      }
+    },
 
     // 关闭弹窗
     onClose: function() {
