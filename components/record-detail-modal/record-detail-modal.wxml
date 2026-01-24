@@ -22,7 +22,7 @@
           </view>
           <view class="date-badge">
             <text class="date-icon">📅</text>
-            <text class="date-text">{{formatDate(record.date)}}</text>
+            <text class="date-text">{{formattedDate}}</text>
           </view>
         </view>
       </view>
@@ -36,7 +36,7 @@
           </view>
           <view class="data-item">
             <text class="data-label">活动日期</text>
-            <text class="data-value">{{formatDate(record.date)}}</text>
+            <text class="data-value">{{formattedDate}}</text>
           </view>
         </view>
       </view>
@@ -84,7 +84,7 @@
       <view class="content-section last-section">
         <view class="create-time">
           <text class="time-icon">⏰</text>
-          <text class="time-text">记录时间: {{formatDateTime(record.createTime)}}</text>
+          <text class="time-text">记录时间: {{formattedCreateTime}}</text>
         </view>
       </view>
     </view>

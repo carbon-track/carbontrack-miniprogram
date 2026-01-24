@@ -12,7 +12,34 @@ Component({
   },
 
   data: {
-    currentImageIndex: 0
+    currentImageIndex: 0,
+    formattedDate: '',
+    formattedCreateTime: ''
+  },
+
+  observers: {
+    'record': function(record) {
+      if (record) {
+        // 格式化日期为 YYYY-MM-DD
+        const formatDate = (dateString) => {
+          if (!dateString) return '暂无日期';
+          const date = new Date(dateString);
+          return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+        };
+
+        // 格式化时间为 YYYY-MM-DD HH:mm
+        const formatDateTime = (dateString) => {
+          if (!dateString) return '暂无时间记录';
+          const date = new Date(dateString);
+          return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        };
+
+        this.setData({
+          formattedDate: formatDate(record.date || record._createTime || record.createTime),
+          formattedCreateTime: formatDateTime(record.createTime || record._createTime || record.date)
+        });
+      }
+    }
   },
 
   methods: {

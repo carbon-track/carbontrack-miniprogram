@@ -12,7 +12,7 @@ const _ = db.command
  * 保存碳足迹记录
  */
 exports.main = async (event, context) => {
-  const { activityType, activityDetail, carbonValue, points, date, description, imageUrl } = event
+  const { activityType, activityDetail, carbonValue, points, date, description, imageUrl, amount, unit } = event
   const wxContext = cloud.getWXContext()
   const { OPENID } = wxContext
 
@@ -45,6 +45,8 @@ exports.main = async (event, context) => {
       date,
       description,
       imageUrl: imageUrl || '', // 确保imageUrl字段存在
+      amount: amount || '',
+      unit: unit || '',
       createTime: db.serverDate()
     }
 

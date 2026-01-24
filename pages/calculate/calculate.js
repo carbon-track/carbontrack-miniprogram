@@ -341,7 +341,9 @@ Page({
         points: pointsResult,
         date,
         description: description || '',
-        imageUrl: cloudImageUrl
+        imageUrl: cloudImageUrl,
+        amount: amount,
+        unit: selectedActivity.unit
       });
 
       console.log('云函数返回结果:', result); // 添加日志

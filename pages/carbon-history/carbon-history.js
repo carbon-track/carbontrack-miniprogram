@@ -83,16 +83,18 @@ Page({
 
       if (result.success) {
         const newRecords = result.records.map(record => {
-          // 尝试从activityDetail中提取数量和单位
-          const detailText = record.activityDetail || '';
-          let amount = '-';
-          let unit = '';
+          // 直接使用数据库中保存的 amount 和 unit，如果没有则从 activityDetail 解析
+          let amount = record.amount || '-';
+          let unit = record.unit || '';
 
-          // 从activityDetail中解析数量和单位（格式如："🚶 步行 5 公里"）
-          const match = detailText.match(/(\d+\.?\d*)\s*([^\s]+)/);
-          if (match) {
-            amount = match[1];
-            unit = match[2];
+          // 如果没有单独的 amount 和 unit，尝试从 activityDetail 中解析
+          if (amount === '-') {
+            const detailText = record.activityDetail || '';
+            const match = detailText.match(/(\d+\.?\d*)\s*([^\s]+)/);
+            if (match) {
+              amount = match[1];
+              unit = match[2];
+            }
           }
 
           // 处理日期字段，兼容多种可能的字段名
@@ -100,6 +102,20 @@ Page({
 
           // 处理创建时间字段，优先使用_createTime（云数据库自动生成）
           const createTime = record.createTime || record._createTime || record.date || new Date().toISOString();
+
+          // 格式化日期为 YYYY-MM-DD
+          const formatDate = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+          };
+
+          // 格式化时间为 YYYY-MM-DD HH:mm
+          const formatDateTime = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+          };
 
           // 调试：打印imageUrl信息
           console.log('记录图片信息:', {
@@ -113,6 +129,7 @@ Page({
           return {
             id: record._id,
             date: date,
+            formattedDate: formatDate(date),
             activityType: record.activityType,
             activityDetail: record.activityDetail,
             carbonValue: Math.floor(record.carbonValue) || 0,
@@ -120,9 +137,10 @@ Page({
             imageUrl: record.imageUrl,
             description: record.description,
             createTime: createTime,
+            formattedCreateTime: formatDateTime(createTime),
             amount: amount,
             unit: unit,
-            emoji: detailText.substring(0, 2)
+            emoji: record.activityDetail.substring(0, 2)
           };
         });
 

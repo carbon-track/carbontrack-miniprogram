@@ -1,0 +1,9 @@
+{
+  "name": "fix-remaining-records",
+  "version": "1.0.0",
+  "description": "修复剩余缺失 amount 和 unit 的记录",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

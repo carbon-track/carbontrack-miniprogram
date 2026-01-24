@@ -39,17 +39,14 @@
     >
       <view class="record-header">
         <view class="record-type">
-          <text class="type-icon">{{item.activityDetail.substring(0, 2)}}</text>
+          <text class="type-icon">{{item.emoji}}</text>
           <text class="type-name">{{item.activityType}}</text>
         </view>
-        <text class="record-date">{{formatDate(item.date)}}</text>
+        <text class="record-date">{{item.formattedDate}}</text>
       </view>
 
       <view class="record-content">
-        <view class="record-detail">
-          <text class="detail-text">{{item.activityDetail}}</text>
-          <text wx:if="{{item.description}}" class="detail-desc">{{item.description}}</text>
-        </view>
+     
         
         <view wx:if="{{item.imageUrl}}" class="record-image" bindtap="previewImage" data-url="{{item.imageUrl}}" catchtap="preventBubble">
           <image src="{{item.imageUrl}}" mode="aspectFill"></image>
@@ -67,7 +64,7 @@
             <text class="badge-text">+{{item.points}}</text>
           </view>
         </view>
-        <text class="record-time">{{formatDateTime(item.createTime)}}</text>
+        <text class="record-time">{{item.formattedCreateTime}}</text>
       </view>
     </view>
 
