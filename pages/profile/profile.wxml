@@ -48,12 +48,12 @@
           placeholder="请输入用户名"
           placeholder-class="placeholder"
         />
-        <text wx:else class="username">{{userInfo.username}}</text>
+        <text wx:else class="username">{{userInfo.username || '微信用户'}}</text>
       </view>
-      <text class="user-email">✉️ {{userInfo.email}}</text>
+      <text class="user-email" wx:if="{{userInfo.email}}">✉️ {{userInfo.email}}</text>
       <view class="user-school">
         <text class="school-emoji">🏫</text>
-        <text>{{userInfo.school}}</text>
+        <text>{{userInfo.school || '未填写'}}</text>
       </view>
       <view class="user-union" wx:if="{{userInfo.unionId}}">
         <text class="union-emoji">🆔</text>

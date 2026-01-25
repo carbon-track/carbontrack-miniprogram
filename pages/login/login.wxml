@@ -1,6 +1,12 @@
 <!--pages/login/login.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
-  <view class="login-content">
+  <image 
+    src="/images/carbontracks.png" 
+    mode="aspectFill" 
+    class="background-image"
+  />
+  <view class="login-content-overlay">
+    <view class="login-content">
     <!-- Logo和标题 -->
     <view class="logo-section">
       <image class="logo" src="/assets/icons/logo.png" mode="aspectFit"></image>
@@ -10,7 +16,9 @@
 
     <view class="login-form">
       <view class="wechat-login-container">
+        <!-- 方式1：使用 getUserProfile（已弃用但向后兼容） -->
         <button
+          wx:if="{{debugInfo.canGetUserProfile}}"
           lang="zh_CN"
           bindtap="onWechatLoginTap"
           class="wechat-login-btn"
@@ -18,6 +26,45 @@
           <image src="/assets/icons/wechat.png" mode="aspectFit"></image>
           <text>微信一键登录</text>
         </button>
+
+        <!-- 方式2：使用新的头像昵称填写能力（推荐） -->
+        <view wx:else class="profile-form">
+          <view class="form-item">
+            <text class="form-label">昵称</text>
+            <input
+              class="form-input"
+              type="nickname"
+              placeholder="请输入昵称"
+              bindinput="onNicknameChange"
+              value="{{nickname}}"
+            />
+          </view>
+          <view class="form-item avatar-item">
+            <text class="form-label">头像</text>
+            <view class="avatar-wrapper" bindtap="onChooseAvatarTap">
+              <button
+                class="choose-avatar-btn"
+                open-type="chooseAvatar"
+                bindchooseavatar="onChooseAvatar"
+              >
+                <image
+                  wx:if="{{avatarUrl}}"
+                  class="avatar-preview"
+                  src="{{avatarUrl}}"
+                  mode="aspectFill"
+                />
+                <text wx:else class="avatar-placeholder">选择头像</text>
+              </button>
+            </view>
+          </view>
+          <button
+            bindtap="onWechatSimpleLoginTap"
+            class="wechat-login-btn"
+          >
+            <image src="/assets/icons/wechat.png" mode="aspectFit"></image>
+            <text>微信一键登录</text>
+          </button>
+        </view>
       </view>
       <view class="debug-toggle" bindtap="toggleDebug">
         <text>{{debugVisible ? '隐藏调试面板' : '显示调试面板'}}</text>
@@ -59,5 +106,6 @@
       </view>
     </view>
 
+    </view>
   </view>
 </view>

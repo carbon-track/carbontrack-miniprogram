@@ -50,7 +50,8 @@ Page({
 
       // 转换数据格式
       const displayUserInfo = {
-        username: userInfo.nickName || '',
+        username: userInfo.nickName || '微信用户',
+        nickName: userInfo.nickName || '微信用户',
         email: userInfo.email || '',
         school: userInfo.school || '',
         studentId: userInfo.studentId || '',

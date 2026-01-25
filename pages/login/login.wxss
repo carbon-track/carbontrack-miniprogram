@@ -96,6 +96,65 @@
   height: 40rpx;
 }
 
+/* 新版头像昵称填写表单 */
+.profile-form {
+  width: 100%;
+}
+
+.form-item {
+  margin-bottom: var(--spacing-md);
+  background-color: var(--secondary-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.avatar-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choose-avatar-btn {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 2rpx dashed var(--border-color);
+  background-color: var(--tertiary-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+}
+
+.choose-avatar-btn::after {
+  border: none;
+}
+
+.avatar-preview {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary-color);
+}
+
 /* 忘记密码 */
 .forgot-password {
   text-align: right;

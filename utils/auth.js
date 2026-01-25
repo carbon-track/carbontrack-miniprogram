@@ -184,18 +184,30 @@ const wxLogin = async (userInfo = {}, code = '') => {
  */
 const getUserProfile = async () => {
   try {
-    const { userInfo } = await new Promise((resolve, reject) => {
-      wx.getUserProfile({
-        desc: '用于完善用户资料',
-        success: resolve,
-        fail: reject
+    // 首先尝试使用 getUserProfile（已弃用但向后兼容）
+    if (wx.getUserProfile) {
+      const { userInfo } = await new Promise((resolve, reject) => {
+        wx.getUserProfile({
+          desc: '用于完善用户资料',
+          success: resolve,
+          fail: reject
+        });
       });
-    });
-
-    return userInfo;
+      return userInfo;
+    } else {
+      // 如果 getUserProfile 不存在，返回空对象，让用户后续在个人中心完善
+      return {
+        nickName: '',
+        avatarUrl: ''
+      };
+    }
   } catch (error) {
     console.error('获取用户信息失败:', error);
-    throw error;
+    // 不抛出错误，允许静默失败
+    return {
+      nickName: '',
+      avatarUrl: ''
+    };
   }
 };
 

@@ -11,6 +11,8 @@ Page({
     showPassword: false,
     redirectUrl: '',
     debugVisible: false,
+    nickname: '',
+    avatarUrl: '',
     debugInfo: {
       sdkVersion: '',
       canGetUserProfile: false,
@@ -172,7 +174,7 @@ Page({
     });
   },
 
-  // 微信一键登录
+  // 微信一键登录（旧版，使用 getUserProfile）
   onWechatLoginTap: async function() {
     try {
       const userInfo = await getUserProfile();
@@ -260,6 +262,91 @@ Page({
     } finally {
       this.setData({ loading: false });
     }
+  },
+
+  // 微信一键登录（新版，使用头像昵称填写能力）
+  onWechatSimpleLoginTap: async function() {
+    try {
+      const { nickname, avatarUrl } = this.data;
+      const userInfo = {
+        nickName: nickname || '微信用户',
+        avatarUrl: avatarUrl || ''
+      };
+
+      this.setData({ loading: true });
+      const loginRes = await new Promise((resolve, reject) => {
+        wx.login({ success: resolve, fail: reject });
+      });
+      const code = (loginRes && loginRes.code) ? loginRes.code : '';
+      const result = await wxLogin(userInfo, code);
+
+      this.setData({
+        'debugInfo.loginCode': code,
+        'debugInfo.userProfileStr': JSON.stringify(userInfo, null, 2),
+        'debugInfo.cloudLoginResultStr': JSON.stringify(result || {}, null, 2)
+      });
+
+      if (result.success) {
+        wx.showToast({
+          title: result.message || '登录成功',
+          icon: 'success',
+          duration: 1500,
+          success: () => {
+            const finalUser = app.globalData.userInfo || wx.getStorageSync('userInfo') || {};
+            if (!finalUser.school) {
+              wx.navigateTo({ url: '/pages/profile/profile' });
+              wx.showToast({ title: '请完善学校信息', icon: 'none' });
+              return;
+            }
+            if (this.data.redirectUrl) {
+              wx.redirectTo({ url: this.data.redirectUrl });
+            } else {
+              wx.switchTab({ url: '/pages/index/index' });
+            }
+          }
+        });
+      } else {
+        throw new Error(result.message || '登录失败');
+      }
+    } catch (error) {
+      console.error('微信登录失败:', error);
+      let errorMsg = '微信登录失败';
+      if (error.message) errorMsg = error.message;
+      else if (error.errMsg) errorMsg = error.errMsg;
+      wx.showToast({
+        title: errorMsg,
+        icon: 'none'
+      });
+    } finally {
+      this.setData({ loading: false });
+    }
+  },
+
+  // 昵称输入
+  onNicknameChange: function(e) {
+    this.setData({
+      nickname: e.detail.value
+    });
+  },
+
+  // 选择头像
+  onChooseAvatar: function(e) {
+    try {
+      const { avatarUrl } = e.detail || {};
+      if (!avatarUrl) {
+        wx.showToast({ title: '未获取到头像', icon: 'none' });
+        return;
+      }
+      this.setData({ avatarUrl });
+    } catch (error) {
+      console.error('选择头像失败:', error);
+      wx.showToast({ title: '选择头像失败', icon: 'none' });
+    }
+  },
+
+  onChooseAvatarTap: function() {
+    // 点击头像区域触发选择
+    // 实际的选择由 button open-type="chooseAvatar" 处理
   },
 
   toggleDebug: function() {
