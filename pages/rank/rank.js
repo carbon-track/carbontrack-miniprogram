@@ -28,11 +28,8 @@ Page({
     // 创建节流函数
     this.throttledLoadMore = throttle(this._loadMore.bind(this), 500);
 
-    // 加载排行榜数据（允许未登录用户查看模拟数据）
+    // 加载排行榜数据
     this.loadRankData();
-
-    // 检查登录状态（只在需要操作时强制登录）
-    // 如果未登录，仍然允许查看排行榜
   },
 
   // 设置主题
@@ -89,8 +86,28 @@ Page({
       }
 
       if (result.success) {
+        // 格式化碳排放值，确保显示两位小数
+        const formatCarbonValue = (value) => {
+          if (value === undefined || value === null) return 0
+          const num = Number(value)
+          if (isNaN(num)) return 0
+          return Math.round(num * 100) / 100
+        }
+
+        // 格式化排行榜数据
+        const formattedRankList = result.rankList.map(item => ({
+          ...item,
+          carbonSaved: formatCarbonValue(item.carbonSaved)
+        }))
+
+        // 格式化用户排名数据
+        const formattedUserRank = result.userRank ? {
+          ...result.userRank,
+          carbonSaved: formatCarbonValue(result.userRank.carbonSaved)
+        } : null
+
         // 合并数据（下拉加载更多）
-        const updatedRankList = page === 1 ? result.rankList : [...this.data.rankList, ...result.rankList];
+        const updatedRankList = page === 1 ? formattedRankList : [...this.data.rankList, ...formattedRankList];
 
         // 检查数据完整性
         if (updatedRankList.length > 0 && (!updatedRankList[0].username || updatedRankList[0].carbonSaved === undefined)) {
@@ -99,44 +116,98 @@ Page({
 
         this.setData({
           rankList: updatedRankList,
-          userRank: result.userRank,
+          userRank: formattedUserRank,
           loading: false,
           refreshing: false,
           hasMore: result.hasMore
         });
       } else {
-        throw new Error(result.message || '获取排行榜失败');
+        // 处理特殊错误情况
+        if (result.code === 'NO_SCHOOL') {
+          wx.showModal({
+            title: '提示',
+            content: '请先在个人资料中设置学校信息，才能查看校内榜',
+            showCancel: false,
+            success: () => {
+              wx.switchTab({ url: '/pages/profile/profile' });
+            }
+          });
+        } else if (result.code === 'NO_LOGIN') {
+          // 未登录时，对于全球榜和校内榜，仍然可以显示（但不会显示用户个人排名）
+          if (currentTab === 'global') {
+            // 全球榜可以正常显示，只是没有用户个人排名
+            this.setData({
+              rankList: [],
+              userRank: null,
+              loading: false,
+              refreshing: false,
+              hasMore: false
+            });
+            return;
+          } else if (currentTab === 'school') {
+            // 校内榜需要学校信息
+            this.setData({
+              rankList: [],
+              userRank: null,
+              loading: false,
+              refreshing: false,
+              hasMore: false
+            });
+            wx.showToast({
+              title: '请先登录并设置学校信息',
+              icon: 'none'
+            });
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: '请先登录查看好友榜',
+              showCancel: false,
+              success: () => {
+                wx.switchTab({ url: '/pages/profile/profile' });
+              }
+            });
+          }
+        } else if (result.code === 'INVALID_TYPE') {
+          wx.showToast({
+            title: '榜单类型错误',
+            icon: 'none'
+          });
+        } else {
+          wx.showToast({
+            title: result.message || '获取排行榜失败，请重试',
+            icon: 'none'
+          });
+        }
+        
+        this.setData({
+          loading: false,
+          refreshing: false
+        });
       }
     } catch (error) {
       console.error('获取排行榜失败:', error);
 
-      // 如果未登录，显示模拟数据
-      if (!app.globalData.isLogin) {
-        const mockRankList = this.generateMockRankData(page);
-        const mockUserRank = this.generateMockUserRank();
-        const updatedRankList = page === 1 ? mockRankList : [...this.data.rankList, ...mockRankList];
-
+      // 未登录用户仍然可以查看全球榜和校内榜
+      if (currentTab === 'global' || currentTab === 'school') {
+        // 显示空状态
         this.setData({
-          rankList: updatedRankList,
-          userRank: mockUserRank,
+          rankList: [],
+          userRank: null,
           loading: false,
           refreshing: false,
-          hasMore: page < 3
+          hasMore: false
+        });
+        
+        wx.showToast({
+          title: '暂无排行榜数据',
+          icon: 'none'
         });
       } else {
-        // 检查是否是字段缺失错误
-        if (error.message && error.message.includes('totalCarbon')) {
-          wx.showModal({
-            title: '数据初始化提示',
-            content: '用户数据缺少碳减排量字段，请在数据库中添加 totalCarbon 和 points 字段',
-            showCancel: false
-          });
-        } else {
-          wx.showToast({
-            title: error.message || '获取排行榜失败，请重试',
-            icon: 'none'
-          });
-        }
+        wx.showToast({
+          title: error.message || '获取排行榜失败，请重试',
+          icon: 'none'
+        });
+        
         this.setData({
           loading: false,
           refreshing: false
@@ -145,112 +216,7 @@ Page({
     }
   },
 
-  // 生成模拟排行榜数据
-  generateMockRankData: async function(page) {
-    const baseRank = (page - 1) * 20;
-    const avatarColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57', '#FF8C42', '#6A0572', '#AB83A1'];
 
-    // 更真实的用户名列表
-    const usernames = [
-      '绿色先锋🌱', '低碳达人💡', '环保卫士🌍', '自然爱好者🌸',
-      '地球守护者🌳', '节能小能手⚡', '生态平衡者♻️', '环保志愿者🎯',
-      '绿色生活家🏡', '可持续发展者🌊', '清洁地球人🚮', '绿植养护师🌿',
-      '环保创新者💚', '低碳出行者🚲', '资源回收师📦', '环保教师👩‍🏫',
-      '生态摄影师📸', '环保设计师🎨', '绿色科学家🔬', '碳中和倡导者🌱'
-    ];
-
-    // 更多样化的学校名称
-    const schools = [
-      '北京大学', '清华大学', '复旦大学', '上海交通大学',
-      '浙江大学', '南京大学', '武汉大学', '中山大学',
-      '环保科技大学', '绿色能源学院', '生态工程学院', '可持续发展大学'
-    ];
-
-    // 根据不同榜单类型生成差异化数据
-    const generatePoints = (rank) => {
-      const basePoints = {
-        'global': 1500 - rank * 12 + Math.floor(Math.random() * 30),
-        'school': 1200 - rank * 15 + Math.floor(Math.random() * 25),
-        'friend': 1000 - rank * 8 + Math.floor(Math.random() * 40)
-      };
-      return Math.max(100, basePoints[this.data.currentTab]);
-    };
-
-    const generateCarbonSaved = (rank) => {
-      const baseCarbon = {
-        'global': 150 - rank * 0.6 + Math.random() * 3,
-        'school': 120 - rank * 0.8 + Math.random() * 2.5,
-        'friend': 100 - rank * 0.5 + Math.random() * 3.5
-      };
-      return Math.floor(Math.max(10, baseCarbon[this.data.currentTab]));
-    };
-
-    // Emoji头像映射
-    const emojiAvatars = ['🌱', '💡', '🌍', '🌸', '🌳', '⚡', '♻️', '🎯', '🏡', '🌊', '🚮', '🌿', '💚', '🚲', '📦', '👩‍🏫', '📸', '🎨', '🔬', '🌱'];
-
-    // 优化：分批生成数据，避免阻塞UI
-    const batchSize = 5;
-    const rankList = [];
-    const total = 20;
-
-    for (let i = 0; i < total; i += batchSize) {
-      const batch = Array.from({ length: Math.min(batchSize, total - i) }, (_, index) => {
-        const rank = baseRank + i + index + 1;
-        const usernameIndex = (baseRank + i + index) % usernames.length;
-
-        return {
-          id: rank,
-          rank: rank,
-          username: usernames[usernameIndex],
-          avatarEmoji: emojiAvatars[usernameIndex],
-          avatarColor: avatarColors[rank % avatarColors.length],
-          points: generatePoints(rank),
-          carbonSaved: generateCarbonSaved(rank),
-          level: Math.min(15, Math.floor(rank / 3) + 1 + Math.floor(Math.random() * 3)),
-          school: schools[Math.floor(Math.random() * schools.length)],
-          // 添加更多真实数据字段
-          contributionDays: Math.floor(Math.random() * 365) + 30,
-          activitiesCompleted: Math.floor(Math.random() * 500) + 50
-        };
-      });
-
-      rankList.push(...batch);
-
-      // 每处理一批后稍微让出主线程
-      if (i + batchSize < total) {
-        await new Promise(resolve => setTimeout(resolve, 0));
-      }
-    }
-
-    return rankList;
-  },
-
-  // 生成模拟用户排名数据
-  generateMockUserRank: function() {
-    // 根据不同榜单类型返回不同的用户排名数据
-    const userRankData = {
-      'global': {
-        rank: 45,
-        points: 875,
-        carbonSaved: 85.6,
-        level: 7
-      },
-      'school': {
-        rank: 12,
-        points: 950,
-        carbonSaved: 92.3,
-        level: 8
-      },
-      'friend': {
-        rank: 8,
-        points: 990,
-        carbonSaved: 97.8,
-        level: 9
-      }
-    };
-    
-    return userRankData[this.data.currentTab] || userRankData.global;
-  },
 
   // 下拉刷新
   onRefresh: function() {

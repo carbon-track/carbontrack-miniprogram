@@ -73,7 +73,7 @@
     </view>
     <view class="feature-grid">
       <block wx:for="{{features}}" wx:key="id">
-        <view class="feature-item" bindtap="onFeatureTap" data-url="{{item.url}}">
+        <view class="feature-item" bindtap="onFeatureTap" data-url="{{item.url}}" data-type="{{item.type || 'page'}}">
           <view class="feature-icon" style="background: {{item.gradient}}">
             <text>{{item.emoji}}</text>
           </view>

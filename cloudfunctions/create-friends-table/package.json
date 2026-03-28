@@ -1,0 +1,12 @@
+{
+  "name": "create-friends-table",
+  "version": "1.0.0",
+  "description": "创建好友关系表结构",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

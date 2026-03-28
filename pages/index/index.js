@@ -101,7 +101,8 @@ Page({
             description: '记录环保活动，计算碳减排量',
             emoji: '📊',
             gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            url: '/pages/calculate/calculate'
+            url: '/pages/calculate/calculate',
+            type: 'tab' // 标记为tab页面
           },
           {
             id: 2,
@@ -109,7 +110,8 @@ Page({
             description: '查看校园环保达人排名',
             emoji: '🏆',
             gradient: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
-            url: '/pages/rank/rank'
+            url: '/pages/rank/rank',
+            type: 'tab' // 标记为tab页面
           },
           {
             id: 3,
@@ -117,7 +119,8 @@ Page({
             description: '使用环保积分兑换精美礼品',
             emoji: '🛍️',
             gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-            url: '/pages/store/store'
+            url: '/pages/store/store',
+            type: 'page' // 标记为普通页面
           },
           {
             id: 4,
@@ -125,7 +128,8 @@ Page({
             description: '了解更多环保知识和小贴士',
             emoji: '💡',
             gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-            url: '/pages/help/help'
+            url: '/pages/help/help',
+            type: 'page' // 标记为普通页面
           }
         ],
         loading: false
@@ -181,8 +185,18 @@ Page({
 
   // 功能卡片点击事件
   onFeatureTap: function(e) {
-    const url = e.currentTarget.dataset.url;
-    if (url) {
+    const { url, type } = e.currentTarget.dataset;
+    
+    if (!url) return;
+    
+    // 根据type字段选择不同的导航方式
+    if (type === 'tab') {
+      // 切换到tab页面
+      wx.switchTab({
+        url
+      });
+    } else {
+      // 普通页面跳转
       wx.navigateTo({
         url
       });
@@ -198,7 +212,8 @@ Page({
       return;
     }
     
-    wx.navigateTo({
+    // 切换到"记录"tab
+    wx.switchTab({
       url: '/pages/calculate/calculate'
     });
   },
@@ -212,7 +227,8 @@ Page({
       return;
     }
     
-    wx.navigateTo({
+    // 切换到"我的"tab
+    wx.switchTab({
       url: '/pages/center/center'
     });
   },

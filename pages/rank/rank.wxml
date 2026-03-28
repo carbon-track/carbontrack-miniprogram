@@ -16,40 +16,40 @@
   <!-- 排行榜头部（前三名） -->
   <view class="rank-header" wx:if="{{rankList.length > 0}}">
     <!-- 第二名 -->
-    <view class="rank-item rank-second" bindtap="viewUserDetail" data-user-id="{{rankList[1] && rankList[1].id}}">
+    <view class="rank-item rank-second" bindtap="viewUserDetail" data-user-id="{{rankList[1] && rankList[1]._id}}">
       <view class="rank-number rank-second-bg">2</view>
       <view class="user-info">
-        <view class="avatar-wrapper" style="background-color: {{rankList[1] && rankList[1].avatarColor ? rankList[1].avatarColor : '#ccc'}}">
+        <view class="avatar-wrapper">
           <block wx:if="{{rankList[1] && rankList[1].avatarUrl}}">
             <image class="avatar-image" src="{{rankList[1].avatarUrl}}" mode="aspectFill"></image>
           </block>
           <block wx:else>
-            {{rankList[1] && rankList[1].avatarEmoji ? rankList[1].avatarEmoji : (rankList[1] && rankList[1].username ? rankList[1].username.substring(0, 2) : '')}}
+            {{rankList[1] && rankList[1].username ? rankList[1].username.substring(0, 2) : ''}}
           </block>
         </view>
         <view class="user-details">
           <view class="username">{{rankList[1] && rankList[1].username}}</view>
-          <view class="points">{{rankList[1] && rankList[1].points}} 积分</view>
+          <view class="points">{{rankList[1] && rankList[1].points || 0}} 积分</view>
         </view>
       </view>
-      <view class="carbon-info">{{rankList[1] && rankList[1].carbonSaved}} kg</view>
+      <view class="carbon-info">{{rankList[1] && rankList[1].carbonSaved || 0}} kg</view>
     </view>
 
     <!-- 第一名 -->
-    <view class="rank-item rank-first" bindtap="viewUserDetail" data-user-id="{{rankList[0] && rankList[0].id}}">
+    <view class="rank-item rank-first" bindtap="viewUserDetail" data-user-id="{{rankList[0] && rankList[0]._id}}">
       <image class="crown" src="/assets/icons/crown.png" mode="aspectFit"></image>
       <view class="user-info">
-        <view class="avatar-wrapper" style="background-color: {{rankList[0] && rankList[0].avatarColor ? rankList[0].avatarColor : '#ccc'}}">
+        <view class="avatar-wrapper">
           <block wx:if="{{rankList[0] && rankList[0].avatarUrl}}">
             <image class="avatar-image" src="{{rankList[0].avatarUrl}}" mode="aspectFill"></image>
           </block>
           <block wx:else>
-            {{rankList[0] && rankList[0].avatarEmoji ? rankList[0].avatarEmoji : (rankList[0] && rankList[0].username ? rankList[0].username.substring(0, 2) : '')}}
+            {{rankList[0] && rankList[0].username ? rankList[0].username.substring(0, 2) : ''}}
           </block>
         </view>
         <view class="user-details">
           <view class="username">{{rankList[0] && rankList[0].username}}</view>
-          <view class="points">{{rankList[0] && rankList[0].points}} 积分</view>
+          <view class="points">{{rankList[0] && rankList[0].points || 0}} 积分</view>
         </view>
       </view>
       <view class="carbon-info">{{rankList[0] && rankList[0].carbonSaved}} kg</view>
@@ -59,12 +59,12 @@
     <view class="rank-item rank-third" bindtap="viewUserDetail" data-user-id="{{rankList[2] && rankList[2].id}}">
       <view class="rank-number rank-third-bg">3</view>
       <view class="user-info">
-        <view class="avatar-wrapper" style="background-color: {{rankList[2] && rankList[2].avatarColor ? rankList[2].avatarColor : '#ccc'}}">
+        <view class="avatar-wrapper">
           <block wx:if="{{rankList[2] && rankList[2].avatarUrl}}">
             <image class="avatar-image" src="{{rankList[2].avatarUrl}}" mode="aspectFill"></image>
           </block>
           <block wx:else>
-            {{rankList[2] && rankList[2].avatarEmoji ? rankList[2].avatarEmoji : (rankList[2] && rankList[2].username ? rankList[2].username.substring(0, 2) : '')}}
+            {{rankList[2] && rankList[2].username ? rankList[2].username.substring(0, 2) : ''}}
           </block>
         </view>
         <view class="user-details">
@@ -98,12 +98,12 @@
         >
         <view class="list-cell rank-cell">{{item.rank}}</view>
         <view class="list-cell user-cell">
-          <view class="avatar-wrapper" style="background-color: {{item.avatarColor}}">
+          <view class="avatar-wrapper">
             <block wx:if="{{item.avatarUrl}}">
               <image class="avatar-image" src="{{item.avatarUrl}}" mode="aspectFill"></image>
             </block>
             <block wx:else>
-              {{item.avatarEmoji ? item.avatarEmoji : (item.username ? item.username.substring(0, 2) : '')}}
+              {{item.username ? item.username.substring(0, 2) : ''}}
             </block>
           </view>
           <view class="username">{{item.username}}</view>
