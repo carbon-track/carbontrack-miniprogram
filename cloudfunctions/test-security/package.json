@@ -1,0 +1,12 @@
+{
+  "name": "test-security",
+  "version": "1.0.0",
+  "description": "内容安全测试云函数，用于验证文本和图片安全检测功能",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

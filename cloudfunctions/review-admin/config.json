@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "environment": {
+    "ADMIN_OPENIDS": "${ADMIN_OPENIDS}"  
+  }
+}

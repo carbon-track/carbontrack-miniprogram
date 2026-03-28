@@ -1,5 +1,5 @@
 {
-  "libVersion": "3.13.0",
+  "libVersion": "3.15.1",
   "projectname": "carbon-track-miniapp",
   "setting": {
     "urlCheck": true,
@@ -10,6 +10,12 @@
     "autoAudits": true,
     "showShadowRootInWxmlPanel": true,
     "compileHotReLoad": true,
-    "bigPackageSizeSupport": true
+    "bigPackageSizeSupport": true,
+    "useApiHook": true,
+    "useStaticServer": false,
+    "useLanDebug": false,
+    "showES6CompileOption": false,
+    "checkInvalidKey": true,
+    "ignoreDevUnusedFiles": true
   }
 }

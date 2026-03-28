@@ -1,0 +1,12 @@
+{
+  "name": "review-admin",
+  "version": "1.0.0",
+  "description": "审核管理云函数，支持待审核内容查询和审批操作",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

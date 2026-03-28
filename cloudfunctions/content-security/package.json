@@ -1,0 +1,14 @@
+{
+  "name": "content-security",
+  "version": "1.0.0",
+  "description": "统一内容安全检测云函数，集成微信文本和图片检测API",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "axios": "^0.21.4",
+    "form-data": "^4.0.0"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}

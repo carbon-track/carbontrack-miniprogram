@@ -236,21 +236,36 @@ Page({
       });
 
       if (result.success) {
-        wx.showToast({
-          title: '保存成功',
-          icon: 'success',
-          duration: 1500,
-          success: () => {
-            // 更新全局用户信息
-            app.globalData.userInfo = {
-              ...app.globalData.userInfo,
-              ...result.userInfo
-            };
-            wx.setStorageSync('userInfo', app.globalData.userInfo);
+        // 根据审核状态显示不同提示
+        if (result.reviewStatus === 'pending') {
+          // 审核中状态
+          wx.showModal({
+            title: '提交成功',
+            content: '您的资料修改已提交审核，审核通过后自动更新',
+            showCancel: false,
+            confirmText: '知道了',
+            success: () => {
+              this.setData({ editing: false });
+            }
+          });
+        } else if (result.reviewStatus === 'approved') {
+          // 直接通过
+          wx.showToast({
+            title: '保存成功',
+            icon: 'success',
+            duration: 1500,
+            success: () => {
+              // 更新全局用户信息
+              app.globalData.userInfo = {
+                ...app.globalData.userInfo,
+                ...result.userInfo
+              };
+              wx.setStorageSync('userInfo', app.globalData.userInfo);
 
-            this.setData({ editing: false });
-          }
-        });
+              this.setData({ editing: false });
+            }
+          });
+        }
       } else {
         throw new Error(result.message || '保存失败');
       }

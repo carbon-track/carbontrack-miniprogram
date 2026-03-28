@@ -193,34 +193,55 @@ Page({
     this.setData({ submitting: true });
     
     try {
-      // 模拟提交反馈
-      // 实际项目中应该调用后端API
-      /*
-      const response = await post('/api/help/feedback', {
-        content: feedbackContent,
-        type: feedbackType,
-        contact: contactInfo
-      });
-      */
-      
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      wx.hideLoading();
-      
-      wx.showToast({
-        title: '感谢您的反馈！',
-        icon: 'success',
-        duration: 2000
+      // 调用云函数提交反馈
+      const result = await wx.cloud.callFunction({
+        name: 'submit-feedback',
+        data: {
+          type: feedbackType,
+          content: feedbackContent,
+          images: []  // 暂时不支持图片
+        }
       });
       
-      // 重置表单并隐藏
-      this.setData({
-        feedbackContent: '',
-        feedbackType: 'question',
-        contactInfo: '',
-        showFeedback: false,
-        submitting: false
-      });
+      const response = result.result;
+      
+      if (response.success) {
+        // 根据审核状态显示不同提示
+        if (response.data.reviewStatus === 'pending') {
+          // 审核中状态
+          wx.showModal({
+            title: '提交成功',
+            content: '您的反馈已提交，我们将在24小时内完成审核',
+            showCancel: false,
+            confirmText: '知道了'
+          });
+        } else if (response.data.reviewStatus === 'approved') {
+          // 直接通过
+          wx.showToast({
+            title: '反馈提交成功',
+            icon: 'success',
+            duration: 2000
+          });
+        }
+        
+        // 重置表单并隐藏
+        this.setData({
+          feedbackContent: '',
+          feedbackType: 'question',
+          contactInfo: '',
+          showFeedback: false,
+          submitting: false
+        });
+      } else {
+        // 提交失败（内容违规）
+        wx.showToast({
+          title: response.error || '提交失败',
+          icon: 'none',
+          duration: 3000
+        });
+        
+        this.setData({ submitting: false });
+      }
     } catch (error) {
       console.error('提交反馈失败:', error);
       wx.showToast({
