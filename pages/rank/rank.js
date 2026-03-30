@@ -106,8 +106,28 @@ Page({
           carbonSaved: formatCarbonValue(result.userRank.carbonSaved)
         } : null
 
+        // 检查当前用户是否已经在排行榜列表中
+        let finalRankList = formattedRankList
+        let finalUserRank = formattedUserRank
+        
+        // 如果当前用户有排名，并且已经在排行榜列表中，从列表中移除，避免重复显示
+        if (formattedUserRank && formattedUserRank.userId) {
+          // 查找当前用户是否在排行榜列表中
+          const userIndex = formattedRankList.findIndex(item => item._id === formattedUserRank.userId)
+          if (userIndex !== -1) {
+            // 从列表中移除当前用户，因为会在下方单独显示
+            finalRankList = formattedRankList.filter(item => item._id !== formattedUserRank.userId)
+            // 确保排名顺序正确，重新计算排名
+            finalRankList.forEach((item, index) => {
+              // 保持原有相对排名，但确保排名数字连续
+              const baseRank = (page - 1) * limit + 1
+              item.rank = baseRank + index
+            })
+          }
+        }
+
         // 合并数据（下拉加载更多）
-        const updatedRankList = page === 1 ? formattedRankList : [...this.data.rankList, ...formattedRankList];
+        const updatedRankList = page === 1 ? finalRankList : [...this.data.rankList, ...finalRankList];
 
         // 检查数据完整性
         if (updatedRankList.length > 0 && (!updatedRankList[0].username || updatedRankList[0].carbonSaved === undefined)) {
@@ -116,7 +136,7 @@ Page({
 
         this.setData({
           rankList: updatedRankList,
-          userRank: formattedUserRank,
+          userRank: finalUserRank,
           loading: false,
           refreshing: false,
           hasMore: result.hasMore

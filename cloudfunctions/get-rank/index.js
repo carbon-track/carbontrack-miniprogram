@@ -182,6 +182,7 @@ exports.main = async (event, context) => {
         level: true
       })
       .orderBy('totalCarbon', 'desc')
+      .orderBy('_id', 'asc') // 添加二级排序，确保相同carbon值时的稳定排序
       .skip((page - 1) * limit)
       .limit(limit)
       .get()
