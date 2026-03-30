@@ -1,0 +1,105 @@
+# macOS 系统文件
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows 系统文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# Node.js 依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# 微信开发者工具
+project.private.config.json
+project.config.json  # 重要：包含 AppID，应设为模板
+cloudbaserc.json     # 重要：包含 CloudBase 环境 ID
+cloudbase-config.json
+
+# 本地构建和缓存
+dist/
+build/
+*.min.js
+*.min.css
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.temp
+
+# 日志文件
+*.log
+logs/
+
+# 环境变量文件
+.env
+.env.local
+.env.development
+.env.production
+
+# 测试文件
+coverage/
+.nyc_output/
+
+# 云函数本地依赖
+cloudfunctions/*/node_modules/
+
+# 数据库备份文件
+*.sql
+*.dump
+
+# 图片缓存
+assets/.thumbnails/
+images/.thumbnails/
+
+# 用户数据文件
+*.user
+*.userprefs
+
+# 压缩文件
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# 文档备份
+*.bak
+*.backup
+
+# 配置文件备份
+*.config.backup
+*.config.bak
+
+# 证书和密钥文件
+*.pem
+*.key
+*.crt
+*.cer
+*.pfx
+
+# 敏感信息文件
+secrets/
+credentials/
+config/private/
+
+# 开发环境特殊文件
+.development
+.test
