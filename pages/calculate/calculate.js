@@ -1,7 +1,7 @@
 // pages/calculate/calculate.js
 const app = getApp();
 const { requireAuth } = require('../../utils/auth.js');
-const { saveCarbonRecord, getCarbonRules, getActivities, checkIncentiveBonus } = require('../../utils/cloud-api.js');
+const { saveCarbonRecord, getCarbonRules, checkIncentiveBonus, uploadCarbonFile } = require('../../utils/cloud-api.js');
 const { debounce, cachedRequest } = require('../../utils/performance.js');
 const {
   calculateCarbonSavings,
@@ -69,34 +69,22 @@ Page({
   // 加载活动类型
   loadActivityTypes: async function() {
     try {
-      // 使用缓存加载活动类型和碳核算规则
-      const [activitiesResult, carbonRulesResult] = await Promise.all([
-        cachedRequest('activities:active', async () => {
-          return await getActivities({ status: 'active' });
-        }, { expire: 60 * 60 * 1000 }), // 缓存1小时
-        cachedRequest('carbonRules:active', async () => {
-          return await getCarbonRules({ status: 'active' });
-        }, { expire: 60 * 60 * 1000 }) // 缓存1小时
-      ]);
-      
+      const carbonRulesResult = await cachedRequest('carbonRules:active', async () => {
+        return await getCarbonRules({ status: 'active' });
+      }, { expire: 60 * 60 * 1000 });
+
       let activityTypes = [];
-      
-      if (activitiesResult.success && activitiesResult.data.length > 0) {
-        activityTypes = activitiesResult.data.map(activity => {
-          // 查找对应的碳核算规则
-          const carbonRule = carbonRulesResult.success ? 
-            carbonRulesResult.data.find(rule => rule.name === activity.name) : null;
-          
-          return {
-            id: activity._id,
-            name: activity.name,
-            unit: activity.unit,
-            emoji: activity.emoji || '🌱',
-            gradient: activity.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            carbonFactor: carbonRule ? carbonRule.carbonFactor : 0, // 碳核算系数（kg/单位）
-            pointsFactor: carbonRule ? (carbonRule.pointsFactor || 10) : 10 // 积分系数（积分/kg）
-          };
-        });
+
+      if (carbonRulesResult.success && carbonRulesResult.data.length > 0) {
+        activityTypes = carbonRulesResult.data.map((activity) => ({
+          id: activity.id || activity._id,
+          name: activity.name,
+          unit: activity.unit,
+          emoji: activity.emoji || '🌱',
+          gradient: activity.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          carbonFactor: activity.carbonFactor != null ? activity.carbonFactor : 0,
+          pointsFactor: activity.pointsFactor != null ? activity.pointsFactor : 10
+        }));
       } else {
         // 如果数据库没有活动数据，使用默认数据
         activityTypes = [
@@ -335,6 +323,7 @@ Page({
       console.log('saveRecordInternal 调用云函数，imageUrl:', cloudImageUrl); // 添加日志
       // 调用云函数保存记录
       const result = await saveCarbonRecord({
+        activity_id: selectedActivity.id,
         activityType: selectedActivity.name,
         activityDetail: selectedActivity.emoji + ' ' + selectedActivity.name,
         carbonValue: carbonResult,
@@ -463,53 +452,28 @@ Page({
       let cloudImageUrl = '';
       if (imageUrl) {
         try {
-          // 上传图片
-          console.log('开始上传图片...');
-          const uploadResult = await wx.cloud.uploadFile({
-            cloudPath: `activity-images/${Date.now()}.jpg`,
-            filePath: imageUrl
-          });
-          console.log('图片上传成功，fileID:', uploadResult.fileID);
-
-          // 调用微信安全API检测图片
+          console.log('开始上传图片到网站存储...');
           this.setData({ checkingImage: true });
-
-          const checkResult = await this.checkImageSecurity(uploadResult.fileID);
-
+          const up = await uploadCarbonFile(imageUrl);
           this.setData({ checkingImage: false });
-
-          // 无论检测结果如何，都保存图片URL（检测失败不阻止提交）
-          cloudImageUrl = uploadResult.fileID;
-          console.log('图片处理完成，imageUrl:', cloudImageUrl);
-
-          if (!checkResult.passed && checkResult.errcode !== -1) {
-            // 检测明确未通过（非异常），询问用户
-            wx.showModal({
-              title: '图片检测未通过',
-              content: checkResult.errMsg || '图片包含违规内容（如二维码、水印、敏感图案等）。是否继续提交记录？',
-              confirmText: '继续提交',
-              cancelText: '取消',
-              success: (modalRes) => {
-                if (modalRes.confirm) {
-                  // 用户选择继续提交，保留图片URL保存
-                  this.saveRecordInternal(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult);
-                } else {
-                  // 用户选择取消，删除已上传的文件
-                  wx.cloud.deleteFile({ fileList: [cloudImageUrl] });
-                  this.setData({ submitting: false });
-                }
-              }
-            });
-            return;
+          const url = (up && up.data && (up.data.file_url || up.data.public_url)) || up.file_url;
+          if (url) {
+            cloudImageUrl = url;
+            console.log('图片上传成功，url:', cloudImageUrl);
           }
-
-          // 检测通过或检测异常，直接保存记录（带图片）
-          await this.saveRecordInternal(selectedActivity, amount, date, description, cloudImageUrl, carbonResult, pointsResult);
+          await this.saveRecordInternal(
+            selectedActivity,
+            amount,
+            date,
+            description,
+            cloudImageUrl,
+            carbonResult,
+            pointsResult
+          );
           return;
         } catch (error) {
           console.error('图片处理失败:', error);
           this.setData({ checkingImage: false });
-          // 图片上传失败不影响主流程，继续提交（不带图片）
         }
       }
 
@@ -522,52 +486,6 @@ Page({
         icon: 'none'
       });
       this.setData({ submitting: false, checkingImage: false });
-    }
-  },
-  
-  // 调用微信安全检测API
-  async checkImageSecurity(fileID) {
-    try {
-      console.log('开始检测图片，fileID:', fileID);
-      // 调用云函数进行检测
-      const result = await wx.cloud.callFunction({
-        name: 'check-image-security',
-        data: {
-          fileID: fileID
-        }
-      });
-      
-      console.log('图片检测结果:', result);
-      
-      if (result.result.errcode === 0) {
-        console.log('图片检测通过');
-        return {
-          passed: true,
-          errcode: 0
-        };
-      } else if (result.result.errcode === 87014) {
-        console.log('图片检测未通过：包含违规内容');
-        return {
-          passed: false,
-          errcode: 87014,
-          errMsg: '图片包含违规内容（如二维码、水印、敏感图案等）'
-        };
-      } else {
-        console.log('图片检测返回错误码:', result.result.errcode, result.result.errmsg);
-        return {
-          passed: false,
-          errcode: result.result.errcode,
-          errMsg: result.result.errmsg || '图片检测失败'
-        };
-      }
-    } catch (error) {
-      console.error('图片检测异常:', error);
-      // 检测异常时，允许继续提交（避免用户数据丢失）
-      return {
-        passed: true, // 检测失败时不阻止提交
-        errcode: -1,
-        errMsg: '检测服务异常，但已允许继续提交'
-      };
     }
   }
 });

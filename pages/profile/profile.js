@@ -50,10 +50,10 @@ Page({
 
       // 转换数据格式
       const displayUserInfo = {
-        username: userInfo.nickName || '微信用户',
-        nickName: userInfo.nickName || '微信用户',
+        username: userInfo.username || userInfo.nickName || '用户',
+        nickName: userInfo.nickName || userInfo.username || '用户',
         email: userInfo.email || '',
-        school: userInfo.school || '',
+        school: userInfo.school || userInfo.schoolName || '',
         studentId: userInfo.studentId || '',
         unionId: userInfo.unionId || '',
         bio: userInfo.bio || '',
@@ -192,13 +192,12 @@ Page({
     this.setData({ loading: true });
 
     try {
-      // 上传到云存储
-      const uploadResult = await wx.cloud.uploadFile({
-        cloudPath: `avatars/${Date.now()}.jpg`,
-        filePath: filePath
-      });
-
-      const avatarUrl = uploadResult.fileID;
+      const { uploadCarbonFile } = require('../../utils/cloud-api.js');
+      const uploadResult = await uploadCarbonFile(filePath);
+      const avatarUrl =
+        (uploadResult.data && (uploadResult.data.file_url || uploadResult.data.public_url)) ||
+        uploadResult.file_url ||
+        '';
 
       this.setData({
         'userInfo.avatar': avatarUrl,
@@ -206,8 +205,8 @@ Page({
       });
 
       wx.showToast({
-        title: '头像上传成功',
-        icon: 'success'
+        title: avatarUrl ? '头像已上传，保存后同步到账号' : '上传失败',
+        icon: avatarUrl ? 'success' : 'none'
       });
     } catch (error) {
       console.error('上传头像失败:', error);
@@ -224,48 +223,35 @@ Page({
     this.setData({ saving: true });
 
     try {
-      const { userInfo } = this.data;
+      const { userInfo, schools } = this.data;
+      const match = (schools || []).find((s) => (s.name || s) === userInfo.school);
 
-      // 调用云函数更新用户资料
-      const result = await updateProfile({
-        nickName: userInfo.username,
-        avatarUrl: userInfo.avatar,
-        school: userInfo.school,
-        bio: userInfo.bio,
-        studentId: userInfo.studentId
-      });
+      const payload = {
+        school: userInfo.school
+      };
+      if (match && match.id != null) {
+        payload.school_id = match.id;
+      }
+
+      const result = await updateProfile(payload);
 
       if (result.success) {
-        // 根据审核状态显示不同提示
-        if (result.reviewStatus === 'pending') {
-          // 审核中状态
-          wx.showModal({
-            title: '提交成功',
-            content: '您的资料修改已提交审核，审核通过后自动更新',
-            showCancel: false,
-            confirmText: '知道了',
-            success: () => {
-              this.setData({ editing: false });
-            }
-          });
-        } else if (result.reviewStatus === 'approved') {
-          // 直接通过
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success',
-            duration: 1500,
-            success: () => {
-              // 更新全局用户信息
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success',
+          duration: 1500,
+          success: () => {
+            if (result.userInfo && result.userInfo.username) {
               app.globalData.userInfo = {
                 ...app.globalData.userInfo,
                 ...result.userInfo
               };
               wx.setStorageSync('userInfo', app.globalData.userInfo);
-
-              this.setData({ editing: false });
             }
-          });
-        }
+            this.setData({ editing: false });
+            this.loadUserInfo();
+          }
+        });
       } else {
         throw new Error(result.message || '保存失败');
       }

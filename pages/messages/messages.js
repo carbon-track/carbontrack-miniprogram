@@ -1,6 +1,6 @@
 // pages/messages/messages.js
 const app = getApp();
-const { callCloudFunction } = require('../../utils/cloud-api.js');
+const { getMessages, markAllMessagesRead } = require('../../utils/cloud-api.js');
 
 Page({
   data: {
@@ -31,23 +31,19 @@ Page({
     this.setData({ loading: true });
     
     try {
-      const type = this.data.activeType === 0 ? 'all' : 
-        this.data.types[this.data.activeType];
-      
-      const result = await callCloudFunction('get-messages', {
-        type,
+      const result = await getMessages({
         page: 1,
         limit: 20
       });
       
       if (result.success) {
-        const formattedMessages = result.data.map(m => ({
-          id: m._id,
+        const formattedMessages = (result.data || []).map(m => ({
+          id: m.id,
           title: m.title,
           content: m.content,
-          type: m.type,
-          time: m.createdAt ? new Date(m.createdAt).toLocaleString() : m.time,
-          read: m.read
+          type: m.type || '系统通知',
+          time: m.created_at ? new Date(m.created_at).toLocaleString() : '',
+          read: !!m.is_read
         }));
         
         this.setData({
@@ -75,24 +71,28 @@ Page({
   // 查看消息详情
   viewMessage: function(e) {
     const messageId = e.currentTarget.dataset.id;
-    // 标记消息为已读
     const messages = [...this.data.messages];
     const messageIndex = messages.findIndex(m => m.id === messageId);
+    if (messageIndex === -1) return;
+
     if (messageIndex !== -1) {
       messages[messageIndex].read = true;
       this.setData({ messages });
     }
-    
-    // 实际项目中可以跳转到消息详情页
+
+    const m = messages[messageIndex];
     wx.showModal({
-      title: messages[messageIndex].title,
-      content: messages[messageIndex].content,
+      title: m.title || '消息',
+      content: m.content || '',
       showCancel: false
     });
   },
 
   // 标记全部已读
-  markAllAsRead: function() {
+  markAllAsRead: async function() {
+    try {
+      await markAllMessagesRead();
+    } catch (e) {}
     const messages = this.data.messages.map(m => ({ ...m, read: true }));
     this.setData({ messages });
     wx.showToast({

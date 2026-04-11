@@ -186,16 +186,8 @@ Page({
   // 检查未读消息
   checkUnreadMessages: async function() {
     try {
-      // 模拟检查未读消息
-      // 实际项目中应该调用后端API
-      /*
-      const messageResponse = await get('/api/user/unread-count');
-      const unreadCount = messageResponse.data.count;
-      */
-      
-      // 模拟未读消息数
-      const unreadCount = 3;
-      
+      const { getMessageUnreadCount } = require('../../utils/cloud-api.js');
+      const unreadCount = await getMessageUnreadCount();
       this.setData({ unreadMessages: unreadCount });
     } catch (error) {
       console.error('检查未读消息失败:', error);

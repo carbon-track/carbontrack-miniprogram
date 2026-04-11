@@ -1,110 +1,141 @@
 /**
- * API请求封装工具
- * 统一处理API请求，添加错误处理和认证信息
+ * 网站 API（OpenAPI /api/v1）HTTP 封装
  */
 
-const app = getApp();
+function getBaseUrl() {
+  try {
+    const app = getApp()
+    const g = app && app.globalData
+    return (g && (g.apiBaseUrl || g.baseUrl)) || ''
+  } catch (e) {
+    return ''
+  }
+}
+
+function pickErrorMessage(data, statusCode) {
+  if (!data || typeof data !== 'object') return `请求失败 (${statusCode})`
+  return (
+    data.message ||
+    data.error ||
+    data.detail ||
+    (data.errors && JSON.stringify(data.errors)) ||
+    `请求失败 (${statusCode})`
+  )
+}
+
+function isAuthPublicPath(url) {
+  return (
+    url.includes('/auth/login') ||
+    url.includes('/auth/register') ||
+    url.includes('/auth/forgot-password') ||
+    url.includes('/auth/send-verification-code')
+  )
+}
 
 /**
- * 封装wx.request
- * @param {string} url - 请求路径
- * @param {object} options - 请求选项
- * @returns {Promise} 请求Promise
+ * @param {string} url - 绝对地址或以 / 开头的路径（相对 apiBaseUrl）
+ * @param {object} options
+ * @param {boolean} [options.skipAuth] - 不附加 Bearer
+ * @param {boolean} [options.silent] - 失败时不自动 toast
+ * @param {object} [options.headers] - 额外请求头
  */
 const request = (url, options = {}) => {
-  // 确保URL正确
-  const fullUrl = url.startsWith('http') ? url : `${app.globalData.baseUrl}${url}`;
-  
-  // 获取token
-  const token = wx.getStorageSync('token');
-  
-  // 设置默认请求头
+  const base = getBaseUrl()
+  const fullUrl = url.startsWith('http') ? url : `${base}${url}`
+
+  const token = options.skipAuth ? '' : wx.getStorageSync('token')
+
   const headers = {
     'Content-Type': 'application/json',
+    'X-Client': 'miniprogram',
     ...options.headers
-  };
-  
-  // 添加认证token
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
   return new Promise((resolve, reject) => {
+    if (!base && !url.startsWith('http')) {
+      const err = new Error('未配置 apiBaseUrl')
+      if (!options.silent) {
+        wx.showToast({ title: err.message, icon: 'none' })
+      }
+      reject(err)
+      return
+    }
+
     wx.request({
       url: fullUrl,
       method: options.method || 'GET',
       data: options.data,
       header: headers,
       success: (res) => {
-        if (res.statusCode === 200) {
-          resolve(res.data);
-        } else if (res.statusCode === 401) {
-          // Token过期或无效，清除token并跳转到登录页
-          wx.removeStorageSync('token');
-          app.globalData.isLogin = false;
-          app.globalData.userInfo = null;
-          
-          // 提示用户重新登录
-          wx.showToast({
-            title: '登录已过期，请重新登录',
-            icon: 'none',
-            duration: 2000,
-            success: () => {
-              setTimeout(() => {
-                wx.navigateTo({
-                  url: '/pages/login/login'
-                });
-              }, 2000);
-            }
-          });
-          
-          reject(new Error('登录已过期'));
-        } else {
-          // 其他错误
-          const errorMessage = res.data?.message || `请求失败 (${res.statusCode})`;
-          wx.showToast({
-            title: errorMessage,
-            icon: 'none',
-            duration: 2000
-          });
-          reject(new Error(errorMessage));
+        const ok = res.statusCode === 200 || res.statusCode === 201 || res.statusCode === 204
+        if (ok) {
+          resolve(res.statusCode === 204 ? { success: true } : res.data)
+          return
         }
+
+        if (res.statusCode === 401 && !isAuthPublicPath(fullUrl)) {
+          wx.removeStorageSync('token')
+          try {
+            const app = getApp()
+            if (app && app.globalData) {
+              app.globalData.isLogin = false
+              app.globalData.userInfo = null
+            }
+          } catch (e) {}
+          wx.removeStorageSync('userInfo')
+          if (!options.silent) {
+            wx.showToast({
+              title: '登录已过期，请重新登录',
+              icon: 'none',
+              duration: 2000,
+              success: () => {
+                setTimeout(() => {
+                  wx.navigateTo({ url: '/pages/login/login' })
+                }, 2000)
+              }
+            })
+          }
+          reject(new Error('登录已过期'))
+          return
+        }
+
+        const msg = pickErrorMessage(res.data, res.statusCode)
+        if (!options.silent) {
+          wx.showToast({ title: msg.length > 48 ? '请求失败' : msg, icon: 'none', duration: 2000 })
+        }
+        reject(new Error(msg))
       },
       fail: (error) => {
-        // 网络请求失败
-        wx.showToast({
-          title: '网络连接失败，请稍后重试',
-          icon: 'none',
-          duration: 2000
-        });
-        reject(error);
+        if (!options.silent) {
+          wx.showToast({ title: '网络连接失败，请稍后重试', icon: 'none', duration: 2000 })
+        }
+        reject(error)
       },
       complete: () => {
-        // 可以在这里处理请求完成后的逻辑，比如隐藏加载动画等
-        if (options.complete) {
-          options.complete();
-        }
+        if (options.complete) options.complete()
       }
-    });
-  });
-};
+    })
+  })
+}
 
 /**
- * 上传文件
- * @param {string} url - 上传接口
- * @param {string} filePath - 文件路径
- * @param {string} name - 文件参数名
- * @param {object} formData - 其他表单数据
- * @returns {Promise} 上传Promise
+ * multipart 上传（如 /api/v1/files/upload）
  */
-const uploadFile = (url, filePath, name = 'file', formData = {}) => {
-  const fullUrl = url.startsWith('http') ? url : `${app.globalData.baseUrl}${url}`;
-  const token = wx.getStorageSync('token');
-  
+const uploadFile = (url, filePath, name = 'file', formData = {}, options = {}) => {
+  const base = getBaseUrl()
+  const fullUrl = url.startsWith('http') ? url : `${base}${url}`
+  const token = wx.getStorageSync('token')
+
   const header = {
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  };
-  
+    'X-Client': 'miniprogram',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.header || {})
+  }
+
   return new Promise((resolve, reject) => {
     wx.uploadFile({
       url: fullUrl,
@@ -114,68 +145,43 @@ const uploadFile = (url, filePath, name = 'file', formData = {}) => {
       header,
       success: (res) => {
         try {
-          const data = JSON.parse(res.data);
-          if (res.statusCode === 200) {
-            resolve(data);
-          } else {
-            const errorMessage = data?.message || `上传失败 (${res.statusCode})`;
-            wx.showToast({
-              title: errorMessage,
-              icon: 'none',
-              duration: 2000
-            });
-            reject(new Error(errorMessage));
+          const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
+          if (res.statusCode === 200 || res.statusCode === 201) {
+            resolve(data)
+            return
           }
+          const msg = pickErrorMessage(data, res.statusCode)
+          if (!options.silent) {
+            wx.showToast({ title: msg.length > 48 ? '上传失败' : msg, icon: 'none' })
+          }
+          reject(new Error(msg))
         } catch (e) {
-          wx.showToast({
-            title: '上传失败，返回数据格式错误',
-            icon: 'none',
-            duration: 2000
-          });
-          reject(new Error('返回数据格式错误'));
+          if (!options.silent) {
+            wx.showToast({ title: '上传返回格式错误', icon: 'none' })
+          }
+          reject(new Error('上传返回格式错误'))
         }
       },
       fail: (error) => {
-        wx.showToast({
-          title: '文件上传失败，请稍后重试',
-          icon: 'none',
-          duration: 2000
-        });
-        reject(error);
+        if (!options.silent) {
+          wx.showToast({ title: '文件上传失败', icon: 'none' })
+        }
+        reject(error)
       }
-    });
-  });
-};
+    })
+  })
+}
 
-/**
- * 封装常用请求方法
- */
 const api = {
-  // GET请求
-  get: (url, data = {}, options = {}) => {
-    return request(url, { ...options, method: 'GET', data });
-  },
-  
-  // POST请求
-  post: (url, data = {}, options = {}) => {
-    return request(url, { ...options, method: 'POST', data });
-  },
-  
-  // PUT请求
-  put: (url, data = {}, options = {}) => {
-    return request(url, { ...options, method: 'PUT', data });
-  },
-  
-  // DELETE请求
-  delete: (url, data = {}, options = {}) => {
-    return request(url, { ...options, method: 'DELETE', data });
-  },
-  
-  // 上传文件
+  get: (url, data = {}, options = {}) => request(url, { ...options, method: 'GET', data }),
+  post: (url, data = {}, options = {}) => request(url, { ...options, method: 'POST', data }),
+  put: (url, data = {}, options = {}) => request(url, { ...options, method: 'PUT', data }),
+  delete: (url, data = {}, options = {}) => request(url, { ...options, method: 'DELETE', data }),
   upload: uploadFile
-};
+}
 
 module.exports = {
   request,
+  getBaseUrl,
   ...api
-};
+}

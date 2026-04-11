@@ -1,7 +1,6 @@
 // pages/achievements/achievements.js
 const app = getApp();
-const { getActivities } = require('../../utils/cloud-api.js');
-const { callCloudFunction } = require('../../utils/cloud-api.js');
+const { getAchievements } = require('../../utils/cloud-api.js');
 
 Page({
   data: {
@@ -71,8 +70,7 @@ Page({
     this.setData({ isLoading: true });
 
     try {
-      // 调用云函数获取成就数据
-      const result = await callCloudFunction('get-achievements');
+      const result = await getAchievements();
 
       if (result.success) {
         // 转换数据格式

@@ -61,6 +61,7 @@ Page({
   // 加载排行榜数据
   loadRankData: async function() {
     const { currentTab, page, refreshing } = this.data;
+    const limit = 20;
 
     try {
       const cacheKey = `rank:${currentTab}:page${page}`;
@@ -86,6 +87,21 @@ Page({
       }
 
       if (result.success) {
+        if (result.code === 'FRIEND_UNSUPPORTED') {
+          wx.showToast({
+            title: result.message || '好友榜暂未开放',
+            icon: 'none'
+          });
+          this.setData({
+            rankList: [],
+            userRank: null,
+            loading: false,
+            refreshing: false,
+            hasMore: false
+          });
+          return;
+        }
+
         // 格式化碳排放值，确保显示两位小数
         const formatCarbonValue = (value) => {
           if (value === undefined || value === null) return 0
@@ -95,7 +111,7 @@ Page({
         }
 
         // 格式化排行榜数据
-        const formattedRankList = result.rankList.map(item => ({
+        const formattedRankList = (result.rankList || []).map(item => ({
           ...item,
           carbonSaved: formatCarbonValue(item.carbonSaved)
         }))

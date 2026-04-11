@@ -1,6 +1,5 @@
 // pages/register/register.js
 const app = getApp();
-const { post } = require('../../utils/api.js');
 
 Page({
   data: {
@@ -163,8 +162,8 @@ Page({
     if (!password) {
       errors.password = '请输入密码';
       isValid = false;
-    } else if (password.length < 6) {
-      errors.password = '密码至少6个字符';
+    } else if (password.length < 8) {
+      errors.password = '密码至少8个字符（网站要求）';
       isValid = false;
     }
     
@@ -200,34 +199,47 @@ Page({
     this.setData({ loading: true });
     
     try {
-      const { username, email, password, school } = this.data.formData;
-      
-      // 模拟注册请求
-      // 实际项目中应该调用后端API
-      /*
-      const response = await post('/api/auth/register', {
-        username,
-        email,
+      const { register } = require('../../utils/auth.js');
+      const { username, email, password, confirmPassword, school } = this.data.formData;
+      const { schools, schoolIndex } = this.data;
+      const picked = schools[schoolIndex];
+
+      const payload = {
+        email: email.trim(),
+        username: username.trim(),
         password,
-        school
-      });
-      */
-      
-      // 模拟成功响应
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      wx.showToast({
-        title: '注册成功',
-        icon: 'success',
-        duration: 2000,
-        success: () => {
-          setTimeout(() => {
-            wx.navigateTo({
-              url: '/pages/login/login'
-            });
-          }, 2000);
-        }
-      });
+        confirmPassword,
+        countryCode: 'CN',
+        stateCode: 'BJ'
+      };
+
+      if (picked && picked.id != null) {
+        payload.schoolId = picked.id;
+      } else if (school && String(school).trim()) {
+        payload.newSchoolName = String(school).trim();
+      }
+
+      const result = await register(payload);
+
+      if (result.success) {
+        wx.showToast({
+          title: result.message || '注册成功',
+          icon: 'success',
+          duration: 2000,
+          success: () => {
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }, 2000);
+          }
+        });
+      } else {
+        wx.showToast({
+          title: result.message || '注册失败，请检查表单',
+          icon: 'none'
+        });
+      }
     } catch (error) {
       console.error('注册失败:', error);
       wx.showToast({

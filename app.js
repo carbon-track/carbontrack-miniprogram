@@ -3,7 +3,10 @@ App({
   globalData: {
     userInfo: null,
     isLogin: false,
-    useCloudBase: true, // 使用 CloudBase
+    useCloudBase: true, // 保留：公告/FAQ/反馈/挑战活动/微信登录等仍走云函数
+    useWebsiteApi: true, // 主业务数据走网站 OpenAPI
+    apiBaseUrl: 'https://carbontrackapp.com', // 与网站同源，无尾斜杠
+    baseUrl: 'https://carbontrackapp.com', // 兼容旧 utils/api 拼接
     theme: 'light', // 默认使用浅色主题
     appVersion: '1.0.0'
   },
@@ -57,10 +60,14 @@ App({
   checkLoginStatus: function() {
     try {
       const userInfo = wx.getStorageSync('userInfo');
+      const token = wx.getStorageSync('token');
 
       if (userInfo) {
         this.globalData.isLogin = true;
         this.globalData.userInfo = userInfo;
+      }
+      if (!userInfo && !token) {
+        this.globalData.isLogin = false;
       }
     } catch (error) {
       console.error('检查登录状态失败:', error);
@@ -87,6 +94,7 @@ App({
     this.globalData.isLogin = false;
     this.globalData.userInfo = null;
     wx.removeStorageSync('userInfo');
+    wx.removeStorageSync('token');
   },
 
   // 检查主题设置

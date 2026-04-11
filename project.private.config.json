@@ -1,6 +1,6 @@
 {
   "libVersion": "3.15.1",
-  "projectname": "carbon-track-miniapp",
+  "projectname": "carbontrack-miniprogram",
   "setting": {
     "urlCheck": true,
     "coverView": true,

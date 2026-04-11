@@ -35,23 +35,24 @@ Page({
     this.setData({ loading: true });
     
     try {
-      const category = this.data.activeCategory === 0 ? 'all' : 
-        this.data.categories[this.data.activeCategory];
-      
       const result = await getProducts({
-        category,
         page: this.data.page,
         limit: 20
       });
       
       if (result.success) {
-        const newProducts = [...this.data.products, ...result.data];
+        let batch = result.data || [];
+        if (this.data.activeCategory !== 0) {
+          const label = this.data.categories[this.data.activeCategory];
+          batch = batch.filter((p) => (p.category || '').indexOf(label) !== -1);
+        }
+        const newProducts = [...this.data.products, ...batch];
         
         this.setData({
           products: newProducts,
           loading: false,
           page: this.data.page + 1,
-          hasMore: result.data.length >= 20
+          hasMore: (result.data || []).length >= 20
         });
       } else {
         throw new Error(result.error || '加载商品失败');
