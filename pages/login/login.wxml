@@ -1,7 +1,7 @@
 <!--pages/login/login.wxml-->
 <view class="container {{theme === 'dark' ? 'dark' : ''}}">
   <image 
-    src="/images/carbontracks.png" 
+    src="/images/CarbonTrack_cover.png" 
     mode="aspectFill" 
     class="background-image"
   />

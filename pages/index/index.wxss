@@ -3,7 +3,7 @@
 /* 页面容器 */
 .container {
   min-height: 100vh;
-  background: url('/images/carbontracks.png') no-repeat center center;
+  background: url('/images/CarbonTrack_cover.png') no-repeat center center;
   background-size: cover;
   color: #FFFFFF;
   padding: 40rpx;
@@ -14,7 +14,7 @@
 .container.dark {
   background: 
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('/images/carbontracks.png') no-repeat center center;
+    url('/images/CarbonTrack_cover.png') no-repeat center center;
   background-size: cover;
   color: #FFFFFF;
 }

@@ -51,7 +51,7 @@ page {
   
   font-size: var(--font-size-base);
   color: var(--text-color);
-  background-image: url('/images/carbontracks.png');
+  background-image: url('/images/CarbonTrack_cover.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

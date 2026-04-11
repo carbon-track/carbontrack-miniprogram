@@ -102,7 +102,7 @@
 - **修改后**：
   ```css
   .container {
-    background: url('/images/carbontracks.png') no-repeat center center;
+    background: url('/images/CarbonTrack_cover.png') no-repeat center center;
     background-size: cover;
   }
   ```
@@ -171,7 +171,7 @@
 
 2. **默认数据**：各页面在数据库无数据时提供了默认数据，但建议尽快初始化数据库
 
-3. **图片资源**：确保`images/carbontracks.png`文件存在
+3. **图片资源**：确保`images/CarbonTrack_cover.png`文件存在
 
 4. **兼容性**：所有修改保持向后兼容，现有功能不受影响
 
